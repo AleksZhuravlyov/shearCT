@@ -4,6 +4,10 @@
 
 class PointsCt {
 
+public:
+
+    PointsCt();
+
 };
 
 
