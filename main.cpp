@@ -10,18 +10,16 @@ int main() {
 
     NcCt ncCt(ncFileName);
 
-    auto dimArrays = ncCt.getDimArrays();
+    auto dims = ncCt.getDims();
 
     std::cout << ncCt << std::endl;
 
-    /*std::cout << "dimArrays :" << std::endl;
-    for (auto &&dimArray : *dimArrays) {
-        std::cout << "-> ";
-        for (auto &&value : dimArray)
-            std::cout << value << " ";
-        std::cout << std::endl;
-    }
-    std::cout << std::endl;*/
+    auto region = Region({{500, 600,  600},
+                          {20,  1800, 1800}});
+
+    ncCt.setRegion(region);
+
+    ncCt.saveRegion("/Volumes/ElkData/CT/tmp/10Cut.nc");
 
     return EXIT_SUCCESS;
 }
