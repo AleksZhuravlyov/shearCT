@@ -14,10 +14,7 @@ int main() {
 
     std::cout << ncCt << std::endl;
 
-    auto region = Region({{500, 600,  600},
-                          {20,  1800, 1800}});
-
-    ncCt.setRegion(region);
+    ncCt.setRegion({500, 600, 600}, {30, 400, 500});
 
     ncCt.saveRegion("/Volumes/ElkData/CT/tmp/10Cut.nc");
 

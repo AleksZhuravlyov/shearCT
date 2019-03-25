@@ -1,14 +1,39 @@
+#include <vector>
+#include <algorithm>
+
 #include <NcCt.h>
+
+Region::Region() : start({0, 0, 0}),
+                   width({1, 1, 1}),
+                   dimArrays(std::vector<std::vector<float>>(3)),
+                   val(std::vector<short>(1)) {
+
+    for (int i = 0; i < width.size(); i++)
+        dimArrays[i].resize(width[i]);
+
+    val.resize(width[0] * width[1] * width[2]);
+}
+
+void Region::initiateRegion(const std::vector<size_t> &_start,
+                            const std::vector<size_t> &_width) {
+    start = _start;
+
+    if (width != _width) {
+        width = _width;
+
+        for (int i = 0; i < width.size(); i++)
+            dimArrays[i].resize(width[i]);
+
+        val.resize(width[0] * width[1] * width[2]);
+    }
+}
+
 
 NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
                                           path(fileName),
-                                          valueName("tomo"),
+                                          valName("tomo"),
                                           units("units"),
-                                          value(std::vector<short>(1)),
-                                          region({{0, 0, 0},
-                                                  {1, 1, 1}}) {
-
-    file.getVar(valueName).getVar(region.start, region.width, value.data());
+                                          region(Region()) {
 
     for (auto &&varData : file.getVars()) {
         vars.push_back(Var());
@@ -17,13 +42,24 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
         vars.back().dim = varData.second.getDimCount();
     }
 
-    for (auto &&dimData : file.getVar(valueName).getDims()) {
+    std::reverse(vars.begin(), vars.end() - 1);
+
+    for (auto &&dimData : file.getVar(valName).getDims()) {
         dims.push_back(Dim());
         dims.back().name = dimData.getName();
         dims.back().size = dimData.getSize();
-        dims.back().array.resize(dims.back().size);
-        file.getVar(dims.back().name).getVar(dims.back().array.data());
+        dimArrays.push_back(std::vector<float>(dims.back().size));
+        file.getVar(dims.back().name).getVar(dimArrays.back().data());
     }
+
+
+    for (int i = 0; i < dimArrays.size(); i++)
+        std::copy(dimArrays[i].begin() + region.start[i],
+                  dimArrays[i].begin() + region.start[i]
+                  + region.width[i], region.dimArrays[i].begin());
+
+    file.getVar(valName).getVar(region.start, region.width,
+                                region.val.data());
 
 }
 
@@ -42,11 +78,12 @@ std::ostream &operator<<(std::ostream &stream, const NcCt &ncCt) {
 
     stream << "dims:" << std::endl;
     stream << "name size step:" << std::endl;
-    for (auto &&dim : ncCt.dims) {
-        stream << dim.name << " ";
-        stream << dim.size << " ";
-        stream << dim.array[1] - dim.array[0] << std::endl;
+    for (int i = 0; i < ncCt.dims.size(); i++) {
+        stream << ncCt.dims[i].name << " ";
+        stream << ncCt.dims[i].size << " ";
+        stream << ncCt.dimArrays[i][1] - ncCt.dimArrays[i][0] << std::endl;
     }
+
 
     return stream;
 
@@ -61,20 +98,22 @@ std::shared_ptr<std::vector<Var>> NcCt::getVars() {
     return std::make_shared<std::vector<Var>>(vars);
 }
 
-std::shared_ptr<std::vector<short>> NcCt::getValue() {
-    return std::make_shared<std::vector<short>>(value);
+std::shared_ptr<std::vector<short>> NcCt::getVal() {
+    return std::make_shared<std::vector<short>>(region.val);
 }
 
 
-void NcCt::setRegion(const Region &_region) {
+void NcCt::setRegion(const std::vector<size_t> &start,
+                     const std::vector<size_t> &width) {
 
-    region = _region;
+    region.initiateRegion(start, width);
 
-    auto nPoints = region.width[0] * region.width[1] * region.width[2];
-    if (nPoints != value.size())
-        value.resize(nPoints);
+    for (int i = 0; i < dimArrays.size(); i++)
+        std::copy(dimArrays[i].begin() + region.start[i],
+                  dimArrays[i].begin() + region.start[i]
+                  + region.width[i], region.dimArrays[i].begin());
 
-    file.getVar(valueName).getVar(region.start, region.width, value.data());
+    file.getVar(valName).getVar(region.start, region.width, region.val.data());
 
 }
 
@@ -82,49 +121,21 @@ void NcCt::saveRegion(const std::string &fileName) {
 
     netCDF::NcFile regionFile(fileName, netCDF::NcFile::replace);
 
+    std::vector<netCDF::NcDim> ncDims(dims.size());
+    for (int i = 0; i < dims.size(); i++)
+        ncDims[i] = regionFile.addDim(dims[i].name, region.width[i]);
 
-    netCDF::NcDim lvlDim = regionFile.addDim(dims[0].name, region.width[0]);
-    netCDF::NcDim ltdDim = regionFile.addDim(dims[1].name, region.width[1]);
-    netCDF::NcDim lngDim = regionFile.addDim(dims[2].name, region.width[2]);
+    std::vector<netCDF::NcVar> ncVars(dims.size());
+    for (int i = 0; i < dims.size(); i++)
+        ncVars[i] = regionFile.addVar(vars[i].name, netCDF::ncFloat, ncDims[i]);
+    netCDF::NcVar valVar = regionFile.addVar(valName, netCDF::ncShort, ncDims);
 
+    for (int i = 0; i < dims.size(); i++)
+        ncVars[i].putAtt(units, vars[i].unitName);
+    valVar.putAtt(units, vars[dims.size()].unitName);
 
-    netCDF::NcVar lvlVar = regionFile.addVar(vars[2].name,
-                                             netCDF::ncFloat, lvlDim);
-    netCDF::NcVar ltdVar = regionFile.addVar(vars[1].name,
-                                             netCDF::ncFloat, ltdDim);
-    netCDF::NcVar lngVar = regionFile.addVar(vars[0].name,
-                                             netCDF::ncFloat, lngDim);
-
-
-    std::vector<netCDF::NcDim> dimVector;
-    dimVector.push_back(lvlDim);
-    dimVector.push_back(ltdDim);
-    dimVector.push_back(lngDim);
-    netCDF::NcVar valVar = regionFile.addVar(valueName,
-                                             netCDF::ncShort, dimVector);
-
-
-    lvlVar.putAtt(units, vars[0].unitName);
-    ltdVar.putAtt(units, vars[1].unitName);
-    lngVar.putAtt(units, vars[2].unitName);
-    valVar.putAtt(units, vars[3].unitName);
-
-
-    auto lvls = std::vector<float>(dims[0].array.begin() + region.start[0],
-                                   dims[0].array.begin() + region.start[0]
-                                   + region.width[0]);
-
-    auto ltds = std::vector<float>(dims[1].array.begin() + region.start[1],
-                                   dims[1].array.begin() + region.start[1]
-                                   + region.width[1]);
-
-    auto lngs = std::vector<float>(dims[2].array.begin() + region.start[2],
-                                   dims[2].array.begin() + region.start[2]
-                                   + region.width[2]);
-
-    lvlVar.putVar(lvls.data());
-    ltdVar.putVar(ltds.data());
-    lngVar.putVar(lngs.data());
-    valVar.putVar(value.data());
+    for (int i = 0; i < dims.size(); i++)
+        ncVars[i].putVar(region.dimArrays[i].data());
+    valVar.putVar(region.val.data());
 
 }

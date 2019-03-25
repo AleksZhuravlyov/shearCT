@@ -8,7 +8,6 @@
 struct Dim {
     std::string name;
     size_t size;
-    std::vector<float> array;
 };
 
 struct Var {
@@ -17,9 +16,20 @@ struct Var {
     int dim;
 };
 
-struct Region {
+class Region {
+
+public:
+
+    Region();
+    virtual ~Region() {}
+
+    void initiateRegion(const std::vector<size_t> &_start,
+                        const std::vector<size_t> &_width);
+
     std::vector<size_t> start;
     std::vector<size_t> width;
+    std::vector<std::vector<float>> dimArrays;
+    std::vector<short> val;
 };
 
 
@@ -41,10 +51,11 @@ public:
 
     std::shared_ptr<std::vector<Var>> getVars();
 
-    std::shared_ptr<std::vector<short>> getValue();
+    std::shared_ptr<std::vector<short>> getVal();
 
 
-    void setRegion(const Region &_region);
+    void setRegion(const std::vector<size_t> &start,
+                   const std::vector<size_t> &width);
 
     void saveRegion(const std::string &fileName);
 
@@ -56,7 +67,7 @@ private:
 
     std::string path;
 
-    std::string valueName;
+    std::string valName;
 
     std::string units;
 
@@ -65,10 +76,10 @@ private:
 
     std::vector<Dim> dims;
 
+    std::vector<std::vector<float>> dimArrays;
+
 
     Region region;
-
-    std::vector<short> value;
 
 };
 
