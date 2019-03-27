@@ -2,15 +2,13 @@
 #include <string>
 
 #include <NcCt.h>
-#include <PointsCt.h>
+#include <VtpCt.h>
 
 int main() {
 
     auto ncFileName = std::string("/Volumes/ElkData/CT/samples/10.nc");
 
     NcCt ncCt(ncFileName);
-
-    auto dims = ncCt.getDims();
 
     std::cout << ncCt << std::endl;
 
