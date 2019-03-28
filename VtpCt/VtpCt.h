@@ -11,26 +11,49 @@
 #include <vtkVertex.h>
 
 
-class PointsCt {
+class VtpCt {
 
 public:
 
-    PointsCt(const std::vector<double> &pointsArray);
+    VtpCt() = delete;
 
-    virtual ~PointsCt() {}
+    VtpCt(const std::vector<double> &pointsArray);
+
+    virtual ~VtpCt() {}
 
 
-    void setTomoA(const std::vector<double> &valuesArray);
+    int size();
 
-    void setTomoB(const std::vector<double> &valuesArray);
+    void setXyzArray(const std::vector<double> &xyzArray);
 
-    void setResult(const std::vector<double> &valuesArray);
+    void setTomoAArray(const std::vector<double> &valuesArray);
 
+    void setTomoBArray(const std::vector<double> &valuesArray);
+
+    void setResultArray(const std::vector<double> &valuesArray);
+
+
+    double *getXyz(const int &pointId);
+
+    double *getTomoAValue(const int &pointId);
+
+    double *getTomoBValue(const int &pointId);
+
+    double *getResultValue(const int &pointId);
+
+
+    void setIsBinary(const bool &_isBinary);
+
+    bool getIsBinary();
+
+    void savePoints(const std::string &fileName);
 
 
 private:
 
     vtkSmartPointer<vtkPoints> points;
+
+    int nPoints;
 
     vtkSmartPointer<vtkDoubleArray> tomoA;
 
@@ -40,7 +63,11 @@ private:
 
 
     void setValues(vtkSmartPointer<vtkDoubleArray> values,
-            const std::vector<double> &valuesArray);
+                   const std::vector<double> &valuesArray);
+
+    bool isBinary;
+
+    vtkSmartPointer<vtkXMLPolyDataWriter> writer;
 
 };
 
