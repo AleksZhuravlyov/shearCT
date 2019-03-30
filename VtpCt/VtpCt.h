@@ -9,65 +9,64 @@
 #include <vtkSmartPointer.h>
 #include <vtkDoubleArray.h>
 #include <vtkVertex.h>
+#include <vtkXMLPolyDataReader.h>
 
 
 class VtpCt {
 
 public:
 
-    VtpCt() = delete;
+    VtpCt();
 
-    VtpCt(const std::vector<double> &pointsArray);
+    VtpCt(std::shared_ptr<std::vector<double>> _xyzArray);
+
+    VtpCt(const std::string &fileName);
+
 
     virtual ~VtpCt() {}
 
 
     int size();
 
-    void setXyzArray(const std::vector<double> &xyzArray);
+    void setXyzArray(std::shared_ptr<std::vector<double>> _xyzArray);
 
-    void setTomoAArray(const std::vector<double> &valuesArray);
+    void setTomoA(std::shared_ptr<std::vector<double>> value);
 
-    void setTomoBArray(const std::vector<double> &valuesArray);
+    void setTomoB(std::shared_ptr<std::vector<double>> value);
 
-    void setResultArray(const std::vector<double> &valuesArray);
-
-
-    double *getXyz(const int &pointId);
-
-    double *getTomoAValue(const int &pointId);
-
-    double *getTomoBValue(const int &pointId);
-
-    double *getResultValue(const int &pointId);
+    void setResult(std::shared_ptr<std::vector<double>> value);
 
 
-    void setIsBinary(const bool &_isBinary);
+    std::shared_ptr<std::vector<double>> getXyzArray();
 
-    bool getIsBinary();
+    std::shared_ptr<std::vector<double>> getTomoA();
 
-    void savePoints(const std::string &fileName);
+    std::shared_ptr<std::vector<double>> getTomoB();
+
+    std::shared_ptr<std::vector<double>> getResult();
+
+
+    void setFileIsBinary(const bool &_fileIsBinary);
+
+    bool getFileIsBinary();
+
+    void saveIntoFile(const std::string &fileName);
 
 
 private:
 
-    vtkSmartPointer<vtkPoints> points;
+    std::shared_ptr<std::vector<double>> xyzArray;
+
+    std::shared_ptr<std::vector<double>> tomoA;
+
+    std::shared_ptr<std::vector<double>> tomoB;
+
+    std::shared_ptr<std::vector<double>> result;
+
 
     int nPoints;
 
-    vtkSmartPointer<vtkDoubleArray> tomoA;
-
-    vtkSmartPointer<vtkDoubleArray> tomoB;
-
-    vtkSmartPointer<vtkDoubleArray> result;
-
-
-    void setValues(vtkSmartPointer<vtkDoubleArray> values,
-                   const std::vector<double> &valuesArray);
-
-    bool isBinary;
-
-    vtkSmartPointer<vtkXMLPolyDataWriter> writer;
+    bool fileIsBinary;
 
 };
 

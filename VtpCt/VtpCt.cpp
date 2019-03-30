@@ -1,45 +1,42 @@
 #include <VtpCt.h>
 
-VtpCt::VtpCt(const std::vector<double> &pointsArray) :
-        points(vtkSmartPointer<vtkPoints>::New()),
-        nPoints(pointsArray.size() / 3),
-        tomoA(vtkSmartPointer<vtkDoubleArray>::New()),
-        tomoB(vtkSmartPointer<vtkDoubleArray>::New()),
-        result(vtkSmartPointer<vtkDoubleArray>::New()),
-        isBinary(true),
-        writer(vtkSmartPointer<vtkXMLPolyDataWriter>::New()) {
+VtpCt::VtpCt() : VtpCt(std::make_shared<std::vector<double>>(3, 0)) {}
 
-    tomoA->SetName("tomoA");
-    tomoB->SetName("tomoB");
-    result->SetName("result");
+VtpCt::VtpCt(std::shared_ptr<std::vector<double>> _xyzArray) :
+        xyzArray(_xyzArray),
+        nPoints(_xyzArray->size() / 3),
+        tomoA(std::make_shared<std::vector<double>>(_xyzArray->size() / 3, 0)),
+        tomoB(std::make_shared<std::vector<double>>(_xyzArray->size() / 3, 0)),
+        result(std::make_shared<std::vector<double>>(_xyzArray->size() / 3, 0)),
+        fileIsBinary(true) {}
 
-    for (int i = 0; i < pointsArray.size() / 3; i++) {
-        points->InsertNextPoint(&pointsArray[i * 3]);
-        tomoA->InsertNextValue(0);
-        tomoB->InsertNextValue(0);
-        result->InsertNextValue(0);
+VtpCt::VtpCt(const std::string &fileName) : VtpCt() {
+
+    auto polyDataReaderVtk = vtkSmartPointer<vtkXMLPolyDataReader>::New();
+    polyDataReaderVtk->SetFileName(fileName.c_str());
+    polyDataReaderVtk->Update();
+    auto polyDataVtk = polyDataReaderVtk->GetOutput();
+    auto pointsVtk = polyDataVtk->GetPoints();
+    auto tomoAVtk = polyDataVtk->GetPointData()->GetScalars("tomoA");
+    auto tomoBVtk = polyDataVtk->GetPointData()->GetScalars("tomoB");
+    auto resultVtk = polyDataVtk->GetPointData()->GetScalars("result");
+
+    int _nPoints = pointsVtk->GetNumberOfPoints();
+
+    auto _xyzArray = std::make_shared<std::vector<double>>(_nPoints, 0);
+    for (int i = 0; i < _nPoints; i++) {
+        auto xyz = pointsVtk->GetPoint(i);
+        for (int j = 0; j < 3; j++)
+            _xyzArray->push_back(xyz[j]);
     }
 
-    vtkSmartPointer<vtkVertex> vertex =
-            vtkSmartPointer<vtkVertex>::New();
-    vertex->Initialize(pointsArray.size() / 3, points);
+    setXyzArray(_xyzArray);
 
-    vtkSmartPointer<vtkCellArray> vertices =
-            vtkSmartPointer<vtkCellArray>::New();
-    vertices->InsertNextCell(vertex);
-
-    vtkSmartPointer<vtkPolyData> polyData =
-            vtkSmartPointer<vtkPolyData>::New();
-    polyData->SetPoints(points);
-
-    polyData->GetPointData()->SetScalars(result);
-    polyData->SetVerts(vertices);
-
-    polyData->GetPointData()->AddArray(tomoA);
-    polyData->GetPointData()->AddArray(tomoB);
-
-    writer->SetInputData(polyData);
-
+    for (int i = 0; i < _nPoints; i++) {
+        (*tomoA)[i] = tomoAVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+        (*tomoB)[i] = tomoBVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+        (*result)[i] = resultVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+    }
 }
 
 
@@ -47,65 +44,98 @@ int VtpCt::size() {
     return nPoints;
 }
 
-
-void VtpCt::setXyzArray(const std::vector<double> &xyzArray) {
-    for (int i = 0; i < xyzArray.size() / 3; i++)
-        points->SetPoint(vtkIdType(i), &xyzArray[i * 3]);
+void VtpCt::setXyzArray(std::shared_ptr<std::vector<double>> _xyzArray) {
+    xyzArray = _xyzArray;
+    nPoints = xyzArray->size() / 3;
+    tomoA->resize(nPoints, 0);
+    tomoB->resize(nPoints, 0);
+    result->resize(nPoints, 0);
 }
 
-void VtpCt::setTomoAArray(const std::vector<double> &valuesArray) {
-    setValues(tomoA, valuesArray);
+void VtpCt::setTomoA(std::shared_ptr<std::vector<double>> value) {
+    tomoA = value;
 }
 
-void VtpCt::setTomoBArray(const std::vector<double> &valuesArray) {
-    setValues(tomoB, valuesArray);
+void VtpCt::setTomoB(std::shared_ptr<std::vector<double>> value) {
+    tomoB = value;
 }
 
-void VtpCt::setResultArray(const std::vector<double> &valuesArray) {
-    setValues(result, valuesArray);
-}
-
-void VtpCt::setValues(vtkSmartPointer<vtkDoubleArray> values,
-                      const std::vector<double> &valuesArray) {
-    for (int i = 0; i < valuesArray.size(); i++)
-        values->SetVariantValue(vtkIdType(i), valuesArray[i]);
+void VtpCt::setResult(std::shared_ptr<std::vector<double>> value) {
+    result = value;
 }
 
 
-double *VtpCt::getXyz(const int &pointId) {
-    return points->GetPoint(vtkIdType(pointId));
+std::shared_ptr<std::vector<double>> VtpCt::getXyzArray() {
+    return xyzArray;
 }
 
-double *VtpCt::getTomoAValue(const int &pointId) {
-    return tomoA->GetPointer(vtkIdType(pointId));
+std::shared_ptr<std::vector<double>> VtpCt::getTomoA() {
+    return tomoA;
 }
 
-double *VtpCt::getTomoBValue(const int &pointId) {
-    return tomoB->GetPointer(vtkIdType(pointId));
+std::shared_ptr<std::vector<double>> VtpCt::getTomoB() {
+    return tomoB;
 }
 
-double *VtpCt::getResultValue(const int &pointId) {
-    return result->GetPointer(vtkIdType(pointId));
+std::shared_ptr<std::vector<double>> VtpCt::getResult() {
+    return result;
 }
 
 
-void VtpCt::setIsBinary(const bool &_isBinary) {
+void VtpCt::setFileIsBinary(const bool &_fileIsBinary) {
+    fileIsBinary = _fileIsBinary;
+}
 
-    isBinary = _isBinary;
+bool VtpCt::getFileIsBinary() {
+    return fileIsBinary;
+}
 
-    if (isBinary)
-        writer->SetDataModeToBinary();
+void VtpCt::saveIntoFile(const std::string &fileName) {
+
+    auto pointsVtk = vtkSmartPointer<vtkPoints>::New();
+    auto tomoAVtk = vtkSmartPointer<vtkDoubleArray>::New();
+    auto tomoBVtk = vtkSmartPointer<vtkDoubleArray>::New();
+    auto resultVtk = vtkSmartPointer<vtkDoubleArray>::New();
+
+    tomoAVtk->SetName("tomoA");
+    tomoBVtk->SetName("tomoB");
+    resultVtk->SetName("result");
+
+    for (int i = 0; i < nPoints; i++) {
+        pointsVtk->InsertNextPoint(&(*xyzArray)[i * 3]);
+        tomoAVtk->InsertNextValue((*tomoA)[i]);
+        tomoBVtk->InsertNextValue((*tomoB)[i]);
+        resultVtk->InsertNextValue((*result)[i]);
+    }
+
+    auto writerVtk = vtkSmartPointer<vtkXMLPolyDataWriter>::New();
+    if (fileIsBinary)
+        writerVtk->SetDataModeToBinary();
     else
-        writer->SetDataModeToAscii();
+        writerVtk->SetDataModeToAscii();
 
-}
+    vtkSmartPointer<vtkVertex> vertexVtk =
+            vtkSmartPointer<vtkVertex>::New();
+    vertexVtk->Initialize(nPoints, pointsVtk);
 
-bool VtpCt::getIsBinary() {
-    return isBinary;
-}
+    vtkSmartPointer<vtkCellArray> verticesVtk =
+            vtkSmartPointer<vtkCellArray>::New();
+    verticesVtk->InsertNextCell(vertexVtk);
 
-void VtpCt::savePoints(const std::string &fileName) {
-    writer->SetFileName(fileName.c_str());
-    writer->Write();
+    vtkSmartPointer<vtkPolyData> polyDataVtk =
+            vtkSmartPointer<vtkPolyData>::New();
+    polyDataVtk->SetPoints(pointsVtk);
+
+    polyDataVtk->GetPointData()->SetScalars(resultVtk);
+    polyDataVtk->SetVerts(verticesVtk);
+
+    polyDataVtk->GetPointData()->AddArray(tomoAVtk);
+    polyDataVtk->GetPointData()->AddArray(tomoBVtk);
+
+    writerVtk->SetInputData(polyDataVtk);
+
+    writerVtk->SetFileName(fileName.c_str());
+    writerVtk->Write();
+
 }
 
