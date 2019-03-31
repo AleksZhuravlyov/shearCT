@@ -1,6 +1,21 @@
 #include <VtpCt.h>
 
-VtpCt::VtpCt() : VtpCt(std::make_shared<std::vector<double>>(3, 0)) {}
+#include <vtkCellArray.h>
+#include <vtkPoints.h>
+#include <vtkXMLPolyDataWriter.h>
+#include <vtkPolyData.h>
+#include <vtkPointData.h>
+#include <vtkSmartPointer.h>
+#include <vtkDoubleArray.h>
+#include <vtkVertex.h>
+#include <vtkXMLPolyDataReader.h>
+#include <pugixml.hpp>
+
+
+VtpCt::VtpCt() : VtpCt(1) {}
+
+VtpCt::VtpCt(const int &_nPoints) :
+        VtpCt(std::make_shared<std::vector<double>>(_nPoints * 3, 0)) {}
 
 VtpCt::VtpCt(std::shared_ptr<std::vector<double>> _xyzArray) :
         xyzArray(_xyzArray),
@@ -90,7 +105,8 @@ bool VtpCt::getFileIsBinary() {
     return fileIsBinary;
 }
 
-void VtpCt::saveIntoFile(const std::string &fileName) {
+void VtpCt::savePointsFile(const std::string &fileName,
+                           const std::string &fileDescription) {
 
     auto pointsVtk = vtkSmartPointer<vtkPoints>::New();
     auto tomoAVtk = vtkSmartPointer<vtkDoubleArray>::New();
@@ -136,6 +152,44 @@ void VtpCt::saveIntoFile(const std::string &fileName) {
 
     writerVtk->SetFileName(fileName.c_str());
     writerVtk->Write();
+
+    fileNames.push_back(fileName);
+    fileDescriptions.push_back(fileDescription);
+
+}
+
+
+void VtpCt::clearFilesCollection() {
+    fileNames.clear();
+    fileDescriptions.clear();
+}
+
+
+void VtpCt::saveCollectionFile(const std::string &fileName) {
+
+    pugi::xml_document doc;
+
+    pugi::xml_node vtkFile = doc.append_child("VTKFile");
+    vtkFile.append_attribute("type") = "Collection";
+    vtkFile.append_attribute("version") = "1.0";
+    vtkFile.append_attribute("byte_order") = "LittleEndian";
+    vtkFile.append_attribute("header_type") = "UInt64";
+
+    pugi::xml_node collection = vtkFile.append_child("Collection");
+
+    for (int i = 0; i < fileNames.size(); i++) {
+
+        collection.append_child("DataSet");
+
+        collection.last_child().append_attribute("timestep").set_value(
+                fileDescriptions[i].c_str());
+
+        collection.last_child().append_attribute("file").set_value(
+                fileNames[i].c_str());
+
+    }
+
+    doc.save_file(fileName.c_str());
 
 }
 

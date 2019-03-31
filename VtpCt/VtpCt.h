@@ -1,15 +1,8 @@
 #ifndef VTPCT_H
 #define VTPCT_H
 
-#include <vtkCellArray.h>
-#include <vtkPoints.h>
-#include <vtkXMLPolyDataWriter.h>
-#include <vtkPolyData.h>
-#include <vtkPointData.h>
-#include <vtkSmartPointer.h>
-#include <vtkDoubleArray.h>
-#include <vtkVertex.h>
-#include <vtkXMLPolyDataReader.h>
+#include <vector>
+#include <string>
 
 
 class VtpCt {
@@ -17,6 +10,8 @@ class VtpCt {
 public:
 
     VtpCt();
+
+    VtpCt(const int &_nPoints);
 
     VtpCt(std::shared_ptr<std::vector<double>> _xyzArray);
 
@@ -50,7 +45,12 @@ public:
 
     bool getFileIsBinary();
 
-    void saveIntoFile(const std::string &fileName);
+    void savePointsFile(const std::string &fileName,
+                        const std::string &fileDescription);
+
+    void clearFilesCollection();
+
+    void saveCollectionFile(const std::string &fileName);
 
 
 private:
@@ -67,6 +67,10 @@ private:
     int nPoints;
 
     bool fileIsBinary;
+
+    std::vector<std::string> fileNames;
+
+    std::vector<std::string> fileDescriptions;
 
 };
 
