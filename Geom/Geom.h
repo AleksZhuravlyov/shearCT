@@ -2,7 +2,6 @@
 #define GEOM_H
 
 #include <cmath>
-#include <tuple>
 #include <vector>
 
 #include <CGAL/Simple_cartesian.h>
@@ -18,6 +17,7 @@ typedef CGAL::Simple_cartesian<double> Kernel;
 typedef CGAL::Aff_transformation_3<Kernel> Aff_transformation;
 typedef CGAL::Bbox_3 Bbox;
 typedef Kernel::Point_3 Point;
+typedef std::vector<Point> Points;
 typedef Kernel::Vector_3 Vector;
 typedef Kernel::Direction_3 Direction;
 

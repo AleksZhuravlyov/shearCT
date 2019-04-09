@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+#include <Geom.h>
+
 
 class VtpCt {
 
@@ -11,9 +13,7 @@ public:
 
     VtpCt();
 
-    VtpCt(const int &_nPoints);
-
-    VtpCt(std::shared_ptr<std::vector<double>> _xyzArray);
+    VtpCt(std::shared_ptr<Points> _points);
 
     VtpCt(const std::string &fileName);
 
@@ -23,7 +23,7 @@ public:
 
     int size();
 
-    void setXyzArray(std::shared_ptr<std::vector<double>> _xyzArray);
+    void setPoints(std::shared_ptr<Points> _points);
 
     void setTomoA(std::shared_ptr<std::vector<double>> value);
 
@@ -32,7 +32,7 @@ public:
     void setResult(std::shared_ptr<std::vector<double>> value);
 
 
-    std::shared_ptr<std::vector<double>> getXyzArray();
+    std::shared_ptr<Points> getPoints();
 
     std::shared_ptr<std::vector<double>> getTomoA();
 
@@ -55,7 +55,7 @@ public:
 
 private:
 
-    std::shared_ptr<std::vector<double>> xyzArray;
+    std::shared_ptr<Points> points;
 
     std::shared_ptr<std::vector<double>> tomoA;
 

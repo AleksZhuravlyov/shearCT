@@ -12,17 +12,15 @@
 #include <pugixml.hpp>
 
 
-VtpCt::VtpCt() : VtpCt(1) {}
+VtpCt::VtpCt() :
+        VtpCt(std::make_shared<Points>(1, Point(0, 0, 0))) {};
 
-VtpCt::VtpCt(const int &_nPoints) :
-        VtpCt(std::make_shared<std::vector<double>>(_nPoints * 3, 0)) {}
-
-VtpCt::VtpCt(std::shared_ptr<std::vector<double>> _xyzArray) :
-        xyzArray(_xyzArray),
-        nPoints(_xyzArray->size() / 3),
-        tomoA(std::make_shared<std::vector<double>>(_xyzArray->size() / 3, 0)),
-        tomoB(std::make_shared<std::vector<double>>(_xyzArray->size() / 3, 0)),
-        result(std::make_shared<std::vector<double>>(_xyzArray->size() / 3, 0)),
+VtpCt::VtpCt(std::shared_ptr<Points> _points) :
+        points(_points),
+        nPoints(_points->size()),
+        tomoA(std::make_shared<std::vector<double>>(_points->size(), 0)),
+        tomoB(std::make_shared<std::vector<double>>(_points->size(), 0)),
+        result(std::make_shared<std::vector<double>>(_points->size(), 0)),
         fileIsBinary(true) {}
 
 VtpCt::VtpCt(const std::string &fileName) : VtpCt() {
@@ -38,14 +36,13 @@ VtpCt::VtpCt(const std::string &fileName) : VtpCt() {
 
     int _nPoints = pointsVtk->GetNumberOfPoints();
 
-    auto _xyzArray = std::make_shared<std::vector<double>>(_nPoints, 0);
+    auto _points = std::make_shared<Points>();
     for (int i = 0; i < _nPoints; i++) {
         auto xyz = pointsVtk->GetPoint(i);
-        for (int j = 0; j < 3; j++)
-            _xyzArray->push_back(xyz[j]);
+        _points->push_back(Point(xyz[0], xyz[1], xyz[2]));
     }
 
-    setXyzArray(_xyzArray);
+    setPoints(_points);
 
     for (int i = 0; i < _nPoints; i++) {
         (*tomoA)[i] = tomoAVtk->GetVariantValue(vtkIdType(i)).ToDouble();
@@ -59,9 +56,9 @@ int VtpCt::size() {
     return nPoints;
 }
 
-void VtpCt::setXyzArray(std::shared_ptr<std::vector<double>> _xyzArray) {
-    xyzArray = _xyzArray;
-    nPoints = xyzArray->size() / 3;
+void VtpCt::setPoints(std::shared_ptr<Points> _points) {
+    points = _points;
+    nPoints = points->size();
     tomoA->resize(nPoints, 0);
     tomoB->resize(nPoints, 0);
     result->resize(nPoints, 0);
@@ -80,8 +77,8 @@ void VtpCt::setResult(std::shared_ptr<std::vector<double>> value) {
 }
 
 
-std::shared_ptr<std::vector<double>> VtpCt::getXyzArray() {
-    return xyzArray;
+std::shared_ptr<Points> VtpCt::getPoints() {
+    return points;
 }
 
 std::shared_ptr<std::vector<double>> VtpCt::getTomoA() {
@@ -118,7 +115,9 @@ void VtpCt::savePointsFile(const std::string &fileName,
     resultVtk->SetName("result");
 
     for (int i = 0; i < nPoints; i++) {
-        pointsVtk->InsertNextPoint(&(*xyzArray)[i * 3]);
+        pointsVtk->InsertNextPoint((*points)[i].x(),
+                                   (*points)[i].y(),
+                                   (*points)[i].z());
         tomoAVtk->InsertNextValue((*tomoA)[i]);
         tomoBVtk->InsertNextValue((*tomoB)[i]);
         resultVtk->InsertNextValue((*result)[i]);
