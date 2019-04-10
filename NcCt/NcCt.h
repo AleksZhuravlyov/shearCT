@@ -46,6 +46,8 @@ public:
 
     void saveRegionCt(const std::string &fileName);
 
+    RegionCt regionCt;
+
 
 private:
 
@@ -66,7 +68,7 @@ private:
     std::vector<std::vector<float>> dimArrays;
 
 
-    RegionCt regionCt;
+
 
 };
 

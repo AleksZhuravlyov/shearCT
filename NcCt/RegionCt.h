@@ -30,6 +30,10 @@ public:
         pointsVal = _pointsVal;
     }
 
+    double computePointVal(Point point);
+    void computePointsVal();
+
+
 private:
 
     std::shared_ptr<Points> points;
