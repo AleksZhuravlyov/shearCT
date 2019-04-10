@@ -5,6 +5,9 @@
 
 #include <netcdf>
 
+#include <Geom.h>
+#include <RegionCt.h>
+
 struct Dim {
     std::string name;
     size_t size;
@@ -14,22 +17,6 @@ struct Var {
     std::string name;
     std::string unitName;
     int dim;
-};
-
-class Region {
-
-public:
-
-    Region();
-    virtual ~Region() {}
-
-    void initiateRegion(const std::vector<size_t> &_start,
-                        const std::vector<size_t> &_width);
-
-    std::vector<size_t> start;
-    std::vector<size_t> width;
-    std::vector<std::vector<float>> dimArrays;
-    std::vector<short> val;
 };
 
 
@@ -54,10 +41,10 @@ public:
     std::shared_ptr<std::vector<short>> getVal();
 
 
-    void setRegion(const std::vector<size_t> &start,
-                   const std::vector<size_t> &width);
+    void setRegionCt(const std::vector<size_t> &start,
+                     const std::vector<size_t> &width);
 
-    void saveRegion(const std::string &fileName);
+    void saveRegionCt(const std::string &fileName);
 
 
 private:
@@ -79,7 +66,7 @@ private:
     std::vector<std::vector<float>> dimArrays;
 
 
-    Region region;
+    RegionCt regionCt;
 
 };
 

@@ -5,57 +5,23 @@
 #include <NcCt.h>
 #include <VtpCt.h>
 #include <Geom.h>
+#include <RegionCt.h>
 
 #include <StringAndNumber.h>
 
 int main() {
 
-    double RMin = 10;
-    double RStep = 0.1;
-    double RMax = 20;
+    auto ncFileName = std::string("/Volumes/ElkData/CT/samples/10.nc");
 
-    int nAnglePoints = 1000;
-    int nZPoints = 200;
-    double height = 10;
+    NcCt ncCt(ncFileName);
 
-    auto points = std::make_shared<Points>();
+    auto dims = ncCt.getDims();
 
+    std::cout << ncCt << std::endl;
 
-    for (int i = 0; i < nZPoints; i++)
-        for (int j = 0; j < nAnglePoints; ++j) {
+    ncCt.setRegionCt({500, 600, 600}, {30, 400, 500});
 
-            points->push_back(Point(
-                    RMin * cos(2. * M_PI / nAnglePoints * j),
-                    RMin * sin(2. * M_PI / nAnglePoints * j),
-                    height / nZPoints * i
-            ));
-        }
-
-
-    VtpCt vtpCt(points);
-
-    auto result = vtpCt.getResult();
-
-    for (int i = 0; i < (RMax - RMin) / RStep; i++) {
-        for (int j = 0; j < points->size(); j++) {
-
-            makeRZPointTransformation((*points)[j], RStep);
-
-            (*result)[j] = (*points)[j].x() * (*points)[j].x();
-            (*result)[j] += (*points)[j].y() * (*points)[j].y();
-            (*result)[j] += (*points)[j].z() * (*points)[j].z();
-            (*result)[j] = sqrt((*result)[j]);
-
-        }
-
-        vtpCt.savePointsFile(toString(RMin + RStep * i) + ".vtp",
-                             toString(RMin + RStep * i));
-
-        std::cout << "R " << RMin + RStep * i << std::endl;
-
-    }
-
-    vtpCt.saveCollectionFile("points.pvd");
+    ncCt.saveRegionCt("/Volumes/ElkData/CT/tmp/_10Cut.nc");
 
 
     return EXIT_SUCCESS;

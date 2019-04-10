@@ -3,37 +3,12 @@
 
 #include <NcCt.h>
 
-Region::Region() : start({0, 0, 0}),
-                   width({1, 1, 1}),
-                   dimArrays(std::vector<std::vector<float>>(3)),
-                   val(std::vector<short>(1)) {
-
-    for (int i = 0; i < width.size(); i++)
-        dimArrays[i].resize(width[i]);
-
-    val.resize(width[0] * width[1] * width[2]);
-}
-
-void Region::initiateRegion(const std::vector<size_t> &_start,
-                            const std::vector<size_t> &_width) {
-    start = _start;
-
-    if (width != _width) {
-        width = _width;
-
-        for (int i = 0; i < width.size(); i++)
-            dimArrays[i].resize(width[i]);
-
-        val.resize(width[0] * width[1] * width[2]);
-    }
-}
-
 
 NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
                                           path(fileName),
                                           valName("tomo"),
                                           units("units"),
-                                          region(Region()) {
+                                          regionCt(RegionCt()) {
 
     for (auto &&varData : file.getVars()) {
         vars.push_back(Var());
@@ -54,12 +29,12 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
 
 
     for (int i = 0; i < dimArrays.size(); i++)
-        std::copy(dimArrays[i].begin() + region.start[i],
-                  dimArrays[i].begin() + region.start[i]
-                  + region.width[i], region.dimArrays[i].begin());
+        std::copy(dimArrays[i].begin() + regionCt.start[i],
+                  dimArrays[i].begin() + regionCt.start[i]
+                  + regionCt.width[i], regionCt.dimArrays[i].begin());
 
-    file.getVar(valName).getVar(region.start, region.width,
-                                region.val.data());
+    file.getVar(valName).getVar(regionCt.start, regionCt.width,
+                                regionCt.val.data());
 
 }
 
@@ -99,43 +74,46 @@ std::shared_ptr<std::vector<Var>> NcCt::getVars() {
 }
 
 std::shared_ptr<std::vector<short>> NcCt::getVal() {
-    return std::make_shared<std::vector<short>>(region.val);
+    return std::make_shared<std::vector<short>>(regionCt.val);
 }
 
 
-void NcCt::setRegion(const std::vector<size_t> &start,
-                     const std::vector<size_t> &width) {
+void NcCt::setRegionCt(const std::vector<size_t> &start,
+                       const std::vector<size_t> &width) {
 
-    region.initiateRegion(start, width);
+    regionCt.initiateRegionCt(start, width);
 
     for (int i = 0; i < dimArrays.size(); i++)
-        std::copy(dimArrays[i].begin() + region.start[i],
-                  dimArrays[i].begin() + region.start[i]
-                  + region.width[i], region.dimArrays[i].begin());
+        std::copy(dimArrays[i].begin() + regionCt.start[i],
+                  dimArrays[i].begin() + regionCt.start[i]
+                  + regionCt.width[i], regionCt.dimArrays[i].begin());
 
-    file.getVar(valName).getVar(region.start, region.width, region.val.data());
+    file.getVar(valName).getVar(regionCt.start, regionCt.width,
+                                regionCt.val.data());
 
 }
 
-void NcCt::saveRegion(const std::string &fileName) {
+void NcCt::saveRegionCt(const std::string &fileName) {
 
-    netCDF::NcFile regionFile(fileName, netCDF::NcFile::replace);
+    netCDF::NcFile regionCtFile(fileName, netCDF::NcFile::replace);
 
     std::vector<netCDF::NcDim> ncDims(dims.size());
     for (int i = 0; i < dims.size(); i++)
-        ncDims[i] = regionFile.addDim(dims[i].name, region.width[i]);
+        ncDims[i] = regionCtFile.addDim(dims[i].name, regionCt.width[i]);
 
     std::vector<netCDF::NcVar> ncVars(dims.size());
     for (int i = 0; i < dims.size(); i++)
-        ncVars[i] = regionFile.addVar(vars[i].name, netCDF::ncFloat, ncDims[i]);
-    netCDF::NcVar valVar = regionFile.addVar(valName, netCDF::ncShort, ncDims);
+        ncVars[i] = regionCtFile.addVar(vars[i].name,
+                                        netCDF::ncFloat, ncDims[i]);
+    netCDF::NcVar valVar = regionCtFile.addVar(valName,
+                                               netCDF::ncShort, ncDims);
 
     for (int i = 0; i < dims.size(); i++)
         ncVars[i].putAtt(units, vars[i].unitName);
     valVar.putAtt(units, vars[dims.size()].unitName);
 
     for (int i = 0; i < dims.size(); i++)
-        ncVars[i].putVar(region.dimArrays[i].data());
-    valVar.putVar(region.val.data());
+        ncVars[i].putVar(regionCt.dimArrays[i].data());
+    valVar.putVar(regionCt.val.data());
 
 }
