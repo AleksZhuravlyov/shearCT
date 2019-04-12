@@ -27,18 +27,18 @@ int main() {
 
 
     double step = 3.60179e-05;
-    double z = (0.5 + 505) * step;
-    for (double x = 560 * step; x < 640 * step; x += 0.1 * step)
-        for (double y = 560 * step; y < 640 * step; y += 0.1 * step)
+    double z = 505 * step;
+    for (double x = 550 * step; x < 650 * step; x += step / 50)
+        for (double y = 550 * step; y < 650 * step; y += step / 50)
             points->push_back(Point(x, y, z));
 
     VtpCt vtpCt(points);
     auto result = vtpCt.getResult();
 
-    auto transformation = constructZRotation(1. * M_PI / 180);
+    /*auto transformation = constructZRotation(1. * M_PI / 180);
 
     for (auto &&point : *points)
-        point = point.transform(transformation);
+        point = point.transform(transformation);*/
 
     ncCt.regionCt.setPoints(points, result);
 

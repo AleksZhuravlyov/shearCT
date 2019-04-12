@@ -61,32 +61,32 @@ double RegionCt::computePointVal(Point point) {
     std::cout << "xWeight " << xWeight << std::endl;
     std::cout << std::endl;*/
 
-    auto iCorners = std::vector<int>(7, 0);
-    auto CornerWeights = std::vector<double>(7, 0);
+    auto iCorners = std::vector<int>(8, 0);
+    auto CornerWeights = std::vector<double>(8, 0);
 
     iCorners[0] = (iz + 0) * ny * nx + (iy + 0) * nx + (ix + 0);
-    CornerWeights[0] = zWeight * yWeight * xWeight;
+    CornerWeights[0] = (1 - zWeight) * (1 - yWeight) * (1 - xWeight);
 
     iCorners[1] = (iz + 0) * ny * nx + (iy + 0) * nx + (ix + 1);
-    CornerWeights[1] = zWeight * yWeight * (1 - xWeight);
+    CornerWeights[1] = (1 - zWeight) * (1 - yWeight) * xWeight;
 
     iCorners[2] = (iz + 0) * ny * nx + (iy + 1) * nx + (ix + 0);
-    CornerWeights[2] = zWeight * (1 - yWeight) * xWeight;
+    CornerWeights[2] = (1 - zWeight) * yWeight * (1 - xWeight);
 
     iCorners[3] = (iz + 0) * ny * nx + (iy + 1) * nx + (ix + 1);
-    CornerWeights[3] = zWeight * (1 - yWeight) * (1 - xWeight);
+    CornerWeights[3] = (1 - zWeight) * yWeight * xWeight;
 
     iCorners[4] = (iz + 1) * ny * nx + (iy + 0) * nx + (ix + 0);
-    CornerWeights[4] = (1 - zWeight) * yWeight * xWeight;
+    CornerWeights[4] = zWeight * (1 - yWeight) * (1 - xWeight);
 
     iCorners[5] = (iz + 1) * ny * nx + (iy + 0) * nx + (ix + 1);
-    CornerWeights[5] = (1 - zWeight) * yWeight * (1 - xWeight);
+    CornerWeights[5] = zWeight * (1 - yWeight) * xWeight;
 
     iCorners[6] = (iz + 1) * ny * nx + (iy + 1) * nx + (ix + 0);
-    CornerWeights[6] = (1 - zWeight) * (1 - yWeight) * xWeight;
+    CornerWeights[6] = zWeight * yWeight * (1 - xWeight);
 
     iCorners[7] = (iz + 1) * ny * nx + (iy + 1) * nx + (ix + 1);
-    CornerWeights[7] = (1 - zWeight) * (1 - yWeight) * (1 - xWeight);
+    CornerWeights[7] = zWeight * yWeight * xWeight;
 
 
     double pointVal = 0;
