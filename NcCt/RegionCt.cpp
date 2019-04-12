@@ -34,9 +34,9 @@ double RegionCt::computePointVal(Point point) {
     auto z = point.z();
 
 
-    auto xInit = double(dimArrays[0][0]);
+    auto zInit = double(dimArrays[0][0]);
     auto yInit = double(dimArrays[1][0]);
-    auto zInit = double(dimArrays[2][0]);
+    auto xInit = double(dimArrays[2][0]);
 
     int nz = dimArrays[0].size();
     int ny = dimArrays[1].size();

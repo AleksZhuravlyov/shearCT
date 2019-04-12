@@ -44,6 +44,8 @@ public:
     void setRegionCt(const std::vector<size_t> &start,
                      const std::vector<size_t> &width);
 
+    void setRegionCt(const Bbox &bbox);
+
     void saveRegionCt(const std::string &fileName);
 
     RegionCt regionCt;

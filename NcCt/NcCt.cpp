@@ -93,6 +93,37 @@ void NcCt::setRegionCt(const std::vector<size_t> &start,
 
 }
 
+
+void NcCt::setRegionCt(const Bbox &bbox) {
+
+    auto xInit = double(dimArrays[0][0]);
+    auto yInit = double(dimArrays[1][0]);
+    auto zInit = double(dimArrays[2][0]);
+
+    auto zStep = double(dimArrays[0][1] - dimArrays[0][0]);
+    auto yStep = double(dimArrays[1][1] - dimArrays[1][0]);
+    auto xStep = double(dimArrays[2][1] - dimArrays[2][0]);
+
+    auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 1;
+    auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 1;
+    auto zStart = size_t((bbox.zmin() - zInit) / zStep) - 1;
+
+    auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep) + 5;
+    auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep) + 5;
+    auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep) + 5;
+
+
+    std::cout << xStart << " " << yStart << " " << zStart << std::endl;
+    std::cout << xWidth << " " << yWidth << " " << zWidth << std::endl;
+
+    std::vector<size_t> start = {zStart, yStart, xStart};
+    std::vector<size_t> width = {zWidth, yWidth, xWidth};
+
+    setRegionCt(start, width);
+
+}
+
+
 void NcCt::saveRegionCt(const std::string &fileName) {
 
     netCDF::NcFile regionCtFile(fileName, netCDF::NcFile::replace);
