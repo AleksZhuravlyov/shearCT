@@ -6,17 +6,11 @@ set(POJECT_NAME shearCT)
 
 project(${POJECT_NAME})
 
-
-find_package(VTK COMPONENTS
-        vtkCommonCore
-        vtkCommonDataModel
-        vtkIOXML QUIET
-        )
+find_package(VTK REQUIRED)
 
 find_package(pugixml)
 
 find_package(CGAL)
-
 
 set(SOURCE_CODE main.cpp
         NcCt/NcCt.cpp
