@@ -5,6 +5,7 @@
 #include <string>
 
 #include <Geom.h>
+#include <PointsCt.h>
 
 
 class VtpCt {
@@ -13,33 +14,13 @@ public:
 
     VtpCt();
 
-    VtpCt(std::shared_ptr<Points> _points);
-
-    VtpCt(const std::string &fileName);
+    VtpCt(std::shared_ptr<PointsCt> _pointsCt);
 
 
     virtual ~VtpCt() {}
 
 
-    int size();
-
-    void setPoints(std::shared_ptr<Points> _points);
-
-    void setTomoA(std::shared_ptr<std::vector<double>> value);
-
-    void setTomoB(std::shared_ptr<std::vector<double>> value);
-
-    void setResult(std::shared_ptr<std::vector<double>> value);
-
-
-    std::shared_ptr<Points> getPoints();
-
-    std::shared_ptr<std::vector<double>> getTomoA();
-
-    std::shared_ptr<std::vector<double>> getTomoB();
-
-    std::shared_ptr<std::vector<double>> getResult();
-
+    void readPointsFile(const std::string &fileName);
 
     void setFileIsBinary(const bool &_fileIsBinary);
 
@@ -55,16 +36,8 @@ public:
 
 private:
 
-    std::shared_ptr<Points> points;
+    std::shared_ptr<PointsCt> pointsCt;
 
-    std::shared_ptr<std::vector<double>> tomoA;
-
-    std::shared_ptr<std::vector<double>> tomoB;
-
-    std::shared_ptr<std::vector<double>> result;
-
-
-    int nPoints;
 
     bool fileIsBinary;
 

@@ -5,6 +5,7 @@
 #include <NcCt.h>
 #include <VtpCt.h>
 #include <Geom.h>
+#include <PointsCt.h>
 
 #include <StringAndNumber.h>
 
@@ -46,13 +47,15 @@ int main() {
 
     ncCt.setRegionCt(bbox);
 
-    // ncCt.setRegionCt({500, 520, 520}, {10, 160, 160});
 
     ncCt.saveRegionCt("/Volumes/ElkData/CT/tmp/_10Cut.nc");
 
 
-    VtpCt vtpCt(points);
-    auto result = vtpCt.getResult();
+    auto pointsCt = PointsCt(points);
+    auto result = pointsCt.getResult();
+
+
+    auto vtpCt = VtpCt(std::make_shared<PointsCt>(pointsCt));
 
 
     ncCt.regionCt.setPoints(points, result);
@@ -61,6 +64,12 @@ int main() {
 
 
     vtpCt.savePointsFile("result.vtp", "0");
+
+
+    /*PointsCt pointsCt;
+    VtpCt vtpCt(std::make_shared<PointsCt>(pointsCt));
+    vtpCt.readPointsFile("result.vtp");
+    vtpCt.savePointsFile("rewriteResult.vtp", "0");*/
 
 
     return EXIT_SUCCESS;

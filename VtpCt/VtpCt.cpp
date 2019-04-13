@@ -13,17 +13,13 @@
 
 
 VtpCt::VtpCt() :
-        VtpCt(std::make_shared<Points>(1, Point(0, 0, 0))) {};
+        VtpCt(std::make_shared<PointsCt>()) {};
 
-VtpCt::VtpCt(std::shared_ptr<Points> _points) :
-        points(_points),
-        nPoints(_points->size()),
-        tomoA(std::make_shared<std::vector<double>>(_points->size(), 0)),
-        tomoB(std::make_shared<std::vector<double>>(_points->size(), 0)),
-        result(std::make_shared<std::vector<double>>(_points->size(), 0)),
+VtpCt::VtpCt(std::shared_ptr<PointsCt> _pointsCt) :
+        pointsCt(_pointsCt),
         fileIsBinary(true) {}
 
-VtpCt::VtpCt(const std::string &fileName) : VtpCt() {
+void VtpCt::readPointsFile(const std::string &fileName) {
 
     auto polyDataReaderVtk = vtkSmartPointer<vtkXMLPolyDataReader>::New();
     polyDataReaderVtk->SetFileName(fileName.c_str());
@@ -41,8 +37,11 @@ VtpCt::VtpCt(const std::string &fileName) : VtpCt() {
         auto xyz = pointsVtk->GetPoint(i);
         _points->push_back(Point(xyz[0], xyz[1], xyz[2]));
     }
+    pointsCt->setPoints(_points);
 
-    setPoints(_points);
+    auto tomoA = pointsCt->getTomoA();
+    auto tomoB = pointsCt->getTomoB();
+    auto result = pointsCt->getResult();
 
     for (int i = 0; i < _nPoints; i++) {
         (*tomoA)[i] = tomoAVtk->GetVariantValue(vtkIdType(i)).ToDouble();
@@ -52,46 +51,6 @@ VtpCt::VtpCt(const std::string &fileName) : VtpCt() {
 }
 
 
-int VtpCt::size() {
-    return nPoints;
-}
-
-void VtpCt::setPoints(std::shared_ptr<Points> _points) {
-    points = _points;
-    nPoints = points->size();
-    tomoA->resize(nPoints, 0);
-    tomoB->resize(nPoints, 0);
-    result->resize(nPoints, 0);
-}
-
-void VtpCt::setTomoA(std::shared_ptr<std::vector<double>> value) {
-    tomoA = value;
-}
-
-void VtpCt::setTomoB(std::shared_ptr<std::vector<double>> value) {
-    tomoB = value;
-}
-
-void VtpCt::setResult(std::shared_ptr<std::vector<double>> value) {
-    result = value;
-}
-
-
-std::shared_ptr<Points> VtpCt::getPoints() {
-    return points;
-}
-
-std::shared_ptr<std::vector<double>> VtpCt::getTomoA() {
-    return tomoA;
-}
-
-std::shared_ptr<std::vector<double>> VtpCt::getTomoB() {
-    return tomoB;
-}
-
-std::shared_ptr<std::vector<double>> VtpCt::getResult() {
-    return result;
-}
 
 
 void VtpCt::setFileIsBinary(const bool &_fileIsBinary) {
@@ -114,7 +73,14 @@ void VtpCt::savePointsFile(const std::string &fileName,
     tomoBVtk->SetName("tomoB");
     resultVtk->SetName("result");
 
-    for (int i = 0; i < nPoints; i++) {
+
+    auto points = pointsCt->getPoints();
+    auto tomoA = pointsCt->getTomoA();
+    auto tomoB = pointsCt->getTomoB();
+    auto result = pointsCt->getResult();
+
+
+    for (int i = 0; i < pointsCt->size(); i++) {
         pointsVtk->InsertNextPoint((*points)[i].x(),
                                    (*points)[i].y(),
                                    (*points)[i].z());
@@ -131,7 +97,7 @@ void VtpCt::savePointsFile(const std::string &fileName,
 
     vtkSmartPointer<vtkVertex> vertexVtk =
             vtkSmartPointer<vtkVertex>::New();
-    vertexVtk->Initialize(nPoints, pointsVtk);
+    vertexVtk->Initialize(pointsCt->size(), pointsVtk);
 
     vtkSmartPointer<vtkCellArray> verticesVtk =
             vtkSmartPointer<vtkCellArray>::New();

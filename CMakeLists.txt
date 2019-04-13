@@ -16,12 +16,14 @@ set(SOURCE_CODE main.cpp
         NcCt/NcCt.cpp
         VtpCt/VtpCt.cpp
         Geom/Geom.cpp
-        NcCt/RegionCt.cpp)
+        NcCt/RegionCt.cpp
+        PointsCt/PointsCt.cpp)
 
 include_directories(.)
 include_directories(NcCt)
 include_directories(VtpCt)
 include_directories(Geom)
+include_directories(PointsCt)
 include_directories(/usr/local/Cellar/netcdf/4.6.2/include)
 
 set(CMAKE_BUILD_TYPE Release)
