@@ -15,6 +15,9 @@ public:
 
     PointsCt(std::shared_ptr<Points> _points);
 
+    PointsCt(std::shared_ptr<Points> _points,
+             std::shared_ptr<Basis> _basis);
+
 
     virtual ~PointsCt() {}
 
@@ -38,6 +41,13 @@ public:
 
     std::shared_ptr<std::vector<double>> getResult();
 
+    std::shared_ptr<Basis> getBasis();
+
+    void setBasis(std::shared_ptr<Basis> _basis);
+
+
+    void translateBasisToCenter();
+
 
 private:
 
@@ -51,6 +61,7 @@ private:
 
     std::shared_ptr<std::vector<double>> result;
 
+    std::shared_ptr<Basis> basis;
 
 };
 

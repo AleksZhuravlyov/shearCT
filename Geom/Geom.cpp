@@ -65,6 +65,20 @@ Aff_transformation Basis::createAff_transformation() {
 }
 
 
+void Basis::setOrigin(const Point &_origin) {
+    origin = _origin;
+}
+
+
+std::shared_ptr<std::vector<Direction>> Basis::getDirections(){
+    return std::make_shared<std::vector<Direction>>(axis);
+}
+
+std::shared_ptr<Point> Basis::getOrigin(){
+    return std::make_shared<Point>(origin);
+}
+
+
 std::ostream &operator<<(std::ostream &stream, const Basis &basis) {
     for (auto axes : basis.axis)
         stream << axes << std::endl;

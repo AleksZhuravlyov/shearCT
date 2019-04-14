@@ -47,6 +47,13 @@ public:
     Aff_transformation createAff_transformation();
 
 
+    void setOrigin(const Point &_origin);
+
+
+    std::shared_ptr<std::vector<Direction>> getDirections();
+
+    std::shared_ptr<Point> getOrigin();
+
     friend std::ostream &operator<<(std::ostream &stream, const Basis &basis);
 
 

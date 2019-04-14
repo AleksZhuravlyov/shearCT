@@ -21,33 +21,23 @@ int main() {
 
 
     auto points = std::make_shared<Points>();
-
-
     double step = 3.60179e-05;
     double z = 505 * step;
     for (double x = 550 * step; x < 660 * step; x += step / 10)
         for (double y = 550 * step; y < 660 * step; y += step / 10)
             points->push_back(Point(x, y, z));
 
-    auto transformation1 = constructXRotation(7. * M_PI / 180);
-
+        auto transformation1 = constructXRotation(7. * M_PI / 180);
     for (auto &&point : *points)
         point = point.transform(transformation1);
 
     auto transformation2 = constructZRotation(7. * M_PI / 180);
-
     for (auto &&point : *points)
         point = point.transform(transformation2);
 
 
     auto bbox = CGAL::bbox_3(points->begin(), points->end());
-
-    std::cout << bbox << std::endl;
-
-
     ncCt.setRegionCt(bbox);
-
-
     ncCt.saveRegionCt("/Volumes/ElkData/CT/tmp/_10Cut.nc");
 
 
@@ -56,10 +46,10 @@ int main() {
 
 
     auto vtpCt = VtpCt(std::make_shared<PointsCt>(pointsCt));
+    vtpCt.setFileIsBinary(false);
 
 
     ncCt.regionCt.setPoints(points, result);
-
     ncCt.regionCt.computePointsVal();
 
 

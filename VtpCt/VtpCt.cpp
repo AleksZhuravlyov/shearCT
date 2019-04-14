@@ -29,6 +29,7 @@ void VtpCt::readPointsFile(const std::string &fileName) {
     auto tomoAVtk = polyDataVtk->GetPointData()->GetScalars("tomoA");
     auto tomoBVtk = polyDataVtk->GetPointData()->GetScalars("tomoB");
     auto resultVtk = polyDataVtk->GetPointData()->GetScalars("result");
+    auto basisVtk = polyDataVtk->GetFieldData()->GetArray("basis");
 
     int _nPoints = pointsVtk->GetNumberOfPoints();
 
@@ -48,9 +49,25 @@ void VtpCt::readPointsFile(const std::string &fileName) {
         (*tomoB)[i] = tomoBVtk->GetVariantValue(vtkIdType(i)).ToDouble();
         (*result)[i] = resultVtk->GetVariantValue(vtkIdType(i)).ToDouble();
     }
+
+
+    std::vector<double> basisValues;
+    for (int i = 0; i < 12; i++)
+        basisValues.push_back(
+                basisVtk->GetVariantValue(vtkIdType(i)).ToDouble());
+
+    std::vector<Direction> axis;
+    for (int i = 0; i < 3; i++)
+        axis.push_back(Direction(basisValues[i * 3 + 0],
+                            basisValues[i * 3 + 1],
+                            basisValues[i * 3 + 2]));
+
+    auto origin = Point(basisValues[9],
+                        basisValues[10],
+                        basisValues[11]);
+
+    pointsCt->setBasis(std::make_shared<Basis>(Basis(axis, origin)));
 }
-
-
 
 
 void VtpCt::setFileIsBinary(const bool &_fileIsBinary) {
@@ -112,6 +129,29 @@ void VtpCt::savePointsFile(const std::string &fileName,
 
     polyDataVtk->GetPointData()->AddArray(tomoAVtk);
     polyDataVtk->GetPointData()->AddArray(tomoBVtk);
+
+
+    std::vector<double> basisValues;
+
+    auto directions = pointsCt->getBasis()->getDirections();
+    for (auto &direction : *directions) {
+        basisValues.push_back(direction.dx());
+        basisValues.push_back(direction.dy());
+        basisValues.push_back(direction.dz());
+    }
+
+    auto origin = pointsCt->getBasis()->getOrigin();
+    basisValues.push_back(origin->x());
+    basisValues.push_back(origin->y());
+    basisValues.push_back(origin->z());
+
+    vtkSmartPointer<vtkDoubleArray> basisVtk =
+            vtkSmartPointer<vtkDoubleArray>::New();
+
+    basisVtk->SetNumberOfComponents(12);
+    basisVtk->SetName("basis");
+    basisVtk->InsertNextTuple(basisValues.data());
+    polyDataVtk->GetFieldData()->AddArray(basisVtk);
 
     writerVtk->SetInputData(polyDataVtk);
 
