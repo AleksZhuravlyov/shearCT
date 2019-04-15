@@ -15,9 +15,10 @@ find_package(CGAL)
 set(SOURCE_CODE main.cpp
         NcCt/NcCt.cpp
         VtpCt/VtpCt.cpp
-        Geom/Geom.cpp
+        Geom/Basis.cpp
         NcCt/RegionCt.cpp
-        PointsCt/PointsCt.cpp)
+        PointsCt/PointsCt.cpp
+        Geom/Transformation.cpp)
 
 include_directories(.)
 include_directories(NcCt)

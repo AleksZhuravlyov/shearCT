@@ -4,8 +4,9 @@
 
 #include <NcCt.h>
 #include <VtpCt.h>
-#include <Geom.h>
+#include <Basis.h>
 #include <PointsCt.h>
+#include <Transformation.h>
 
 #include <StringAndNumber.h>
 
