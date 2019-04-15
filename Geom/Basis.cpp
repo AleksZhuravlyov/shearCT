@@ -25,9 +25,14 @@ Basis::Basis(Basis &&basis) : axes(basis.axes), origin(basis.origin) {}
 
 
 Basis &Basis::operator=(Basis &&basis) {
-    std::swap(axes, basis.axes);
-    std::swap(origin, basis.origin);
+
+    if (&basis == this)
+        return *this;
+
+    axes = basis.axes;
+    origin = basis.origin;
     return *this;
+
 }
 
 

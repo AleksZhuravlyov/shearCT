@@ -35,12 +35,14 @@ PointsCt::PointsCt(PointsCt &&pointsCt) : points(pointsCt.points),
 
 PointsCt &PointsCt::operator=(PointsCt &&pointsCt) {
 
-    std::swap(points, pointsCt.points);
-    std::swap(basis, pointsCt.basis);
+    if (&pointsCt == this)
+        return *this;
 
-    std::swap(tomoA, pointsCt.tomoA);
-    std::swap(tomoB, pointsCt.tomoB);
-    std::swap(result, pointsCt.result);
+    points = std::make_shared<Points>(*(pointsCt.points));
+    basis = std::make_shared<Basis>(*(pointsCt.basis));
+    tomoA = std::make_shared < std::vector < double >> (*(pointsCt.tomoA));
+    tomoB = std::make_shared < std::vector < double >> (*(pointsCt.tomoB));
+    result = std::make_shared < std::vector < double >> (*(pointsCt.result));
 
     return *this;
 
