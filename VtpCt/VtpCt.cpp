@@ -31,20 +31,21 @@ void VtpCt::readPointsFile(const std::string &fileName) {
     auto resultVtk = polyDataVtk->GetPointData()->GetScalars("result");
     auto basisVtk = polyDataVtk->GetFieldData()->GetArray("basis");
 
-    int _nPoints = pointsVtk->GetNumberOfPoints();
+    int nPoints = pointsVtk->GetNumberOfPoints();
 
-    auto _points = std::make_shared<Points>();
-    for (int i = 0; i < _nPoints; i++) {
+    auto points = std::make_shared<Points>();
+    for (int i = 0; i < nPoints; i++) {
         auto xyz = pointsVtk->GetPoint(i);
-        _points->push_back(Point(xyz[0], xyz[1], xyz[2]));
+        points->push_back(Point(xyz[0], xyz[1], xyz[2]));
     }
-    pointsCt->setPoints(_points);
+
+    pointsCt->setPoints(points);
 
     auto tomoA = pointsCt->getTomoA();
     auto tomoB = pointsCt->getTomoB();
     auto result = pointsCt->getResult();
 
-    for (int i = 0; i < _nPoints; i++) {
+    for (int i = 0; i < nPoints; i++) {
         (*tomoA)[i] = tomoAVtk->GetVariantValue(vtkIdType(i)).ToDouble();
         (*tomoB)[i] = tomoBVtk->GetVariantValue(vtkIdType(i)).ToDouble();
         (*result)[i] = resultVtk->GetVariantValue(vtkIdType(i)).ToDouble();
@@ -56,17 +57,17 @@ void VtpCt::readPointsFile(const std::string &fileName) {
         basisValues.push_back(
                 basisVtk->GetVariantValue(vtkIdType(i)).ToDouble());
 
-    std::vector<Direction> axis;
+    std::vector<Direction> axes;
     for (int i = 0; i < 3; i++)
-        axis.push_back(Direction(basisValues[i * 3 + 0],
-                            basisValues[i * 3 + 1],
-                            basisValues[i * 3 + 2]));
+        axes.push_back(Direction(basisValues[i * 3 + 0],
+                                 basisValues[i * 3 + 1],
+                                 basisValues[i * 3 + 2]));
 
     auto origin = Point(basisValues[9],
                         basisValues[10],
                         basisValues[11]);
 
-    pointsCt->setBasis(std::make_shared<Basis>(Basis(axis, origin)));
+    pointsCt->setBasis(std::make_shared<Basis>(Basis(axes, origin)));
 }
 
 
@@ -133,7 +134,7 @@ void VtpCt::savePointsFile(const std::string &fileName,
 
     std::vector<double> basisValues;
 
-    auto directions = pointsCt->getBasis()->getDirections();
+    auto directions = pointsCt->getBasis()->getAxes();
     for (auto &direction : *directions) {
         basisValues.push_back(direction.dx());
         basisValues.push_back(direction.dy());

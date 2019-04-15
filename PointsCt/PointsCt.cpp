@@ -13,41 +13,121 @@ PointsCt::PointsCt(std::shared_ptr<Points> _points) :
 PointsCt::PointsCt(std::shared_ptr<Points> _points,
                    std::shared_ptr<Basis> _basis) :
         points(_points),
-        nPoints(_points->size()),
+        basis(_basis),
         tomoA(std::make_shared<std::vector<double>>(_points->size(), 0)),
         tomoB(std::make_shared<std::vector<double>>(_points->size(), 0)),
-        result(std::make_shared<std::vector<double>>(_points->size(), 0)),
-        basis(_basis) {}
+        result(std::make_shared<std::vector<double>>(_points->size(), 0)) {}
+
+
+PointsCt::PointsCt(const PointsCt &pointsCt) : points(pointsCt.points),
+                                               basis(pointsCt.basis),
+                                               tomoA(pointsCt.tomoA),
+                                               tomoB(pointsCt.tomoB),
+                                               result(pointsCt.result) {}
+
+PointsCt::PointsCt(PointsCt &&pointsCt) : points(pointsCt.points),
+                                          basis(pointsCt.basis),
+                                          tomoA(pointsCt.tomoA),
+                                          tomoB(pointsCt.tomoB),
+                                          result(pointsCt.result) {}
+
+
+PointsCt &PointsCt::operator=(PointsCt &&pointsCt) {
+
+    std::swap(points, pointsCt.points);
+    std::swap(basis, pointsCt.basis);
+
+    std::swap(tomoA, pointsCt.tomoA);
+    std::swap(tomoB, pointsCt.tomoB);
+    std::swap(result, pointsCt.result);
+
+    return *this;
+
+}
+
+
+PointsCt PointsCt::transform(const Aff_transformation &transformation) {
+
+    auto basisTransformation = basis->generateTransformation();
+    auto basisInverseTransformation = basisTransformation.inverse();
+
+
+    PointsCt pointsCt(*this);
+
+    for (auto &&point : *(pointsCt.points))
+        point = point.transform(basisInverseTransformation);
+    *(pointsCt.basis) = pointsCt.basis->transform(basisInverseTransformation);
+
+    for (auto &&point : *(pointsCt.points))
+        point = point.transform(transformation);
+    *(pointsCt.basis) = pointsCt.basis->transform(transformation);
+
+    for (auto &&point : *(pointsCt.points))
+        point = point.transform(basisTransformation);
+    *(pointsCt.basis) = pointsCt.basis->transform(basisTransformation);
+
+
+    return pointsCt;
+
+}
+
+
+void PointsCt::translateBasisToCenter() {
+
+    auto bbox = CGAL::bbox_3(points->begin(), points->end());
+
+    auto center = Point((bbox.xmax() + bbox.xmin()) / 2,
+                        (bbox.ymax() + bbox.ymin()) / 2,
+                        (bbox.zmax() + bbox.zmin()) / 2);
+
+    basis->setOrigin(center);
+
+}
 
 
 int PointsCt::size() {
-    return nPoints;
+    return points->size();
 }
+
 
 void PointsCt::setPoints(std::shared_ptr<Points> _points) {
+
+    if (points->size() != _points->size()) {
+        tomoA->resize(_points->size(), 0);
+        tomoB->resize(_points->size(), 0);
+        result->resize(_points->size(), 0);
+    }
+
     points = _points;
-    nPoints = points->size();
-    tomoA->resize(nPoints, 0);
-    tomoB->resize(nPoints, 0);
-    result->resize(nPoints, 0);
+
 }
 
-void PointsCt::setTomoA(std::shared_ptr<std::vector<double>> value) {
-    tomoA = value;
+void PointsCt::setBasis(std::shared_ptr<Basis> _basis) {
+    basis = _basis;
 }
 
-void PointsCt::setTomoB(std::shared_ptr<std::vector<double>> value) {
-    tomoB = value;
+
+void PointsCt::setTomoA(std::shared_ptr<std::vector<double>> _tomoA) {
+    tomoA = _tomoA;
 }
 
-void PointsCt::setResult(std::shared_ptr<std::vector<double>> value) {
-    result = value;
+void PointsCt::setTomoB(std::shared_ptr<std::vector<double>> _tomoB) {
+    tomoB = _tomoB;
+}
+
+void PointsCt::setResult(std::shared_ptr<std::vector<double>> _result) {
+    result = _result;
 }
 
 
 std::shared_ptr<Points> PointsCt::getPoints() {
     return points;
 }
+
+std::shared_ptr<Basis> PointsCt::getBasis() {
+    return basis;
+}
+
 
 std::shared_ptr<std::vector<double>> PointsCt::getTomoA() {
     return tomoA;
@@ -62,21 +142,6 @@ std::shared_ptr<std::vector<double>> PointsCt::getResult() {
 }
 
 
-std::shared_ptr<Basis> PointsCt::getBasis() {
-    return basis;
+Bbox PointsCt::generateBbox() {
+    return CGAL::bbox_3(points->begin(), points->end());
 }
-
-
-void PointsCt::setBasis(std::shared_ptr<Basis> _basis) {
-    basis = _basis;
-}
-
-
-void PointsCt::translateBasisToCenter() {
-    auto bbox = CGAL::bbox_3(points->begin(), points->end());
-    auto center = Point((bbox.xmax() - bbox.xmin()) / 2,
-                        (bbox.ymax() - bbox.ymin()) / 2,
-                        (bbox.zmax() - bbox.zmin()) / 2);
-    basis->setOrigin(center);
-}
-

@@ -70,8 +70,6 @@ private:
     std::vector<std::vector<float>> dimArrays;
 
 
-
-
 };
 
 

@@ -18,22 +18,41 @@ public:
     PointsCt(std::shared_ptr<Points> _points,
              std::shared_ptr<Basis> _basis);
 
+    PointsCt(const PointsCt &pointsCt);
+
+    PointsCt(PointsCt &&pointsCt);
 
     virtual ~PointsCt() {}
 
 
+    PointsCt &operator=(PointsCt &&pointsCt);
+
+
+    PointsCt transform(const Aff_transformation &transformation);
+
+
+    void translateBasisToCenter();
+
+
     int size();
+
 
     void setPoints(std::shared_ptr<Points> _points);
 
-    void setTomoA(std::shared_ptr<std::vector<double>> value);
+    void setBasis(std::shared_ptr<Basis> _basis);
 
-    void setTomoB(std::shared_ptr<std::vector<double>> value);
 
-    void setResult(std::shared_ptr<std::vector<double>> value);
+    void setTomoA(std::shared_ptr<std::vector<double>> _tomoA);
+
+    void setTomoB(std::shared_ptr<std::vector<double>> _tomoB);
+
+    void setResult(std::shared_ptr<std::vector<double>> _result);
 
 
     std::shared_ptr<Points> getPoints();
+
+    std::shared_ptr<Basis> getBasis();
+
 
     std::shared_ptr<std::vector<double>> getTomoA();
 
@@ -41,27 +60,22 @@ public:
 
     std::shared_ptr<std::vector<double>> getResult();
 
-    std::shared_ptr<Basis> getBasis();
 
-    void setBasis(std::shared_ptr<Basis> _basis);
-
-
-    void translateBasisToCenter();
+    Bbox generateBbox();
 
 
 private:
 
-    int nPoints;
-
     std::shared_ptr<Points> points;
+
+    std::shared_ptr<Basis> basis;
+
 
     std::shared_ptr<std::vector<double>> tomoA;
 
     std::shared_ptr<std::vector<double>> tomoB;
 
     std::shared_ptr<std::vector<double>> result;
-
-    std::shared_ptr<Basis> basis;
 
 };
 

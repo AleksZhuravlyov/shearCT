@@ -1,20 +1,23 @@
+#include <cmath>
+
 #include <Basis.h>
 #include <Transformation.h>
 
 
-Basis::Basis(const std::vector<Direction> &_axis, const Point &_origin) :
-        axes(_axis), origin(_origin) {}
+Basis::Basis() :
+        Basis({Direction(1, 0, 0), Direction(0, 1, 0), Direction(0, 0, 1)},
+              Point(0, 0, 0)) {}
 
 Basis::Basis(const Point &_origin) :
         Basis({Direction(1, 0, 0), Direction(0, 1, 0), Direction(0, 0, 1)},
               _origin) {}
 
-Basis::Basis(const std::vector<Direction> &_axis) :
-        Basis(_axis, Point(0, 0, 0)) {}
+Basis::Basis(const std::vector<Direction> &_axes) :
+        Basis(_axes, Point(0, 0, 0)) {}
 
-Basis::Basis() :
-        Basis({Direction(1, 0, 0), Direction(0, 1, 0), Direction(0, 0, 1)},
-              Point(0, 0, 0)) {}
+Basis::Basis(const std::vector<Direction> &_axes, const Point &_origin) :
+        axes(_axes), origin(_origin) {}
+
 
 Basis::Basis(const Basis &basis) : axes(basis.axes), origin(basis.origin) {}
 
@@ -28,21 +31,34 @@ Basis &Basis::operator=(Basis &&basis) {
 }
 
 
-Basis Basis::transform(const Aff_transformation &aff_transformation) {
+Basis Basis::transform(const Aff_transformation &transformation) {
 
-    Basis basis;
+    Basis basis(*this);
+
+    basis.origin = transformation(origin);
 
     for (auto &&axis : basis.axes)
-        axis = aff_transformation(axis);
+        axis = transformation(axis);
 
-    basis.origin = aff_transformation(origin);
+    double absValue;
+    for (auto &&axis : basis.axes) {
+
+        absValue = sqrt(axis.dx() * axis.dx() +
+                        axis.dy() * axis.dy() +
+                        axis.dz() * axis.dz());
+
+        axis = Direction(axis.dx() / absValue,
+                         axis.dy() / absValue,
+                         axis.dz() / absValue);
+
+    }
 
     return basis;
 
 }
 
 
-Aff_transformation Basis::createAff_transformation() {
+Aff_transformation Basis::generateTransformation() {
 
     double m00 = axes[0].dx();
     double m01 = axes[0].dy();
@@ -66,21 +82,21 @@ Aff_transformation Basis::createAff_transformation() {
 }
 
 
-void Basis::setAxes(const std::vector<Direction> &_axes) {
-    axes = _axes;
-}
-
 void Basis::setOrigin(const Point &_origin) {
     origin = _origin;
 }
 
-
-std::shared_ptr<std::vector<Direction>> Basis::getDirections() {
-    return std::make_shared<std::vector<Direction>>(axes);
+void Basis::setAxes(const std::vector<Direction> &_axes) {
+    axes = _axes;
 }
+
 
 std::shared_ptr<Point> Basis::getOrigin() {
     return std::make_shared<Point>(origin);
+}
+
+std::shared_ptr<std::vector<Direction>> Basis::getAxes() {
+    return std::make_shared<std::vector<Direction>>(axes);
 }
 
 
@@ -90,6 +106,3 @@ std::ostream &operator<<(std::ostream &stream, const Basis &basis) {
     stream << basis.origin << std::endl;
     return stream;
 }
-
-
-

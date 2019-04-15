@@ -4,50 +4,56 @@
 #include <cmath>
 #include <vector>
 
-#include <CALIncludes.h>
+#include <CgalAliases.h>
 
 class Basis {
+
 public:
 
-    Basis(const std::vector<Direction> &_axis, const Point &_origin);
+    Basis();
 
     Basis(const Point &_origin);
 
-    Basis(const std::vector<Direction> &_axis);
+    Basis(const std::vector<Direction> &_axes);
 
-    Basis();
+    Basis(const std::vector<Direction> &_axes, const Point &_origin);
+
 
     Basis(const Basis &basis);
 
     Basis(Basis &&basis);
+
 
     virtual ~Basis() {}
 
 
     Basis &operator=(Basis &&basis);
 
-    Basis transform(const Aff_transformation &aff_transformation);
 
-    Aff_transformation createAff_transformation();
+    Basis transform(const Aff_transformation &transformation);
 
 
-    void setAxes(const std::vector<Direction> &_axes);
+    Aff_transformation generateTransformation();
+
 
     void setOrigin(const Point &_origin);
 
+    void setAxes(const std::vector<Direction> &_axes);
 
-    std::shared_ptr<std::vector<Direction>> getDirections();
 
     std::shared_ptr<Point> getOrigin();
+
+    std::shared_ptr<std::vector<Direction>> getAxes();
+
 
     friend std::ostream &operator<<(std::ostream &stream, const Basis &basis);
 
 
 private:
 
-    std::vector<Direction> axes;
-
     Point origin;
+
+    std::vector<Direction> axes;
 
 };
 

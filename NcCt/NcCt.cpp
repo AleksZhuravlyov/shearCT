@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 #include <algorithm>
 
 #include <NcCt.h>
@@ -113,8 +114,23 @@ void NcCt::setRegionCt(const Bbox &bbox) {
     auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep) + 5;
 
 
-    std::cout << xStart << " " << yStart << " " << zStart << std::endl;
-    std::cout << xWidth << " " << yWidth << " " << zWidth << std::endl;
+    std::string errorMessage;
+    if ((xStart + xWidth) > dims[2].size)
+        errorMessage += " x ";
+    if ((yStart + yWidth) > dims[1].size)
+        errorMessage += " y ";
+    if ((zStart + zWidth) > dims[0].size)
+        errorMessage += " z ";
+
+    if (errorMessage != "") {
+
+        std::cerr << "PointsCt are out range for " <<
+                  errorMessage << std::endl;
+
+        std::exit(EXIT_FAILURE);
+
+    }
+
 
     std::vector<size_t> start = {zStart, yStart, xStart};
     std::vector<size_t> width = {zWidth, yWidth, xWidth};

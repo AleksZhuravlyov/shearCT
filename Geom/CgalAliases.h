@@ -1,5 +1,5 @@
-#ifndef CGALINCLUDES_H
-#define CGALINCLUDES_H
+#ifndef CGALALIASES_H
+#define CGALALIASES_H
 
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Aff_transformation_3.h>
@@ -19,4 +19,4 @@ typedef Kernel::Vector_3 Vector;
 typedef Kernel::Direction_3 Direction;
 
 
-#endif //CGALINCLUDES_H
+#endif //CGALALIASES_H

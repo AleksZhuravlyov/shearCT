@@ -1,7 +1,7 @@
 #ifndef TRANSFORMATION_H
 #define TRANSFORMATION_H
 
-#include <CALIncludes.h>
+#include <CgalAliases.h>
 
 Aff_transformation constructXRotation(const double &angle);
 
