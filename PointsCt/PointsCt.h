@@ -56,11 +56,11 @@ public:
     std::shared_ptr<Basis> getBasis();
 
 
-    std::shared_ptr<std::vector<double>> getTomoA();
+    std::shared_ptr<Value> getTomoA();
 
-    std::shared_ptr<std::vector<double>> getTomoB();
+    std::shared_ptr<Value> getTomoB();
 
-    std::shared_ptr<std::vector<double>> getResult();
+    std::shared_ptr<Value> getResult();
 
 
     Bbox generateBbox();
