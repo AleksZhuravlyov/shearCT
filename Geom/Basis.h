@@ -30,7 +30,7 @@ public:
     Basis &operator=(Basis &&basis);
 
 
-    Basis transform(const Aff_transformation &transformation);
+    void transform(const Aff_transformation &transformation);
 
 
     Aff_transformation generateTransformation();

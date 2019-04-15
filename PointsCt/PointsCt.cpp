@@ -46,28 +46,23 @@ PointsCt &PointsCt::operator=(PointsCt &&pointsCt) {
 }
 
 
-PointsCt PointsCt::transform(const Aff_transformation &transformation) {
+void PointsCt::transform(const Aff_transformation &transformation) {
 
     auto basisTransformation = basis->generateTransformation();
     auto basisInverseTransformation = basisTransformation.inverse();
 
 
-    PointsCt pointsCt(*this);
+    for (auto &&point : *points)
+        point = basisInverseTransformation(point);
+    basis->transform(basisInverseTransformation);
 
-    for (auto &&point : *(pointsCt.points))
-        point = point.transform(basisInverseTransformation);
-    *(pointsCt.basis) = pointsCt.basis->transform(basisInverseTransformation);
+    for (auto &&point : *points)
+        point = transformation(point);
+    basis->transform(transformation);
 
-    for (auto &&point : *(pointsCt.points))
-        point = point.transform(transformation);
-    *(pointsCt.basis) = pointsCt.basis->transform(transformation);
-
-    for (auto &&point : *(pointsCt.points))
-        point = point.transform(basisTransformation);
-    *(pointsCt.basis) = pointsCt.basis->transform(basisTransformation);
-
-
-    return pointsCt;
+    for (auto &&point : *points)
+        point = basisTransformation(point);
+    basis->transform(basisTransformation);
 
 }
 

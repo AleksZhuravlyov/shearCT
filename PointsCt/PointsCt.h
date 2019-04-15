@@ -28,7 +28,7 @@ public:
     PointsCt &operator=(PointsCt &&pointsCt);
 
 
-    PointsCt transform(const Aff_transformation &transformation);
+    void transform(const Aff_transformation &transformation);
 
 
     void translateBasisToCenter();

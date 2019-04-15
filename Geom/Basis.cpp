@@ -31,17 +31,15 @@ Basis &Basis::operator=(Basis &&basis) {
 }
 
 
-Basis Basis::transform(const Aff_transformation &transformation) {
+void Basis::transform(const Aff_transformation &transformation) {
 
-    Basis basis(*this);
+    origin = transformation(origin);
 
-    basis.origin = transformation(origin);
-
-    for (auto &&axis : basis.axes)
+    for (auto &&axis : axes)
         axis = transformation(axis);
 
     double absValue;
-    for (auto &&axis : basis.axes) {
+    for (auto &&axis : axes) {
 
         absValue = sqrt(axis.dx() * axis.dx() +
                         axis.dy() * axis.dy() +
@@ -52,8 +50,6 @@ Basis Basis::transform(const Aff_transformation &transformation) {
                          axis.dz() / absValue);
 
     }
-
-    return basis;
 
 }
 
