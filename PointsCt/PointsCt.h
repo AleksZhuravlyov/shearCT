@@ -6,6 +6,8 @@
 
 #include <Basis.h>
 
+typedef std::vector<double> Value;
+
 
 class PointsCt {
 
@@ -42,11 +44,11 @@ public:
     void setBasis(std::shared_ptr<Basis> _basis);
 
 
-    void setTomoA(std::shared_ptr<std::vector<double>> _tomoA);
+    void setTomoA(std::shared_ptr<Value> _tomoA);
 
-    void setTomoB(std::shared_ptr<std::vector<double>> _tomoB);
+    void setTomoB(std::shared_ptr<Value> _tomoB);
 
-    void setResult(std::shared_ptr<std::vector<double>> _result);
+    void setResult(std::shared_ptr<Value> _result);
 
 
     std::shared_ptr<Points> getPoints();
@@ -71,11 +73,11 @@ private:
     std::shared_ptr<Basis> basis;
 
 
-    std::shared_ptr<std::vector<double>> tomoA;
+    std::shared_ptr<Value> tomoA;
 
-    std::shared_ptr<std::vector<double>> tomoB;
+    std::shared_ptr<Value> tomoB;
 
-    std::shared_ptr<std::vector<double>> result;
+    std::shared_ptr<Value> result;
 
 };
 
