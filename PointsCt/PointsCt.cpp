@@ -19,11 +19,12 @@ PointsCt::PointsCt(std::shared_ptr<Points> _points,
         result(std::make_shared<std::vector<double>>(_points->size(), 0)) {}
 
 
-PointsCt::PointsCt(const PointsCt &pointsCt) : points(pointsCt.points),
-                                               basis(pointsCt.basis),
-                                               tomoA(pointsCt.tomoA),
-                                               tomoB(pointsCt.tomoB),
-                                               result(pointsCt.result) {}
+PointsCt::PointsCt(const PointsCt &pointsCt) :
+        points(std::make_shared<Points>(*(pointsCt.points))),
+        basis(std::make_shared<Basis>(*(pointsCt.basis))),
+        tomoA(std::make_shared<std::vector<double>>(*(pointsCt.tomoA))),
+        tomoB(std::make_shared<std::vector<double>>(*(pointsCt.tomoB))),
+        result(std::make_shared<std::vector<double>>(*(pointsCt.result))) {}
 
 PointsCt::PointsCt(PointsCt &&pointsCt) : points(pointsCt.points),
                                           basis(pointsCt.basis),
