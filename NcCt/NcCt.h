@@ -38,7 +38,7 @@ public:
 
     std::shared_ptr<std::vector<Var>> getVars();
 
-    std::shared_ptr<std::vector<short>> getVal();
+    std::shared_ptr<std::vector<short>> getValue();
 
 
     void setRegionCt(const std::vector<size_t> &start,
@@ -58,7 +58,7 @@ private:
 
     std::string path;
 
-    std::string valName;
+    std::string valueName;
 
     std::string units;
 

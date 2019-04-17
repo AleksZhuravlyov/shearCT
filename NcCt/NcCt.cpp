@@ -7,7 +7,7 @@
 
 NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
                                           path(fileName),
-                                          valName("tomo"),
+                                          valueName("tomo"),
                                           units("units"),
                                           regionCt(RegionCt()) {
 
@@ -20,7 +20,7 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
 
     std::reverse(vars.begin(), vars.end() - 1);
 
-    for (auto &&dimData : file.getVar(valName).getDims()) {
+    for (auto &&dimData : file.getVar(valueName).getDims()) {
         dims.push_back(Dim());
         dims.back().name = dimData.getName();
         dims.back().size = dimData.getSize();
@@ -34,8 +34,8 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
                   dimArrays[i].begin() + regionCt.start[i]
                   + regionCt.width[i], regionCt.dimArrays[i].begin());
 
-    file.getVar(valName).getVar(regionCt.start, regionCt.width,
-                                regionCt.val.data());
+    file.getVar(valueName).getVar(regionCt.start, regionCt.width,
+                                regionCt.value.data());
 
 }
 
@@ -74,8 +74,8 @@ std::shared_ptr<std::vector<Var>> NcCt::getVars() {
     return std::make_shared<std::vector<Var>>(vars);
 }
 
-std::shared_ptr<std::vector<short>> NcCt::getVal() {
-    return std::make_shared<std::vector<short>>(regionCt.val);
+std::shared_ptr<std::vector<short>> NcCt::getValue() {
+    return std::make_shared<std::vector<short>>(regionCt.value);
 }
 
 
@@ -89,8 +89,8 @@ void NcCt::setRegionCt(const std::vector<size_t> &start,
                   dimArrays[i].begin() + regionCt.start[i]
                   + regionCt.width[i], regionCt.dimArrays[i].begin());
 
-    file.getVar(valName).getVar(regionCt.start, regionCt.width,
-                                regionCt.val.data());
+    file.getVar(valueName).getVar(regionCt.start, regionCt.width,
+                                regionCt.value.data());
 
 }
 
@@ -152,7 +152,7 @@ void NcCt::saveRegionCt(const std::string &fileName) {
     for (int i = 0; i < dims.size(); i++)
         ncVars[i] = regionCtFile.addVar(vars[i].name,
                                         netCDF::ncFloat, ncDims[i]);
-    netCDF::NcVar valVar = regionCtFile.addVar(valName,
+    netCDF::NcVar valVar = regionCtFile.addVar(valueName,
                                                netCDF::ncShort, ncDims);
 
     for (int i = 0; i < dims.size(); i++)
@@ -161,6 +161,6 @@ void NcCt::saveRegionCt(const std::string &fileName) {
 
     for (int i = 0; i < dims.size(); i++)
         ncVars[i].putVar(regionCt.dimArrays[i].data());
-    valVar.putVar(regionCt.val.data());
+    valVar.putVar(regionCt.value.data());
 
 }

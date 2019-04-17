@@ -37,7 +37,7 @@ int main() {
     ncCt.saveRegionCt("/Volumes/ElkData/CT/tmp/_10Cut.nc");
 
     ncCt.regionCt.setPoints(pointsCt.getPoints(), pointsCt.getResult());
-    ncCt.regionCt.computePointsVal();
+    ncCt.regionCt.computePointsValue();
 
 
     auto vtpCt = VtpCt(std::make_shared<PointsCt>(pointsCt));

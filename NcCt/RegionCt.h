@@ -22,22 +22,23 @@ public:
     std::vector<size_t> start;
     std::vector<size_t> width;
     std::vector<std::vector<float>> dimArrays;
-    std::vector<short> val;
+    std::vector<short> value;
 
     void setPoints(std::shared_ptr<Points> _points,
-                   std::shared_ptr<std::vector<double>> _pointsVal) {
+                   std::shared_ptr<std::vector<double>> _pointsValue) {
         points = _points;
-        pointsVal = _pointsVal;
+        pointsValue = _pointsValue;
     }
 
-    double computePointVal(Point point);
-    void computePointsVal();
+    double computePointValue(Point point);
+
+    void computePointsValue();
 
 
 private:
 
     std::shared_ptr<Points> points;
-    std::shared_ptr<std::vector<double>> pointsVal;
+    std::shared_ptr<std::vector<double>> pointsValue;
 };
 
 
