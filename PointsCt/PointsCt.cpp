@@ -151,9 +151,36 @@ Bbox PointsCt::generateBbox() {
 }
 
 
-void PointsCt::calculateResult() {
+void PointsCt::computeResult() {
     for (int i = 0; i < result->size(); i++)
         (*result)[i] = (*tomoA)[i] - (*tomoB)[i];
+}
+
+double PointsCt::computePearsonCorrelation() {
+
+    auto n = points->size();
+
+    double A = 0;
+    double B = 0;
+
+    double AA = 0;
+    double BB = 0;
+    double AB = 0;
+
+    for (int i = 0; i < n; i++) {
+
+        A += (*tomoA)[i];
+        B += (*tomoB)[i];
+
+        AA += (*tomoA)[i] * (*tomoA)[i];
+        BB += (*tomoB)[i] * (*tomoB)[i];
+
+        AB += (*tomoA)[i] * (*tomoB)[i];
+
+    }
+
+    return (n * AB - A * B) / (n * AA - A * A) / (n * BB - B * B);
+
 }
 
 
@@ -169,6 +196,7 @@ void PointsCt::createXYSquare(const double &xCenter,
     auto xInit = xCenter - xWidth / 2;
     auto yInit = yCenter - yWidth / 2;
     auto zInit = zCenter;
+
 
     auto _points = std::make_shared<Points>(Points());
     for (int i = 0; i < nX; i++)

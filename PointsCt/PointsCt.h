@@ -68,7 +68,10 @@ public:
     Bbox generateBbox();
 
 
-    void calculateResult();
+    void computeResult();
+
+    double computePearsonCorrelation();
+
 
     void createXYSquare(const double &xCenter,
                         const double &yCenter,
