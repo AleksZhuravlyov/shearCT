@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <vector>
 
 #include <NcCt.h>
 #include <VtpCt.h>
@@ -10,66 +11,154 @@
 
 #include <StringAndNumber.h>
 
+PointsCt createInitBaseSquare(NcCt &ncCt);
+
+double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
+                     std::shared_ptr<Transformation> transformation,
+                     const std::vector<double> &relativeValues,
+                     const std::vector<double> &absoluteValues,
+                     const std::string &fileNamesPrefix,
+                     const bool &isFilesSaved);
+
+void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
+
+void variateBaseOffsetZ(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
+
+
 int main() {
 
-    auto ncFileName = std::string("/Volumes/ElkData/CT/samples/10.nc");
-    NcCt ncCt(ncFileName);
-    auto dims = ncCt.getDims();
-    std::cout << ncCt << std::endl;
+    NcCt ncCt5("/Volumes/ElkData/CT/samples/5.nc");
+    NcCt ncCt10("/Volumes/ElkData/CT/samples/10.nc");
 
+    auto pointsCt = std::make_shared<PointsCt>(createInitBaseSquare(ncCt5));
 
-    double xCenter = ncCt.getXInit() + 1200 * ncCt.getXStep();
-    double yCenter = ncCt.getYInit() + 1200 * ncCt.getYStep();
-    double zCenter = ncCt.getZInit() + 800 * ncCt.getZStep();
-    double xWidth = 600 * ncCt.getXStep();
-    double yWidth = 600 * ncCt.getYStep();
+    takeBaseDataFromFirstCt(pointsCt, ncCt5);
+
+    variateBaseOffsetZ(pointsCt, ncCt10);
+
+    auto vtpCt = VtpCt(pointsCt);
+
+    vtpCt.savePointsFile("finalPoints.vtp", "0");
+
+    return EXIT_SUCCESS;
+
+}
+
+PointsCt createInitBaseSquare(NcCt &ncCt) {
+
+    double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) / 2;
+    double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) / 2;
+
+    double zCenter = ncCt.getZInit() + 200 * ncCt.getZStep();
+
+    double xWidth = 1000 * ncCt.getXStep();
+    double yWidth = 1000 * ncCt.getYStep();
 
     PointsCt pointsCt;
     pointsCt.createXYSquare(xCenter, yCenter, zCenter,
                             xWidth, yWidth, 1000, 1000);
 
-
-    pointsCt.transform(constructXTranslation(20e-5));
-    pointsCt.transform(constructXRotation(20. * M_PI / 180));
-    pointsCt.transform(constructZRotation(20. * M_PI / 180));
-    pointsCt.transform(constructXYStretching(2));
+    return pointsCt;
+}
 
 
-    /*double xCylinderBaseCenter = ncCt.getXInit() + 1200 * ncCt.getXStep();
-    double yCylinderBaseCenter = ncCt.getYInit() + 1200 * ncCt.getYStep();
-    double zCylinderBaseCenter = ncCt.getZInit() + 800 * ncCt.getZStep();
-    double R = 300 * (ncCt.getXStep() + ncCt.getYStep()) / 2;
-    double angleCenter = 0;
-    double zWidth = 200 * ncCt.getZStep();
-    const double &angleWidth = M_PI * 2;
-
-    PointsCt pointsCt;
-    pointsCt.createZCylinderSegment(xCylinderBaseCenter,
-                                    yCylinderBaseCenter,
-                                    zCylinderBaseCenter,
-                                    R, angleCenter,
-                                    zWidth, angleWidth,
-                                    1000, 4000);
-
-    pointsCt.transform(constructXYStretching(1.1));*/
-
-
-    ncCt.setRegionCt(pointsCt.generateBbox());
-    ncCt.saveRegionCt("/Volumes/ElkData/CT/tmp/_10Cut.nc");
-
-    ncCt.regionCt.setPoints(pointsCt.getPoints(), pointsCt.getResult());
+void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
+    ncCt.setRegionCt(pointsCt->generateBbox());
+    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
     ncCt.regionCt.computePointsValue();
+}
 
 
-    auto vtpCt = VtpCt(std::make_shared<PointsCt>(pointsCt));
-    vtpCt.savePointsFile("result.vtp", "0");
+double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
+                     std::shared_ptr<Transformation> transformation,
+                     const std::vector<double> &relativeValues,
+                     const std::vector<double> &absoluteValues,
+                     const std::string &fileNamesPrefix,
+                     const bool &isFilesSaved) {
+
+    std::cout << transformation->getName() << ":" << std::endl << std::endl;
+
+    std::vector<double> correlations;
+
+    auto vtpCt = VtpCt(pointsCt);
+
+    for (int i = 0; i < relativeValues.size(); i++) {
+
+        pointsCt->transform((*transformation)(relativeValues[i]));
+        regionCt.computePointsValue();
+        pointsCt->computeResult();
+        correlations.push_back(pointsCt->computePearsonCorrelation());
+
+        if (isFilesSaved)
+            vtpCt.savePointsFile(
+                    fileNamesPrefix + "_" + transformation->getName() +
+                    toString(absoluteValues[i]) + ".vtp",
+                    toString(absoluteValues[i]));
+
+    }
+
+    if (isFilesSaved)
+        vtpCt.saveCollectionFile(fileNamesPrefix + ".pvd");
 
 
-    /*PointsCt pointsCtRead;
-    VtpCt vtpCtRead(std::make_shared<PointsCt>(pointsCtRead));
-    vtpCtRead.readPointsFile("result.vtp");
-    vtpCtRead.savePointsFile("rewriteResult.vtp", "0");*/
+    for (int i = 0; i < absoluteValues.size(); i++) {
+        std::cout << "offset " << absoluteValues[i];
+        std::cout << "   pearsonCorrelation " << correlations[i]
+                  << std::endl;
+    }
+
+    int indMaxCorrelation = 0;
+    double maxCorrelation = correlations[indMaxCorrelation];
+
+    for (int i = 0; i < correlations.size(); i++)
+        if (maxCorrelation < correlations[i]) {
+            maxCorrelation = correlations[i];
+            indMaxCorrelation = i;
+        }
+
+    pointsCt->transform((*transformation)(-absoluteValues.back()));
+    pointsCt->transform((*transformation)(absoluteValues[indMaxCorrelation]));
+    regionCt.computePointsValue();
+    pointsCt->computeResult();
+
+    return absoluteValues[indMaxCorrelation];
+
+}
 
 
-    return EXIT_SUCCESS;
+void variateBaseOffsetZ(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
+
+    int nOffsetsZ = 21;
+    auto offsetsZWidth = ncCt.getZStep() * 2;
+    auto offsetsZStart = -offsetsZWidth / 2;
+    auto offsetsZStep = offsetsZWidth / (nOffsetsZ - 1);
+    std::vector<double> offsetsZRelative;
+    std::vector<double> offsetsZAbsolute;
+    offsetsZRelative.push_back(offsetsZStart);
+    offsetsZAbsolute.push_back(offsetsZStart);
+    for (int i = 1; i < nOffsetsZ; i++) {
+        offsetsZRelative.push_back(offsetsZStep);
+        offsetsZAbsolute.push_back(offsetsZStart + offsetsZStep * i);
+    }
+
+    auto translationZ = std::make_shared<TranslationZ>();
+
+    pointsCt->transform((*translationZ)(offsetsZAbsolute.front()));
+    auto bBoxFront = pointsCt->generateBbox();
+    pointsCt->transform((*translationZ)(-offsetsZAbsolute.front()));
+
+    pointsCt->transform((*translationZ)(offsetsZAbsolute.back()));
+    auto bBoxBack = pointsCt->generateBbox();
+    pointsCt->transform((*translationZ)(-offsetsZAbsolute.back()));
+
+    ncCt.setRegionCt(bBoxFront + bBoxBack);
+    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
+
+    auto OffsetZ = variatePoints(pointsCt, ncCt.regionCt,
+                                 translationZ,
+                                 offsetsZRelative, offsetsZAbsolute,
+                                 "base", true);
+
+    std::cout << std::endl << "computed OffsetZ " << OffsetZ << std::endl;
+
 }
