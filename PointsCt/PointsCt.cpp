@@ -179,7 +179,7 @@ double PointsCt::computePearsonCorrelation() {
 
     }
 
-    return (n * AB - A * B) / (n * AA - A * A) / (n * BB - B * B);
+    return (n * AB - A * B) / sqrt(n * AA - A * A) / sqrt(n * BB - B * B);
 
 }
 
