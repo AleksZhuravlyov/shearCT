@@ -149,3 +149,29 @@ void PointsCt::calculateResult() {
     for (int i = 0; i < result->size(); i++)
         (*result)[i] = (*tomoA)[i] - (*tomoB)[i];
 }
+
+
+void PointsCt::createXYSquare(const double &xCenter,
+                              const double &yCenter,
+                              const double &zCenter,
+                              const double &xWidth, const double &yWidth,
+                              const int &nX, const int &nY) {
+
+    auto xStep = xWidth / (nX - 1);
+    auto yStep = yWidth / (nY - 1);
+
+    auto xInit = xCenter - xWidth / 2;
+    auto yInit = yCenter - yWidth / 2;
+
+    auto _points = std::make_shared<Points>(Points());
+    for (int i = 0; i < nX; i++)
+        for (int j = 0; j < nY; j++)
+            _points->push_back(Point(xInit + xStep * i,
+                                     yInit + yStep * j,
+                                     zCenter));
+
+    setPoints(_points);
+
+    translateBasisToCenter();
+
+}

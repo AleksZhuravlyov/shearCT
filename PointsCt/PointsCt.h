@@ -68,6 +68,12 @@ public:
 
     void calculateResult();
 
+    void createXYSquare(const double &xCenter,
+                        const double &yCenter,
+                        const double &zCenter,
+                        const double &xWidth, const double &yWidth,
+                        const int &nX, const int &nY);
+
 
 private:
 

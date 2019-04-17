@@ -18,15 +18,18 @@ int main() {
     std::cout << ncCt << std::endl;
 
 
-    auto points = std::make_shared<Points>();
     double step = 3.60179e-05;
-    double z = 505 * step;
-    for (double x = 550 * step; x < 660 * step; x += step / 10)
-        for (double y = 550 * step; y < 660 * step; y += step / 10)
-            points->push_back(Point(x, y, z));
+    double xCenter = 700 * step;
+    double yCenter = 700 * step;
+    double zCenter = 700 * step;
+    double xWidth = 200 * step;
+    double yWidth = 200 * step;
+
+    PointsCt pointsCt;
+    pointsCt.createXYSquare(xCenter, yCenter, zCenter,
+                            xWidth, yWidth, 1000, 1000);
 
 
-    auto pointsCt = PointsCt(points);
     pointsCt.transform(constructXTranslation(20e-5));
     pointsCt.transform(constructXRotation(20. * M_PI / 180));
     pointsCt.transform(constructZRotation(20. * M_PI / 180));
