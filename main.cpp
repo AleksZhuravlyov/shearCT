@@ -18,12 +18,11 @@ int main() {
     std::cout << ncCt << std::endl;
 
 
-    /*double step = 3.60179e-05;
-    double xCenter = 700 * step;
-    double yCenter = 700 * step;
-    double zCenter = 700 * step;
-    double xWidth = 400 * step;
-    double yWidth = 400 * step;
+    double xCenter = ncCt.getXInit() + 1200 * ncCt.getXStep();
+    double yCenter = ncCt.getYInit() + 1200 * ncCt.getYStep();
+    double zCenter = ncCt.getZInit() + 800 * ncCt.getZStep();
+    double xWidth = 600 * ncCt.getXStep();
+    double yWidth = 600 * ncCt.getYStep();
 
     PointsCt pointsCt;
     pointsCt.createXYSquare(xCenter, yCenter, zCenter,
@@ -33,15 +32,15 @@ int main() {
     pointsCt.transform(constructXTranslation(20e-5));
     pointsCt.transform(constructXRotation(20. * M_PI / 180));
     pointsCt.transform(constructZRotation(20. * M_PI / 180));
-    pointsCt.transform(constructXYStretching(2));*/
+    pointsCt.transform(constructXYStretching(2));
 
-    double step = 3.60179e-05;
-    double xCylinderBaseCenter = 700 * step;
-    double yCylinderBaseCenter = 700 * step;
-    double zCylinderBaseCenter = 700 * step;
-    double R = 200 * step;
+
+    /*double xCylinderBaseCenter = ncCt.getXInit() + 1200 * ncCt.getXStep();
+    double yCylinderBaseCenter = ncCt.getYInit() + 1200 * ncCt.getYStep();
+    double zCylinderBaseCenter = ncCt.getZInit() + 800 * ncCt.getZStep();
+    double R = 300 * (ncCt.getXStep() + ncCt.getYStep()) / 2;
     double angleCenter = 0;
-    double zWidth = 200 * step;
+    double zWidth = 200 * ncCt.getZStep();
     const double &angleWidth = M_PI * 2;
 
     PointsCt pointsCt;
@@ -50,9 +49,9 @@ int main() {
                                     zCylinderBaseCenter,
                                     R, angleCenter,
                                     zWidth, angleWidth,
-                                    1000, 2000);
+                                    1000, 4000);
 
-    pointsCt.transform(constructXYStretching(1.1));
+    pointsCt.transform(constructXYStretching(1.1));*/
 
 
     ncCt.setRegionCt(pointsCt.generateBbox());

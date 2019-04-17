@@ -35,7 +35,15 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
                   + regionCt.width[i], regionCt.dimArrays[i].begin());
 
     file.getVar(valueName).getVar(regionCt.start, regionCt.width,
-                                regionCt.value.data());
+                                  regionCt.value.data());
+
+    xInit = dimArrays[2][0];
+    yInit = dimArrays[1][0];
+    zInit = dimArrays[0][0];
+
+    xStep = dimArrays[2][1] - xInit;
+    yStep = dimArrays[1][1] - yInit;
+    zStep = dimArrays[0][1] - zInit;
 
 }
 
@@ -60,9 +68,34 @@ std::ostream &operator<<(std::ostream &stream, const NcCt &ncCt) {
         stream << ncCt.dimArrays[i][1] - ncCt.dimArrays[i][0] << std::endl;
     }
 
-
     return stream;
 
+}
+
+
+double NcCt::getXInit() {
+    return xInit;
+}
+
+double NcCt::getYInit() {
+    return yInit;
+}
+
+double NcCt::getZInit() {
+    return zInit;
+}
+
+
+double NcCt::getXStep() {
+    return xStep;
+}
+
+double NcCt::getYStep() {
+    return yStep;
+}
+
+double NcCt::getZStep() {
+    return zStep;
 }
 
 
@@ -89,21 +122,15 @@ void NcCt::setRegionCt(const std::vector<size_t> &start,
                   dimArrays[i].begin() + regionCt.start[i]
                   + regionCt.width[i], regionCt.dimArrays[i].begin());
 
+    regionCt.computeInitsAndSteps();
+
     file.getVar(valueName).getVar(regionCt.start, regionCt.width,
-                                regionCt.value.data());
+                                  regionCt.value.data());
 
 }
 
 
 void NcCt::setRegionCt(const Bbox &bbox) {
-
-    auto xInit = double(dimArrays[0][0]);
-    auto yInit = double(dimArrays[1][0]);
-    auto zInit = double(dimArrays[2][0]);
-
-    auto zStep = double(dimArrays[0][1] - dimArrays[0][0]);
-    auto yStep = double(dimArrays[1][1] - dimArrays[1][0]);
-    auto xStep = double(dimArrays[2][1] - dimArrays[2][0]);
 
     auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 1;
     auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 1;

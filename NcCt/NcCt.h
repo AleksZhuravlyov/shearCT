@@ -34,6 +34,20 @@ public:
     friend std::ostream &operator<<(std::ostream &stream, const NcCt &ncCt);
 
 
+    double getXInit();
+
+    double getYInit();
+
+    double getZInit();
+
+
+    double getXStep();
+
+    double getYStep();
+
+    double getZStep();
+
+
     std::shared_ptr<std::vector<Dim>> getDims();
 
     std::shared_ptr<std::vector<Var>> getVars();
@@ -69,6 +83,19 @@ private:
 
     std::vector<std::vector<float>> dimArrays;
 
+
+    double xInit;
+
+    double yInit;
+
+    double zInit;
+
+
+    double xStep;
+
+    double yStep;
+
+    double zStep;
 
 };
 

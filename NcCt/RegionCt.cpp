@@ -34,18 +34,10 @@ double RegionCt::computePointValue(Point point) {
     auto z = point.z();
 
 
-    auto zInit = double(dimArrays[0][0]);
-    auto yInit = double(dimArrays[1][0]);
-    auto xInit = double(dimArrays[2][0]);
-
     auto nz = int(dimArrays[0].size());
     auto ny = int(dimArrays[1].size());
     auto nx = int(dimArrays[2].size());
 
-
-    auto zStep = double(dimArrays[0][1] - dimArrays[0][0]);
-    auto yStep = double(dimArrays[1][1] - dimArrays[1][0]);
-    auto xStep = double(dimArrays[2][1] - dimArrays[2][0]);
 
     auto ix = int((x - xInit) / xStep);
     auto iy = int((y - yInit) / yStep);
@@ -102,3 +94,15 @@ void RegionCt::computePointsValue() {
 
 }
 
+
+void RegionCt::computeInitsAndSteps() {
+
+    xInit = dimArrays[2][0];
+    yInit = dimArrays[1][0];
+    zInit = dimArrays[0][0];
+
+    xStep = dimArrays[2][1] - xInit;
+    yStep = dimArrays[1][1] - yInit;
+    zStep = dimArrays[0][1] - zInit;
+
+}
