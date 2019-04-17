@@ -3,23 +3,86 @@
 
 #include <CgalAliases.h>
 
-Aff_transformation constructXRotation(const double &angle);
 
-Aff_transformation constructYRotation(const double &angle);
+class Transformation {
+public:
+    Transformation() = default;
 
-Aff_transformation constructZRotation(const double &angle);
+    virtual ~Transformation() {}
+
+    virtual Aff_transformation operator()(const double &value) = 0;
+
+    std::string getName() { return name; }
+
+protected:
+    std::string name;
+};
 
 
-Aff_transformation constructXTranslation(const double &offset);
+class RotationX : public Transformation {
+public:
+    RotationX() { name = "RotationX"; }
 
-Aff_transformation constructYTranslation(const double &offset);
+    virtual ~RotationX() {}
 
-Aff_transformation constructZTranslation(const double &offset);
+    virtual Aff_transformation operator()(const double &value) override final;
+};
+
+class RotationY : public Transformation {
+public:
+    RotationY() { name = "RotationY"; }
+
+    virtual ~RotationY() {}
+
+    virtual Aff_transformation operator()(const double &value) override final;
+};
+
+class RotationZ : public Transformation {
+public:
+    RotationZ() { name = "RotationZ"; }
+
+    virtual ~RotationZ() {}
+
+    virtual Aff_transformation operator()(const double &value) override final;
+};
 
 
-Aff_transformation constructXYStretching(const double &factor);
+class TranslationX : public Transformation {
+public:
+    TranslationX() { name = "TranslationX"; }
 
-void translatePointFromZAxis(Point &point, const double &offset);
+    virtual ~TranslationX() {}
+
+    virtual Aff_transformation operator()(const double &value) override final;
+};
+
+class TranslationY : public Transformation {
+public:
+    TranslationY() { name = "TranslationY"; }
+
+    virtual ~TranslationY() {}
+
+    virtual Aff_transformation operator()(const double &value) override final;
+};
+
+class TranslationZ : public Transformation {
+public:
+    TranslationZ() { name = "TranslationZ"; }
+
+    virtual ~TranslationZ() {}
+
+    virtual Aff_transformation operator()(const double &value) override final;
+};
+
+
+class StretchingXY : public Transformation {
+public:
+    StretchingXY() { name = "StretchingXY"; }
+
+    virtual ~StretchingXY() {}
+
+    virtual Aff_transformation operator()(const double &value) override final;
+};
 
 
 #endif //TRANSFORMATION_H
