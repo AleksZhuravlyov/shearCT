@@ -143,3 +143,9 @@ std::shared_ptr<Value> PointsCt::getResult() {
 Bbox PointsCt::generateBbox() {
     return CGAL::bbox_3(points->begin(), points->end());
 }
+
+
+void PointsCt::calculateResult() {
+    for (int i = 0; i < result->size(); i++)
+        (*result)[i] = (*tomoA)[i] - (*tomoB)[i];
+}

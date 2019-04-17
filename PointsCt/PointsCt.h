@@ -66,6 +66,9 @@ public:
     Bbox generateBbox();
 
 
+    void calculateResult();
+
+
 private:
 
     std::shared_ptr<Points> points;
