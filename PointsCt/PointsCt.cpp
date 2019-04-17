@@ -1,5 +1,7 @@
 #include <PointsCt.h>
 
+#include <cmath>
+
 
 PointsCt::PointsCt() :
         PointsCt(std::make_shared<Points>(1, Point(0, 0, 0)),
@@ -70,6 +72,10 @@ void PointsCt::transform(const Aff_transformation &transformation) {
 }
 
 
+void PointsCt::translateBasis(const Point &point) {
+    basis->setOrigin(point);
+}
+
 void PointsCt::translateBasisToCenter() {
 
     auto bbox = CGAL::bbox_3(points->begin(), points->end());
@@ -78,7 +84,7 @@ void PointsCt::translateBasisToCenter() {
                         (bbox.ymax() + bbox.ymin()) / 2,
                         (bbox.zmax() + bbox.zmin()) / 2);
 
-    basis->setOrigin(center);
+    translateBasis(center);
 
 }
 
@@ -162,16 +168,52 @@ void PointsCt::createXYSquare(const double &xCenter,
 
     auto xInit = xCenter - xWidth / 2;
     auto yInit = yCenter - yWidth / 2;
+    auto zInit = zCenter;
 
     auto _points = std::make_shared<Points>(Points());
     for (int i = 0; i < nX; i++)
         for (int j = 0; j < nY; j++)
-            _points->push_back(Point(xInit + xStep * i,
-                                     yInit + yStep * j,
-                                     zCenter));
+            _points->push_back(
+                    Point(xInit + xStep * i,
+                          yInit + yStep * j,
+                          zInit));
 
     setPoints(_points);
 
     translateBasisToCenter();
+
+}
+
+
+void PointsCt::createZCylinderSegment(const double &xCylinderBaseCenter,
+                                      const double &yCylinderBaseCenter,
+                                      const double &zCylinderBaseCenter,
+                                      const double &R,
+                                      const double &angleCenter,
+                                      const double &zWidth,
+                                      const double &angleWidth,
+                                      const int &nZ, const int &nAngle) {
+
+    auto angleStep = angleWidth / (nAngle - 1);
+    auto zStep = zWidth / (nZ - 1);
+
+    auto angleInit = angleCenter - angleWidth / 2;
+    auto xInit = xCylinderBaseCenter;
+    auto yInit = yCylinderBaseCenter;
+    auto zInit = zCylinderBaseCenter;
+
+    auto _points = std::make_shared<Points>(Points());
+    for (int i = 0; i < nAngle; i++)
+        for (int j = 0; j < nZ; j++)
+            _points->push_back(
+                    Point(xInit + R * cos(angleInit + angleStep * i),
+                          yInit + R * sin(angleInit + angleStep * i),
+                          zInit + zStep * j));
+
+    setPoints(_points);
+
+    translateBasis(Point(xCylinderBaseCenter,
+                         yCylinderBaseCenter,
+                         zCylinderBaseCenter));
 
 }

@@ -33,6 +33,8 @@ public:
     void transform(const Aff_transformation &transformation);
 
 
+    void translateBasis(const Point &point);
+
     void translateBasisToCenter();
 
 
@@ -73,6 +75,15 @@ public:
                         const double &zCenter,
                         const double &xWidth, const double &yWidth,
                         const int &nX, const int &nY);
+
+    void createZCylinderSegment(const double &xCylinderBaseCenter,
+                                const double &yCylinderBaseCenter,
+                                const double &zCylinderBaseCenter,
+                                const double &R,
+                                const double &angleCenter,
+                                const double &zWidth,
+                                const double &angleWidth,
+                                const int &nZ, const int &nAngle);
 
 
 private:
