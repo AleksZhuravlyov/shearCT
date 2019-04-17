@@ -19,15 +19,22 @@ int main() {
     NcCt ncCt5("/Volumes/ElkData/CT/samples/5.nc");
     NcCt ncCt10("/Volumes/ElkData/CT/samples/10.nc");
 
-    auto pointsCt = std::make_shared<PointsCt>(createInitBaseSquare(ncCt5));
+    auto pointsBottom = std::make_shared<PointsCt>(
+            createInitBaseSquare(ncCt5));
 
-    takeBaseDataFromFirstCt(pointsCt, ncCt5);
+    takeBaseDataFromFirstCt(pointsBottom, ncCt5);
 
-    variateBaseOffsetZ(pointsCt, ncCt10);
+    auto pointsTopFirstCt = createTopFirstCt(pointsBottom, ncCt5);
 
-    auto vtpCt = VtpCt(pointsCt);
+    takeBaseDataFromFirstCt(pointsTopFirstCt, ncCt5);
 
+    variateBaseOffsetZ(pointsBottom, ncCt10);
+
+    auto vtpCt = VtpCt(pointsBottom);
     vtpCt.savePointsFile("finalPoints.vtp", "0");
+
+    auto vtpCtTmp = VtpCt(pointsTopFirstCt);
+    vtpCtTmp.savePointsFile("pointsTopFirstCt.vtp", "0");
 
     return EXIT_SUCCESS;
 

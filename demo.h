@@ -28,5 +28,8 @@ void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
 void variateBaseOffsetZ(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
 
 
+std::shared_ptr<PointsCt>
+createTopFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
+
 
 #endif //DEMO_H

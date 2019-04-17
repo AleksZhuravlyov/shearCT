@@ -119,3 +119,23 @@ void variateBaseOffsetZ(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
     std::cout << std::endl << "computed OffsetZ " << OffsetZ << std::endl;
 
 }
+
+
+std::shared_ptr<PointsCt>
+createTopFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
+
+    auto pointsTopFirstCt = *pointsCt;
+
+    auto offsetZ = ncCt.getZStep() * 1000;
+
+    TranslationZ translationZ;
+    pointsTopFirstCt.transform(translationZ(offsetZ));
+
+    ncCt.setRegionCt(pointsTopFirstCt.generateBbox());
+    ncCt.regionCt.setPoints(pointsTopFirstCt.getPoints(),
+                            pointsTopFirstCt.getTomoA());
+    ncCt.regionCt.computePointsValue();
+
+    return std::make_shared<PointsCt>(pointsTopFirstCt);
+
+}
