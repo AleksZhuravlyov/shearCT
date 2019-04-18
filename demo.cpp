@@ -46,7 +46,8 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 
         if (isFilesSaved)
             vtpCt.savePointsFile(
-                    fileNamesPrefix + "_" + transformation->getName() +
+                    fileNamesPrefix + "_" +
+                    typeid(*transformation).name() +
                     toString(absoluteValues[i]) + ".vtp",
                     toString(absoluteValues[i]));
 
@@ -54,7 +55,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 
     if (isFilesSaved)
         vtpCt.saveCollectionFile(fileNamesPrefix + "_" +
-                                 transformation->getName() + ".pvd");
+                                 typeid(*transformation).name() + ".pvd");
 
 
     int indMaxCorrelation = 0;
@@ -84,7 +85,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 
     GnuplotPipe gp;
     gp.sendLine("set title '" +
-                fileNamesPrefix + " " + transformation->getName() +
+                fileNamesPrefix + " " + typeid(*transformation).name() +
                 ": max " + toString(absoluteValues[indMaxCorrelation]) + "'");
     gp.sendLine("set term dumb");
     gp.sendLine(plotLine);
