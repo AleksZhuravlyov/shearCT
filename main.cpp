@@ -16,25 +16,66 @@
 
 int main() {
 
-    NcCt ncCt5("/Volumes/ElkData/CT/samples/5.nc");
-    NcCt ncCt10("/Volumes/ElkData/CT/samples/10.nc");
+    double shiftZ = 5e-2;
 
-    auto pointsBottom = std::make_shared<PointsCt>(
-            createInitBaseSquare(ncCt5));
 
-    takeBaseDataFromFirstCt(pointsBottom, ncCt5);
+    NcCt ncCtA("/Volumes/ElkData/CT/samples/5.nc");
+    NcCt ncCtB("/Volumes/ElkData/CT/samples/10.nc");
 
-    auto pointsTopFirstCt = createTopFirstCt(pointsBottom, ncCt5);
+    auto pointsCt = std::make_shared<PointsCt>(
+            createInitBaseSquare(ncCtA));
+    // auto vtpCt = VtpCt(pointsCt);
+    takeBaseDataFromFirstCt(pointsCt, ncCtA);
+    // vtpCt.savePointsFile("InitialBottom.vtp", "0");
 
-    takeBaseDataFromFirstCt(pointsTopFirstCt, ncCt5);
+    auto tomoATopFirstCt = computeTomoATopFirstCt(pointsCt, ncCtA, shiftZ);
 
-    variateBaseOffsetZ(pointsBottom, ncCt10);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
+                     10e-5, 21, "bottom", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationX>(),
+                     10e-5, 21, "bottom", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
+                     10e-5, 21, "bottom", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
+                     M_PI / 200, 21, "bottom", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
+                     M_PI / 200, 21, "bottom", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationZ>(),
+                     M_PI / 200, 21, "bottom", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
+                     1e-5, 21, "bottom", false);
 
-    auto vtpCt = VtpCt(pointsBottom);
-    vtpCt.savePointsFile("finalPoints.vtp", "0");
+    // vtpCt.savePointsFile("finalBottom.vtp", "1");
 
-    auto vtpCtTmp = VtpCt(pointsTopFirstCt);
-    vtpCtTmp.savePointsFile("pointsTopFirstCt.vtp", "0");
+    pointsCt->setTomoA(tomoATopFirstCt);
+    pointsCt->transform(TranslationZ()(shiftZ));
+    // vtpCt.savePointsFile("initialTop.vtp", "2");
+
+
+
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
+                     30e-5, 31, "top", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationX>(),
+                     30e-5, 31, "top", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
+                     M_PI / 80, 31, "top", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
+                     M_PI / 100, 31, "top", false);
+
+    auto offsetZTop1 = processVariation(pointsCt, ncCtB,
+                                        std::make_shared<TranslationZ>(),
+                                        15e-5, 41, "top", false);
+
+    auto offsetZTop2 = processVariation(pointsCt, ncCtB,
+                                        std::make_shared<TranslationZ>(),
+                                        1.5e-5, 41, "top", false);
+
+
+    auto stretch = -(offsetZTop1 + offsetZTop2) / shiftZ;
+    std::cout << std::endl << "stretch " << stretch << std::endl;
+
+    double youngsModulus = 500. / stretch;
+    std::cout << std::endl << "youngsModulus " << youngsModulus << std::endl;
 
     return EXIT_SUCCESS;
 

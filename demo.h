@@ -13,6 +13,7 @@
 #include <Transformation.h>
 
 #include <StringAndNumber.h>
+#include <gnuplot.h>
 
 PointsCt createInitBaseSquare(NcCt &ncCt);
 
@@ -25,11 +26,17 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 
 void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
 
-void variateBaseOffsetZ(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
+
+double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+                        std::shared_ptr<Transformation> transformation,
+                        const double &valueWidth, const int &nValues,
+                        const std::string &fileNamesPrefix,
+                        const bool &isFilesSaved);
 
 
-std::shared_ptr<PointsCt>
-createTopFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
+std::shared_ptr<std::vector<double>> computeTomoATopFirstCt(
+        std::shared_ptr<PointsCt> pointsCt,
+        NcCt &ncCt, const double &shiftZ);
 
 
 #endif //DEMO_H

@@ -8,8 +8,8 @@ PointsCt createInitBaseSquare(NcCt &ncCt) {
 
     double zCenter = ncCt.getZInit() + 200 * ncCt.getZStep();
 
-    double xWidth = 1000 * ncCt.getXStep();
-    double yWidth = 1000 * ncCt.getYStep();
+    double xWidth = 100 * ncCt.getXStep();
+    double yWidth = 100 * ncCt.getYStep();
 
     PointsCt pointsCt;
     pointsCt.createXYSquare(xCenter, yCenter, zCenter,
@@ -33,8 +33,6 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                      const std::string &fileNamesPrefix,
                      const bool &isFilesSaved) {
 
-    std::cout << transformation->getName() << ":" << std::endl << std::endl;
-
     std::vector<double> correlations;
 
     auto vtpCt = VtpCt(pointsCt);
@@ -55,14 +53,9 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
     }
 
     if (isFilesSaved)
-        vtpCt.saveCollectionFile(fileNamesPrefix + ".pvd");
+        vtpCt.saveCollectionFile(fileNamesPrefix + "_" +
+                                 transformation->getName() + ".pvd");
 
-
-    for (int i = 0; i < absoluteValues.size(); i++) {
-        std::cout << "offset " << absoluteValues[i];
-        std::cout << "   pearsonCorrelation " << correlations[i]
-                  << std::endl;
-    }
 
     int indMaxCorrelation = 0;
     double maxCorrelation = correlations[indMaxCorrelation];
@@ -78,64 +71,89 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
     regionCt.computePointsValue();
     pointsCt->computeResult();
 
+
+    std::string plotLine =
+            "plot \"-\" using 1:2 with points pt \"*\" notitle";
+    /*std::string plotLine =
+            "plot \"-\" using 1:2 with linespoint lw 2 pt 8 notitle";*/
+
+    for (int i = 0; i < absoluteValues.size(); i++) {
+        plotLine += "\n" + toString(absoluteValues[i], 20, 5, true);
+        plotLine += " " + toString(correlations[i], 20, 5, true);
+    }
+
+    GnuplotPipe gp;
+    gp.sendLine("set title '" +
+                fileNamesPrefix + " " + transformation->getName() +
+                ": max " + toString(absoluteValues[indMaxCorrelation]) + "'");
+    gp.sendLine("set term dumb");
+    gp.sendLine(plotLine);
+
+
     return absoluteValues[indMaxCorrelation];
 
 }
 
 
-void variateBaseOffsetZ(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
+double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+                        std::shared_ptr<Transformation> transformation,
+                        const double &valueWidth, const int &nValues,
+                        const std::string &fileNamesPrefix,
+                        const bool &isFilesSaved) {
 
-    int nOffsetsZ = 21;
-    auto offsetsZWidth = ncCt.getZStep() * 2;
-    auto offsetsZStart = -offsetsZWidth / 2;
-    auto offsetsZStep = offsetsZWidth / (nOffsetsZ - 1);
-    std::vector<double> offsetsZRelative;
-    std::vector<double> offsetsZAbsolute;
-    offsetsZRelative.push_back(offsetsZStart);
-    offsetsZAbsolute.push_back(offsetsZStart);
-    for (int i = 1; i < nOffsetsZ; i++) {
-        offsetsZRelative.push_back(offsetsZStep);
-        offsetsZAbsolute.push_back(offsetsZStart + offsetsZStep * i);
+    auto valuesStart = -valueWidth / 2;
+    auto valuesStep = valueWidth / (nValues - 1);
+    std::vector<double> valuesRelative;
+    std::vector<double> valuesAbsolute;
+    valuesRelative.push_back(valuesStart);
+    valuesAbsolute.push_back(valuesStart);
+    for (int i = 1; i < nValues; i++) {
+        valuesRelative.push_back(valuesStep);
+        valuesAbsolute.push_back(valuesStart + valuesStep * i);
     }
 
-    auto translationZ = std::make_shared<TranslationZ>();
 
-    pointsCt->transform((*translationZ)(offsetsZAbsolute.front()));
+    pointsCt->transform((*transformation)(valuesAbsolute.front()));
     auto bBoxFront = pointsCt->generateBbox();
-    pointsCt->transform((*translationZ)(-offsetsZAbsolute.front()));
+    pointsCt->transform((*transformation)(-valuesAbsolute.front()));
 
-    pointsCt->transform((*translationZ)(offsetsZAbsolute.back()));
+    pointsCt->transform((*transformation)(valuesAbsolute.back()));
     auto bBoxBack = pointsCt->generateBbox();
-    pointsCt->transform((*translationZ)(-offsetsZAbsolute.back()));
+    pointsCt->transform((*transformation)(-valuesAbsolute.back()));
 
     ncCt.setRegionCt(bBoxFront + bBoxBack);
     ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
 
-    auto OffsetZ = variatePoints(pointsCt, ncCt.regionCt,
-                                 translationZ,
-                                 offsetsZRelative, offsetsZAbsolute,
-                                 "base", true);
+    auto value = variatePoints(pointsCt, ncCt.regionCt,
+                               transformation,
+                               valuesRelative, valuesAbsolute,
+                               fileNamesPrefix, isFilesSaved);
 
-    std::cout << std::endl << "computed OffsetZ " << OffsetZ << std::endl;
+    /*std::cout << "computed" << " " << transformation->getName() <<
+              " " << value << std::endl << std::endl;*/
+
+    return value;
 
 }
 
 
-std::shared_ptr<PointsCt>
-createTopFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
+std::shared_ptr<std::vector<double>> computeTomoATopFirstCt(
+        std::shared_ptr<PointsCt> pointsCt,
+        NcCt &ncCt, const double &shiftZ) {
 
-    auto pointsTopFirstCt = *pointsCt;
+    auto pointsTopFirstCt = std::make_shared<PointsCt>(*pointsCt);
 
-    auto offsetZ = ncCt.getZStep() * 1000;
+    pointsTopFirstCt->transform(TranslationZ()(shiftZ));
 
-    TranslationZ translationZ;
-    pointsTopFirstCt.transform(translationZ(offsetZ));
-
-    ncCt.setRegionCt(pointsTopFirstCt.generateBbox());
-    ncCt.regionCt.setPoints(pointsTopFirstCt.getPoints(),
-                            pointsTopFirstCt.getTomoA());
+    ncCt.setRegionCt(pointsTopFirstCt->generateBbox());
+    ncCt.regionCt.setPoints(pointsTopFirstCt->getPoints(),
+                            pointsTopFirstCt->getTomoA());
     ncCt.regionCt.computePointsValue();
 
-    return std::make_shared<PointsCt>(pointsTopFirstCt);
+    auto vtpCt = VtpCt(pointsTopFirstCt);
+
+    vtpCt.savePointsFile("tmpTop.vtp", "0");
+
+    return pointsTopFirstCt->getTomoA();
 
 }
