@@ -32,14 +32,20 @@ int main() {
 
     auto tomoATopFirstCt = computeTomoATopFirstCt(pointsCt, ncCtA, shiftZ);
 
+
+
+
+
+
+
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
-                     10e-5, 21, "bottom", false);
+                     15e-5, 31, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationX>(),
                      10e-5, 21, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
                      10e-5, 21, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
-                     M_PI / 200, 21, "bottom", false);
+                     M_PI / 140, 31, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
                      M_PI / 200, 21, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
@@ -62,24 +68,29 @@ int main() {
     processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
                      M_PI / 30, 41, "top1", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
-                     M_PI / 70, 31, "top1", false);
+                     M_PI / 50, 41, "top1", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
-                     15e-5, 41, "top1", false);
+                     19e-5, 51, "top1", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
                      1.5e-5, 41, "top1", false);
+
+
+    processVariation(pointsCt, ncCtB, std::make_shared<StretchingXY>(),
+                     0.0005, 40, "top1", false);
+
 
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
                      15e-5, 41, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationX>(),
                      5e-5, 31, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
-                     M_PI / 150, 41, "top2", false);
+                     M_PI / 70, 100, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
-                     M_PI / 200, 31, "top2", false);
+                     M_PI / 150, 41, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
-                     9e-5, 41, "top2", false);
+                     9e-5, 61, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
-                     .7e-5, 41, "top2", false);
+                     .7e-5, 61, "top2", false);
 
 
     auto topOrigin = *(pointsCt->getBasis()->getOrigin());

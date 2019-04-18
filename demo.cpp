@@ -28,8 +28,9 @@ void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
 
 double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                      std::shared_ptr<Transformation> transformation,
-                     const std::vector<double> &relativeValues,
-                     const std::vector<double> &absoluteValues,
+                     const std::vector<double> &valuesRelative,
+                     const std::vector<double> &valuesAbsolute,
+                     const std::vector<double> &valuesAbsoluteReverse,
                      const std::string &fileNamesPrefix,
                      const bool &isFilesSaved) {
 
@@ -37,9 +38,9 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 
     auto vtpCt = VtpCt(pointsCt);
 
-    for (int i = 0; i < relativeValues.size(); i++) {
+    for (int i = 0; i < valuesRelative.size(); i++) {
 
-        pointsCt->transform((*transformation)(relativeValues[i]));
+        pointsCt->transform((*transformation)(valuesRelative[i]));
         regionCt.computePointsValue();
         pointsCt->computeResult();
         correlations.push_back(pointsCt->computePearsonCorrelation());
@@ -48,8 +49,8 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
             vtpCt.savePointsFile(
                     fileNamesPrefix + "_" +
                     typeid(*transformation).name() +
-                    toString(absoluteValues[i]) + ".vtp",
-                    toString(absoluteValues[i]));
+                    toString(valuesAbsolute[i]) + ".vtp",
+                    toString(valuesAbsolute[i]));
 
     }
 
@@ -67,8 +68,8 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
             indMaxCorrelation = i;
         }
 
-    pointsCt->transform((*transformation)(-absoluteValues.back()));
-    pointsCt->transform((*transformation)(absoluteValues[indMaxCorrelation]));
+    pointsCt->transform((*transformation)(valuesAbsoluteReverse.back()));
+    pointsCt->transform((*transformation)(valuesAbsolute[indMaxCorrelation]));
     regionCt.computePointsValue();
     pointsCt->computeResult();
 
@@ -78,20 +79,20 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
     /*std::string plotLine =
             "plot \"-\" using 1:2 with linespoint lw 2 pt 8 notitle";*/
 
-    for (int i = 0; i < absoluteValues.size(); i++) {
-        plotLine += "\n" + toString(absoluteValues[i], 20, 5, true);
+    for (int i = 0; i < valuesAbsolute.size(); i++) {
+        plotLine += "\n" + toString(valuesAbsolute[i], 20, 5, true);
         plotLine += " " + toString(correlations[i], 20, 5, true);
     }
 
     GnuplotPipe gp;
     gp.sendLine("set title '" +
                 fileNamesPrefix + " " + typeid(*transformation).name() +
-                ": max " + toString(absoluteValues[indMaxCorrelation]) + "'");
+                ": max " + toString(valuesAbsolute[indMaxCorrelation]) + "'");
     gp.sendLine("set term dumb");
     gp.sendLine(plotLine);
 
 
-    return absoluteValues[indMaxCorrelation];
+    return valuesAbsolute[indMaxCorrelation];
 
 }
 
@@ -102,36 +103,66 @@ double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
                         const std::string &fileNamesPrefix,
                         const bool &isFilesSaved) {
 
-    auto valuesStart = -valueWidth / 2;
-    auto valuesStep = valueWidth / (nValues - 1);
     std::vector<double> valuesRelative;
     std::vector<double> valuesAbsolute;
-    valuesRelative.push_back(valuesStart);
-    valuesAbsolute.push_back(valuesStart);
-    for (int i = 1; i < nValues; i++) {
-        valuesRelative.push_back(valuesStep);
-        valuesAbsolute.push_back(valuesStart + valuesStep * i);
+    std::vector<double> valuesAbsoluteReverse;
+
+    int _nValues = nValues;
+    if (nValues % 2 == 0)
+        _nValues += 1;
+
+    if (typeid(*transformation).name() == typeid(StretchingXY).name()) {
+
+        double valuesStart = 1 - valueWidth / 2;
+        double valuesStop = 1 + valueWidth / 2;
+        double deltaValue = (valuesStop - valuesStart) / (_nValues - 1);
+
+        valuesRelative.push_back(valuesStart);
+        valuesAbsolute.push_back(valuesStart);
+        valuesAbsoluteReverse.push_back(1. / valuesStart);
+
+        for (int i = 1; i < _nValues; i++) {
+            valuesRelative.push_back((deltaValue * i + valuesStart) /
+                                     (deltaValue * (i - 1) + valuesStart));
+            valuesAbsolute.push_back(valuesAbsolute[i - 1] * valuesRelative[i]);
+            valuesAbsoluteReverse.push_back(1. / valuesAbsolute[i]);
+        }
+
+    } else {
+
+        double valuesStart = -valueWidth / 2;
+        double valuesStep = valueWidth / (_nValues - 1);
+
+        valuesRelative.push_back(valuesStart);
+        valuesAbsolute.push_back(valuesStart);
+
+        for (int i = 1; i < _nValues; i++) {
+            valuesRelative.push_back(valuesStep);
+            valuesAbsolute.push_back(valuesStart + valuesStep * i);
+            valuesAbsoluteReverse.push_back(-valuesAbsolute[i]);
+        }
     }
 
 
     pointsCt->transform((*transformation)(valuesAbsolute.front()));
     auto bBoxFront = pointsCt->generateBbox();
-    pointsCt->transform((*transformation)(-valuesAbsolute.front()));
+    pointsCt->transform((*transformation)(valuesAbsoluteReverse.front()));
 
     pointsCt->transform((*transformation)(valuesAbsolute.back()));
     auto bBoxBack = pointsCt->generateBbox();
-    pointsCt->transform((*transformation)(-valuesAbsolute.back()));
+    pointsCt->transform((*transformation)(valuesAbsoluteReverse.back()));
 
     ncCt.setRegionCt(bBoxFront + bBoxBack);
     ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
 
     auto value = variatePoints(pointsCt, ncCt.regionCt,
                                transformation,
-                               valuesRelative, valuesAbsolute,
-                               fileNamesPrefix, isFilesSaved);
+                               valuesRelative,
+                               valuesAbsolute,
+                               valuesAbsoluteReverse,
+                               fileNamesPrefix,
+                               isFilesSaved);
 
-    /*std::cout << "computed" << " " << transformation->getName() <<
-              " " << value << std::endl << std::endl;*/
 
     return value;
 

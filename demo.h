@@ -19,8 +19,9 @@ PointsCt createInitBaseSquare(NcCt &ncCt);
 
 double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                      std::shared_ptr<Transformation> transformation,
-                     const std::vector<double> &relativeValues,
-                     const std::vector<double> &absoluteValues,
+                     const std::vector<double> &valuesRelative,
+                     const std::vector<double> &valuesAbsolute,
+                     const std::vector<double> &valuesAbsoluteReverse,
                      const std::string &fileNamesPrefix,
                      const bool &isFilesSaved);
 
