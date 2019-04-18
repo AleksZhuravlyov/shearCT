@@ -9,6 +9,7 @@
 #include <CGAL/Direction_3.h>
 #include <CGAL/Line_3.h>
 #include <CGAL/Vector_3.h>
+#include <CGAL/squared_distance_3.h>
 
 typedef CGAL::Simple_cartesian<double> Kernel;
 typedef CGAL::Aff_transformation_3<Kernel> Aff_transformation;

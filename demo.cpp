@@ -6,7 +6,7 @@ PointsCt createInitBaseSquare(NcCt &ncCt) {
     double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) / 2;
     double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) / 2;
 
-    double zCenter = ncCt.getZInit() + 200 * ncCt.getZStep();
+    double zCenter = ncCt.getZInit() + 90 * ncCt.getZStep();
 
     double xWidth = 100 * ncCt.getXStep();
     double yWidth = 100 * ncCt.getYStep();

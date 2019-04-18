@@ -16,11 +16,13 @@
 
 int main() {
 
-    double shiftZ = 5e-2;
+    double shiftZ = 0.0554 - 3.60179e-05 * 90;
 
 
     NcCt ncCtA("/Volumes/ElkData/CT/samples/5.nc");
     NcCt ncCtB("/Volumes/ElkData/CT/samples/10.nc");
+
+    // std::cout << ncCtA << std::endl;
 
     auto pointsCt = std::make_shared<PointsCt>(
             createInitBaseSquare(ncCtA));
@@ -40,10 +42,11 @@ int main() {
                      M_PI / 200, 21, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
                      M_PI / 200, 21, "bottom", false);
-    processVariation(pointsCt, ncCtB, std::make_shared<RotationZ>(),
-                     M_PI / 200, 21, "bottom", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
                      1e-5, 21, "bottom", false);
+
+    auto bottomOrigin = *(pointsCt->getBasis()->getOrigin());
+    // std::cout << "bottomOrigin " << bottomOrigin << std::endl;
 
     // vtpCt.savePointsFile("finalBottom.vtp", "1");
 
@@ -52,30 +55,62 @@ int main() {
     // vtpCt.savePointsFile("initialTop.vtp", "2");
 
 
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
+                     40e-5, 41, "top1", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationX>(),
+                     35e-5, 31, "top1", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
+                     M_PI / 30, 41, "top1", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
+                     M_PI / 70, 31, "top1", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
+                     15e-5, 41, "top1", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
+                     1.5e-5, 41, "top1", false);
 
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
-                     30e-5, 31, "top", false);
+                     15e-5, 41, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationX>(),
-                     30e-5, 31, "top", false);
+                     5e-5, 31, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationX>(),
-                     M_PI / 80, 31, "top", false);
+                     M_PI / 150, 41, "top2", false);
     processVariation(pointsCt, ncCtB, std::make_shared<RotationY>(),
-                     M_PI / 100, 31, "top", false);
-
-    auto offsetZTop1 = processVariation(pointsCt, ncCtB,
-                                        std::make_shared<TranslationZ>(),
-                                        15e-5, 41, "top", false);
-
-    auto offsetZTop2 = processVariation(pointsCt, ncCtB,
-                                        std::make_shared<TranslationZ>(),
-                                        1.5e-5, 41, "top", false);
+                     M_PI / 200, 31, "top2", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
+                     9e-5, 41, "top2", false);
+    processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
+                     .7e-5, 41, "top2", false);
 
 
-    auto stretch = -(offsetZTop1 + offsetZTop2) / shiftZ;
-    std::cout << std::endl << "stretch " << stretch << std::endl;
+    auto topOrigin = *(pointsCt->getBasis()->getOrigin());
+    // std::cout << "topOrigin " << topOrigin << std::endl;
 
-    double youngsModulus = 500. / stretch;
-    std::cout << std::endl << "youngsModulus " << youngsModulus << std::endl;
+
+    std::cout << std::endl;
+    std::cout << "shiftZ " << shiftZ << std::endl;
+
+
+    auto baseDistance = sqrt(CGAL::squared_distance(
+            topOrigin, bottomOrigin));
+
+
+    std::cout << std::endl;
+    std::cout << "baseDistance " << baseDistance << std::endl;
+
+    auto baseDeltaL = shiftZ - baseDistance;
+
+    std::cout << std::endl;
+    std::cout << "baseDeltaL " << baseDeltaL << std::endl;
+
+
+    auto baseStretch = baseDeltaL / shiftZ;
+    std::cout << std::endl << "baseStretch " << baseStretch << std::endl;
+
+
+    double baseYoungsModulus = 500. / baseStretch;
+    std::cout << std::endl << "baseYoungsModulus " <<
+              baseYoungsModulus << std::endl;
+
 
     return EXIT_SUCCESS;
 
