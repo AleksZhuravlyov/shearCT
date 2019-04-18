@@ -19,10 +19,19 @@ PointsCt createInitBaseSquare(NcCt &ncCt) {
 }
 
 
-void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt) {
+void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+                             const double &shiftZ) {
+
     ncCt.setRegionCt(pointsCt->generateBbox());
     ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
     ncCt.regionCt.computePointsValue();
+
+    pointsCt->transform(TranslationZ()(shiftZ));
+    ncCt.setRegionCt(pointsCt->generateBbox());
+    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoBuffer());
+    ncCt.regionCt.computePointsValue();
+    pointsCt->transform(TranslationZ()(-shiftZ));
+
 }
 
 
@@ -165,27 +174,5 @@ double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
 
 
     return value;
-
-}
-
-
-std::shared_ptr<std::vector<double>> computeTomoATopFirstCt(
-        std::shared_ptr<PointsCt> pointsCt,
-        NcCt &ncCt, const double &shiftZ) {
-
-    auto pointsTopFirstCt = std::make_shared<PointsCt>(*pointsCt);
-
-    pointsTopFirstCt->transform(TranslationZ()(shiftZ));
-
-    ncCt.setRegionCt(pointsTopFirstCt->generateBbox());
-    ncCt.regionCt.setPoints(pointsTopFirstCt->getPoints(),
-                            pointsTopFirstCt->getTomoA());
-    ncCt.regionCt.computePointsValue();
-
-    auto vtpCt = VtpCt(pointsTopFirstCt);
-
-    vtpCt.savePointsFile("tmpTop.vtp", "0");
-
-    return pointsTopFirstCt->getTomoA();
 
 }

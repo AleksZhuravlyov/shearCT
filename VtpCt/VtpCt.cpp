@@ -28,6 +28,7 @@ void VtpCt::readPointsFile(const std::string &fileName) {
     auto pointsVtk = polyDataVtk->GetPoints();
     auto tomoAVtk = polyDataVtk->GetPointData()->GetScalars("tomoA");
     auto tomoBVtk = polyDataVtk->GetPointData()->GetScalars("tomoB");
+    auto tomoBufferVtk = polyDataVtk->GetPointData()->GetScalars("tomoBuffer");
     auto resultVtk = polyDataVtk->GetPointData()->GetScalars("result");
     auto basisVtk = polyDataVtk->GetFieldData()->GetArray("basis");
 
@@ -43,12 +44,18 @@ void VtpCt::readPointsFile(const std::string &fileName) {
 
     auto tomoA = pointsCt->getTomoA();
     auto tomoB = pointsCt->getTomoB();
+    auto tomoBuffer = pointsCt->getTomoBuffer();
     auto result = pointsCt->getResult();
 
     for (int i = 0; i < nPoints; i++) {
-        (*tomoA)[i] = tomoAVtk->GetVariantValue(vtkIdType(i)).ToDouble();
-        (*tomoB)[i] = tomoBVtk->GetVariantValue(vtkIdType(i)).ToDouble();
-        (*result)[i] = resultVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+        (*tomoA)[i] =
+                tomoAVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+        (*tomoB)[i] =
+                tomoBVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+        (*tomoBuffer)[i] =
+                tomoBufferVtk->GetVariantValue(vtkIdType(i)).ToDouble();
+        (*result)[i] =
+                resultVtk->GetVariantValue(vtkIdType(i)).ToDouble();
     }
 
 
@@ -85,16 +92,19 @@ void VtpCt::savePointsFile(const std::string &fileName,
     auto pointsVtk = vtkSmartPointer<vtkPoints>::New();
     auto tomoAVtk = vtkSmartPointer<vtkDoubleArray>::New();
     auto tomoBVtk = vtkSmartPointer<vtkDoubleArray>::New();
+    auto tomoBufferVtk = vtkSmartPointer<vtkDoubleArray>::New();
     auto resultVtk = vtkSmartPointer<vtkDoubleArray>::New();
 
     tomoAVtk->SetName("tomoA");
     tomoBVtk->SetName("tomoB");
+    tomoBufferVtk->SetName("tomoBuffer");
     resultVtk->SetName("result");
 
 
     auto points = pointsCt->getPoints();
     auto tomoA = pointsCt->getTomoA();
     auto tomoB = pointsCt->getTomoB();
+    auto tomoBuffer = pointsCt->getTomoBuffer();
     auto result = pointsCt->getResult();
 
 
@@ -104,6 +114,7 @@ void VtpCt::savePointsFile(const std::string &fileName,
                                    (*points)[i].z());
         tomoAVtk->InsertNextValue((*tomoA)[i]);
         tomoBVtk->InsertNextValue((*tomoB)[i]);
+        tomoBufferVtk->InsertNextValue((*tomoBuffer)[i]);
         resultVtk->InsertNextValue((*result)[i]);
     }
 
@@ -130,6 +141,7 @@ void VtpCt::savePointsFile(const std::string &fileName,
 
     polyDataVtk->GetPointData()->AddArray(tomoAVtk);
     polyDataVtk->GetPointData()->AddArray(tomoBVtk);
+    polyDataVtk->GetPointData()->AddArray(tomoBufferVtk);
 
 
     std::vector<double> basisValues;

@@ -50,7 +50,11 @@ public:
 
     void setTomoB(std::shared_ptr<Value> _tomoB);
 
+    void setTomoBuffer(std::shared_ptr<Value> _tomoBuffer);
+
     void setResult(std::shared_ptr<Value> _result);
+
+    void swapAAndBuffer();
 
 
     std::shared_ptr<Points> getPoints();
@@ -61,6 +65,8 @@ public:
     std::shared_ptr<Value> getTomoA();
 
     std::shared_ptr<Value> getTomoB();
+
+    std::shared_ptr<Value> getTomoBuffer();
 
     std::shared_ptr<Value> getResult();
 
@@ -99,6 +105,8 @@ private:
     std::shared_ptr<Value> tomoA;
 
     std::shared_ptr<Value> tomoB;
+
+    std::shared_ptr<Value> tomoBuffer;
 
     std::shared_ptr<Value> result;
 

@@ -18,6 +18,7 @@ PointsCt::PointsCt(std::shared_ptr<Points> _points,
         basis(_basis),
         tomoA(std::make_shared<Value>(_points->size(), 0)),
         tomoB(std::make_shared<Value>(_points->size(), 0)),
+        tomoBuffer(std::make_shared<Value>(_points->size(), 0)),
         result(std::make_shared<Value>(_points->size(), 0)) {}
 
 
@@ -26,12 +27,14 @@ PointsCt::PointsCt(const PointsCt &pointsCt) :
         basis(std::make_shared<Basis>(*(pointsCt.basis))),
         tomoA(std::make_shared<Value>(*(pointsCt.tomoA))),
         tomoB(std::make_shared<Value>(*(pointsCt.tomoB))),
+        tomoBuffer(std::make_shared<Value>(*(pointsCt.tomoBuffer))),
         result(std::make_shared<Value>(*(pointsCt.result))) {}
 
 PointsCt::PointsCt(PointsCt &&pointsCt) : points(pointsCt.points),
                                           basis(pointsCt.basis),
                                           tomoA(pointsCt.tomoA),
                                           tomoB(pointsCt.tomoB),
+                                          tomoBuffer(pointsCt.tomoBuffer),
                                           result(pointsCt.result) {}
 
 
@@ -44,6 +47,7 @@ PointsCt &PointsCt::operator=(PointsCt &&pointsCt) {
     basis = std::make_shared<Basis>(*(pointsCt.basis));
     tomoA = std::make_shared<Value>(*(pointsCt.tomoA));
     tomoB = std::make_shared<Value>(*(pointsCt.tomoB));
+    tomoBuffer = std::make_shared<Value>(*(pointsCt.tomoBuffer));
     result = std::make_shared<Value>(*(pointsCt.result));
 
     return *this;
@@ -99,6 +103,7 @@ void PointsCt::setPoints(std::shared_ptr<Points> _points) {
     if (points->size() != _points->size()) {
         tomoA->resize(_points->size(), 0);
         tomoB->resize(_points->size(), 0);
+        tomoBuffer->resize(_points->size(), 0);
         result->resize(_points->size(), 0);
     }
 
@@ -119,8 +124,16 @@ void PointsCt::setTomoB(std::shared_ptr<std::vector<double>> _tomoB) {
     tomoB = _tomoB;
 }
 
+void PointsCt::setTomoBuffer(std::shared_ptr<std::vector<double>> _tomoBuffer) {
+    tomoBuffer = _tomoBuffer;
+}
+
 void PointsCt::setResult(std::shared_ptr<std::vector<double>> _result) {
     result = _result;
+}
+
+void PointsCt::swapAAndBuffer() {
+    swap(tomoA, tomoBuffer);
 }
 
 
@@ -139,6 +152,10 @@ std::shared_ptr<Value> PointsCt::getTomoA() {
 
 std::shared_ptr<Value> PointsCt::getTomoB() {
     return tomoB;
+}
+
+std::shared_ptr<Value> PointsCt::getTomoBuffer() {
+    return tomoBuffer;
 }
 
 std::shared_ptr<Value> PointsCt::getResult() {

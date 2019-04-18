@@ -25,7 +25,8 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                      const std::string &fileNamesPrefix,
                      const bool &isFilesSaved);
 
-void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt);
+void takeBaseDataFromFirstCt(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+                             const double &shiftZ);
 
 
 double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
@@ -33,11 +34,6 @@ double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
                         const bool &isFilesSaved);
-
-
-std::shared_ptr<std::vector<double>> computeTomoATopFirstCt(
-        std::shared_ptr<PointsCt> pointsCt,
-        NcCt &ncCt, const double &shiftZ);
 
 
 #endif //DEMO_H

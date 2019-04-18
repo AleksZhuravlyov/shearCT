@@ -16,26 +16,15 @@
 
 int main() {
 
-    double shiftZ = 0.0554 - 3.60179e-05 * 90;
-
-
     NcCt ncCtA("/Volumes/ElkData/CT/samples/5.nc");
     NcCt ncCtB("/Volumes/ElkData/CT/samples/10.nc");
 
-    // std::cout << ncCtA << std::endl;
 
-    auto pointsCt = std::make_shared<PointsCt>(
-            createInitBaseSquare(ncCtA));
-    // auto vtpCt = VtpCt(pointsCt);
-    takeBaseDataFromFirstCt(pointsCt, ncCtA);
-    // vtpCt.savePointsFile("InitialBottom.vtp", "0");
-
-    auto tomoATopFirstCt = computeTomoATopFirstCt(pointsCt, ncCtA, shiftZ);
+    double shiftZ = 0.0554 - 3.60179e-05 * 90;
 
 
-
-
-
+    auto pointsCt = std::make_shared<PointsCt>(createInitBaseSquare(ncCtA));
+    takeBaseDataFromFirstCt(pointsCt, ncCtA, shiftZ);
 
 
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
@@ -52,13 +41,16 @@ int main() {
                      1e-5, 21, "bottom", false);
 
     auto bottomOrigin = *(pointsCt->getBasis()->getOrigin());
-    // std::cout << "bottomOrigin " << bottomOrigin << std::endl;
 
-    // vtpCt.savePointsFile("finalBottom.vtp", "1");
+    VtpCt vtpCt(pointsCt);
 
-    pointsCt->setTomoA(tomoATopFirstCt);
+    vtpCt.savePointsFile("beforeSwap.vtp", "0");
+
+    pointsCt->swapAAndBuffer();
+
+    vtpCt.savePointsFile("afterSwap.vtp", "0");
+
     pointsCt->transform(TranslationZ()(shiftZ));
-    // vtpCt.savePointsFile("initialTop.vtp", "2");
 
 
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
@@ -73,10 +65,6 @@ int main() {
                      19e-5, 51, "top1", false);
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationZ>(),
                      1.5e-5, 41, "top1", false);
-
-
-    processVariation(pointsCt, ncCtB, std::make_shared<StretchingXY>(),
-                     0.0005, 40, "top1", false);
 
 
     processVariation(pointsCt, ncCtB, std::make_shared<TranslationY>(),
@@ -94,33 +82,32 @@ int main() {
 
 
     auto topOrigin = *(pointsCt->getBasis()->getOrigin());
-    // std::cout << "topOrigin " << topOrigin << std::endl;
 
 
     std::cout << std::endl;
     std::cout << "shiftZ " << shiftZ << std::endl;
 
 
-    auto baseDistance = sqrt(CGAL::squared_distance(
+    auto distance = sqrt(CGAL::squared_distance(
             topOrigin, bottomOrigin));
 
 
     std::cout << std::endl;
-    std::cout << "baseDistance " << baseDistance << std::endl;
+    std::cout << "distance " << distance << std::endl;
 
-    auto baseDeltaL = shiftZ - baseDistance;
+    auto deltaL = shiftZ - distance;
 
     std::cout << std::endl;
-    std::cout << "baseDeltaL " << baseDeltaL << std::endl;
+    std::cout << "deltaL " << deltaL << std::endl;
 
 
-    auto baseStretch = baseDeltaL / shiftZ;
-    std::cout << std::endl << "baseStretch " << baseStretch << std::endl;
+    auto stretch = deltaL / shiftZ;
+    std::cout << std::endl << "stretch " << stretch << std::endl;
 
 
-    double baseYoungsModulus = 500. / baseStretch;
-    std::cout << std::endl << "baseYoungsModulus " <<
-              baseYoungsModulus << std::endl;
+    double youngsModulus = 500. / stretch;
+    std::cout << std::endl << "youngsModulus " <<
+              youngsModulus << std::endl;
 
 
     return EXIT_SUCCESS;
