@@ -53,9 +53,15 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt);
 void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
                          std::shared_ptr<PointsCt> &pointsCt);
 
-std::shared_ptr<PointsCt>
-getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
-                    const std::string &fileName);
+std::shared_ptr<PointsCt> getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
+                                              const std::string &fileName);
+
+
+std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
+        NcCt &ncCt, std::shared_ptr<PointsCt> &baseSquare);
+
+double getCylinderSectorFromCtB(NcCt &ncCt,
+                                std::shared_ptr<PointsCt> &pointsCt);
 
 
 #endif //DEMO_H

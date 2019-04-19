@@ -19,6 +19,16 @@ VtpCt::VtpCt(std::shared_ptr<PointsCt> _pointsCt) :
         pointsCt(_pointsCt),
         fileIsBinary(true) {}
 
+
+void VtpCt::setPointsCt(std::shared_ptr<PointsCt> _pointsCt){
+    pointsCt = _pointsCt;
+}
+
+std::shared_ptr<PointsCt> VtpCt::getPointsCt(){
+    return pointsCt;
+}
+
+
 void VtpCt::readPointsFile(const std::string &fileName) {
 
     auto polyDataReaderVtk = vtkSmartPointer<vtkXMLPolyDataReader>::New();

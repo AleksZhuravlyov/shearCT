@@ -254,3 +254,49 @@ void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
                      .7e-5, 61, "top2", false);
 
 }
+
+
+std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
+        NcCt &ncCt, std::shared_ptr<PointsCt> &baseSquare) {
+
+    auto origin = baseSquare->getBasis()->getOrigin();
+
+    double R = ncCt.getXStep() * 500;
+    double angleCenter = M_PI * 1.5;
+    double zWidth = ncCt.getZStep() * 50;
+    double angleWidth = M_PI / 10;
+    int nZ = 500;
+    int nAngle = 5000;
+
+    auto pointsCt = std::make_shared<PointsCt>();
+    pointsCt->createZCylinderSegment(origin->x(), origin->y(), origin->z(),
+                                     R, angleCenter, zWidth, angleWidth,
+                                     nZ, nAngle);
+
+    ncCt.setRegionCt(pointsCt->generateBbox());
+    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
+    ncCt.regionCt.computePointsValue();
+
+    return pointsCt;
+
+}
+
+
+double getCylinderSectorFromCtB(NcCt &ncCt,
+                                std::shared_ptr<PointsCt> &pointsCt) {
+
+    auto mult1 = processVariation(pointsCt, ncCt,
+                                  std::make_shared<StretchingXY>(),
+                                  0.007, 21, "cylinder1", false);
+    auto mult2 = processVariation(pointsCt, ncCt,
+                                  std::make_shared<StretchingXY>(),
+                                  0.0007, 21, "cylinder2", false);
+    auto mult3 = processVariation(pointsCt, ncCt,
+                                  std::make_shared<StretchingXY>(),
+                                  0.0002, 21, "cylinder3", false);
+    auto mult4 = processVariation(pointsCt, ncCt,
+                                  std::make_shared<StretchingXY>(),
+                                  0.00015, 21, "cylinder4", false);
+
+    return mult1 * mult2 * mult3 * mult4 - 1;
+}

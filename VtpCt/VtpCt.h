@@ -20,6 +20,11 @@ public:
     virtual ~VtpCt() {}
 
 
+    void setPointsCt(std::shared_ptr<PointsCt> _pointsCt);
+
+    std::shared_ptr<PointsCt> getPointsCt();
+
+
     void readPointsFile(const std::string &fileName);
 
     void setFileIsBinary(const bool &_fileIsBinary);
