@@ -67,6 +67,8 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                 fileNamesPrefix + " " + typeid(*transformation).name() +
                 ": max " + toString(valuesAbsolute[indMaxCorrelation]) + "'");
     gp.sendLine("set term dumb");
+    //set term tikz latex size 17.9,6
+    //set output '6_compare1D_C_H_4_2.txt'
     gp.sendLine(plotLine);
 
 
