@@ -3,17 +3,16 @@
 
 #include <iostream>
 #include <string>
-#include <cmath>
 #include <vector>
 
+#include <StringAndNumber.h>
+#include <gnuplot.h>
+
 #include <NcCt.h>
-#include <VtpCt.h>
 #include <Basis.h>
 #include <PointsCt.h>
 #include <Transformation.h>
 
-#include <StringAndNumber.h>
-#include <gnuplot.h>
 
 double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                      std::shared_ptr<Transformation> transformation,

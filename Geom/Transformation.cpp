@@ -1,9 +1,6 @@
-#include <Transformation.h>
-
 #include <cmath>
-#include <vector>
 
-#include <CgalAliases.h>
+#include <Transformation.h>
 
 
 Aff_transformation RotationX::operator()(const double &value) {

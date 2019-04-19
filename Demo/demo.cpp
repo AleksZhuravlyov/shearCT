@@ -1,4 +1,7 @@
+#include <cmath>
+
 #include <demo.h>
+#include <VtpCt.h>
 
 
 double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,

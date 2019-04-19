@@ -1,7 +1,5 @@
 #include <iostream>
 #include <string>
-#include <cmath>
-#include <vector>
 
 #include <NcCt.h>
 #include <VtpCt.h>
@@ -9,10 +7,7 @@
 #include <PointsCt.h>
 #include <Transformation.h>
 
-#include <StringAndNumber.h>
-
 #include <demo.h>
-
 
 int main() {
 
@@ -147,5 +142,3 @@ int main() {
     return EXIT_SUCCESS;
 
 }
-
-

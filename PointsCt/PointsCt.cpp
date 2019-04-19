@@ -1,7 +1,5 @@
 #include <PointsCt.h>
 
-#include <cmath>
-
 
 PointsCt::PointsCt() :
         PointsCt(std::make_shared<Points>(1, Point(0, 0, 0)),

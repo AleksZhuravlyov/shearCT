@@ -2,11 +2,13 @@
 #define NCCT_H
 
 #include <string>
+#include <vector>
 
 #include <netcdf>
 
 #include <Basis.h>
 #include <RegionCt.h>
+
 
 struct Dim {
     std::string name;

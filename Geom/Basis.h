@@ -1,7 +1,6 @@
 #ifndef BASIS_H
 #define BASIS_H
 
-#include <cmath>
 #include <vector>
 
 #include <CgalAliases.h>
