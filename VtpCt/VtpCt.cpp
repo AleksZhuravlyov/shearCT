@@ -176,6 +176,10 @@ void VtpCt::savePointsFile(const std::string &fileName,
 
 }
 
+void VtpCt::savePointsFile(const std::string &fileName) {
+    savePointsFile(fileName, "0");
+}
+
 
 void VtpCt::clearFilesCollection() {
     fileNames.clear();

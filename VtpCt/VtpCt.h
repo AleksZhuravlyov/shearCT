@@ -29,6 +29,8 @@ public:
     void savePointsFile(const std::string &fileName,
                         const std::string &fileDescription);
 
+    void savePointsFile(const std::string &fileName);
+
     void clearFilesCollection();
 
     void saveCollectionFile(const std::string &fileName);
