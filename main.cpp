@@ -33,7 +33,6 @@ int main() {
 
     /// Young's modulus calculation
     /// =======================================================================
-/*
 
     /// Length of measurement
 
@@ -81,7 +80,6 @@ int main() {
     double youngsModulus = 500. / stretchLength;
     std::cout << std::endl << "youngsModulus " << youngsModulus << std::endl;
 
-*/
     /// =======================================================================
 
 

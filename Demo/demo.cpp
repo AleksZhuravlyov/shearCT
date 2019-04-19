@@ -225,7 +225,7 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
 void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
                          std::shared_ptr<PointsCt> &pointsCt) {
 
-    pointsCt->swapAAndBuffer();
+    pointsCt->swapTomoAAndTomoBuffer();
     pointsCt->transform(TranslationZ()(shiftZ));
 
 

@@ -130,7 +130,7 @@ void PointsCt::setResult(std::shared_ptr<std::vector<double>> _result) {
     result = _result;
 }
 
-void PointsCt::swapAAndBuffer() {
+void PointsCt::swapTomoAAndTomoBuffer() {
     swap(tomoA, tomoBuffer);
 }
 

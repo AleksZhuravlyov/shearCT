@@ -21,7 +21,6 @@ Aff_transformation RotationZ::operator()(const double &value) {
                               0, 0, 1);
 }
 
-
 Aff_transformation TranslationX::operator()(const double &value) {
     return Aff_transformation(CGAL::TRANSLATION, Vector(value, 0, 0));
 }
@@ -33,7 +32,6 @@ Aff_transformation TranslationY::operator()(const double &value) {
 Aff_transformation TranslationZ::operator()(const double &value) {
     return Aff_transformation(CGAL::TRANSLATION, Vector(0, 0, value));
 }
-
 
 Aff_transformation StretchingXY::operator()(const double &value) {
     return Aff_transformation(value, 0, 0,
