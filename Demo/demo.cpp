@@ -115,6 +115,7 @@ double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
 
         valuesRelative.push_back(valuesStart);
         valuesAbsolute.push_back(valuesStart);
+        valuesAbsoluteReverse.push_back(-valuesStart);
 
         for (int i = 1; i < _nValues; i++) {
             valuesRelative.push_back(valuesStep);
