@@ -33,6 +33,12 @@ public:
     PointsCt(std::shared_ptr<Points> _points);
 
     /**
+     Constructor sets CGAL Bbox.
+     @param[in] bBox is CGAL Bbox for points settings.
+    */
+    PointsCt(const Bbox &bBox);
+
+    /**
      Constructor sets CGAL points and basis.
      @param[in] _points is CGAL points for points attribute.
      @param[in] _basis is CGAL based basis for basis attribute.

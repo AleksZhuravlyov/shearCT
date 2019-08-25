@@ -10,6 +10,21 @@ PointsCt::PointsCt(std::shared_ptr<Points> _points) :
     translateBasisToCenter();
 }
 
+PointsCt::PointsCt(const Bbox &bBox) :
+        PointsCt(std::make_shared<Points>(
+                Points{Point(bBox.xmin(), bBox.ymin(), bBox.zmin()),
+                       Point(bBox.xmax(), bBox.ymin(), bBox.zmin()),
+                       Point(bBox.xmin(), bBox.ymax(), bBox.zmin()),
+                       Point(bBox.xmax(), bBox.ymax(), bBox.zmin()),
+                       Point(bBox.xmin(), bBox.ymin(), bBox.zmax()),
+                       Point(bBox.xmax(), bBox.ymin(), bBox.zmax()),
+                       Point(bBox.xmin(), bBox.ymax(), bBox.zmax()),
+                       Point(bBox.xmax(), bBox.ymax(), bBox.zmax())}),
+                 std::make_shared<Basis>()) {
+    translateBasisToCenter();
+}
+
+
 PointsCt::PointsCt(std::shared_ptr<Points> _points,
                    std::shared_ptr<Basis> _basis) :
         points(_points),
