@@ -5,8 +5,8 @@
 #include <Registration.h>
 
 
-double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
-                     std::shared_ptr<Transformation> transformation,
+double variatePoints(std::shared_ptr <PointsCt> pointsCt, RegionCt &regionCt,
+                     std::shared_ptr <Transformation> transformation,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
                      const std::vector<double> &valuesAbsoluteReverse,
@@ -78,8 +78,8 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 }
 
 
-double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
-                        std::shared_ptr<Transformation> transformation,
+double processVariation(std::shared_ptr <PointsCt> pointsCt, NcCt &ncCt,
+                        std::shared_ptr <Transformation> transformation,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
                         const bool &isFilesSaved) {
@@ -151,7 +151,7 @@ double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
 }
 
 
-std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName) {
+std::shared_ptr <PointsCt> getPointCtFromFile(const std::string &fileName) {
     auto pointsCt = std::make_shared<PointsCt>();
     auto vtpCt = VtpCt(pointsCt);
     vtpCt.readPointsFile(fileName);
@@ -159,7 +159,7 @@ std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName) {
 }
 
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
+std::shared_ptr <PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
 
     double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) / 2;
     double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) / 2;
@@ -183,7 +183,8 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
 
 
 void getBaseSquareFromCtAWithTop(
-        NcCt &ncCt, const double &shiftZ, std::shared_ptr<PointsCt> &pointsCt) {
+        NcCt &ncCt, const double &shiftZ,
+        std::shared_ptr <PointsCt> &pointsCt) {
 
     pointsCt->transform(TranslationZ()(shiftZ));
     ncCt.setRegionCt(pointsCt->generateBbox());
@@ -193,7 +194,7 @@ void getBaseSquareFromCtAWithTop(
 
 }
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
+std::shared_ptr <PointsCt> getBaseSquareFromCtAWithTop(
         NcCt &ncCt, const double &shiftZ, const std::string &fileName) {
     auto pointsCt = getPointCtFromFile(fileName);
     getBaseSquareFromCtAWithTop(ncCt, shiftZ, pointsCt);
@@ -201,10 +202,10 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
 }
 
 
-void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt) {
+void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr <PointsCt> &pointsCt) {
 
     // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-    //                  15e-5, 31, "bottom",
+    //                  20e-5, 11, "bottom",
     //                  false);
     // processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
     //                  10e-5, 21, "bottom",
@@ -223,38 +224,24 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt) {
     //                  false);
 
 
-    Transformations transformations;
-    transformations.push_back(std::make_shared<TranslationX>());
-    transformations.push_back(std::make_shared<TranslationY>());
-    transformations.push_back(std::make_shared<TranslationZ>());
-    transformations.push_back(std::make_shared<RotationX>());
-    transformations.push_back(std::make_shared<RotationY>());
-    transformations.push_back(std::make_shared<RotationZ>());
+    auto transformations = generateTranslationAnaRotationXYZ();
+    auto constraintsMin = std::vector < double > {
+            -20e-5, -20e-5, -20e-5,
+            -M_PI / 180., -M_PI / 180., -M_PI / 180.};
+    auto constraintsMax = std::vector < double > {
+            20e-5, 20e-5, 20e-5,
+            M_PI / 180., M_PI / 180., M_PI / 180.};
 
-    std::vector<double> constraintsMin;
-    constraintsMin.push_back(10e-5);
-    constraintsMin.push_back(10e-5);
-    constraintsMin.push_back(10e-5);
-    constraintsMin.push_back(M_PI / 200);
-    constraintsMin.push_back(M_PI / 200);
-    constraintsMin.push_back(M_PI / 200);
-
-    std::vector<double> constraintsMax;
-    constraintsMax.push_back(-10e-5);
-    constraintsMax.push_back(-10e-5);
-    constraintsMax.push_back(-10e-5);
-    constraintsMax.push_back(-M_PI / 200);
-    constraintsMax.push_back(-M_PI / 200);
-    constraintsMax.push_back(-M_PI / 200);
-
-
-    makeRegistration(ncCt, pointsCt, transformations,
-                     constraintsMin, constraintsMax);
+    std::string registrationType = "XYZTAndRTop";
+    std::cout << registrationType << std::endl;
+    makeRegistration(ncCt, pointsCt, transformations, 1.e-7,
+                     constraintsMin, constraintsMax,
+                     registrationType, false);
 
 }
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
-                                               const std::string &fileName) {
+std::shared_ptr <PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
+                                                const std::string &fileName) {
     auto pointsCt = getPointCtFromFile(fileName);
     getBaseSquareFromCtB(ncCt, pointsCt);
     return pointsCt;
@@ -262,44 +249,60 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
 
 
 void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
-                         std::shared_ptr<PointsCt> &pointsCt) {
+                         std::shared_ptr <PointsCt> &pointsCt) {
 
     pointsCt->swapTomoAAndTomoBuffer();
     pointsCt->transform(TranslationZ()(shiftZ));
 
 
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationY>(),
-                     40e-5, 41, "top1", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
-                     35e-5, 31, "top1", false);
-    processVariation(pointsCt, ncCt, std::make_shared<RotationX>(),
-                     M_PI / 30, 41, "top1", false);
-    processVariation(pointsCt, ncCt, std::make_shared<RotationY>(),
-                     M_PI / 50, 41, "top1", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-                     19e-5, 51, "top1", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-                     1.5e-5, 41, "top1", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationY>(),
+    //                  40e-5, 41, "top1", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
+    //                  35e-5, 31, "top1", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<RotationX>(),
+    //                  M_PI / 30, 41, "top1", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<RotationY>(),
+    //                  M_PI / 50, 41, "top1", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
+    //                  19e-5, 51, "top1", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
+    //                  1.5e-5, 41, "top1", false);
+    //
+    //
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationY>(),
+    //                  15e-5, 41, "top2", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
+    //                  5e-5, 31, "top2", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<RotationX>(),
+    //                  M_PI / 70, 100, "top2", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<RotationY>(),
+    //                  M_PI / 150, 41, "top2", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
+    //                  9e-5, 61, "top2", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
+    //                  .7e-5, 61, "top2", false);
 
 
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationY>(),
-                     15e-5, 41, "top2", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
-                     5e-5, 31, "top2", false);
-    processVariation(pointsCt, ncCt, std::make_shared<RotationX>(),
-                     M_PI / 70, 100, "top2", false);
-    processVariation(pointsCt, ncCt, std::make_shared<RotationY>(),
-                     M_PI / 150, 41, "top2", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-                     9e-5, 61, "top2", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-                     .7e-5, 61, "top2", false);
+    auto transformations = generateTranslationAnaRotationXYZ();
+    auto constraintsMin = std::vector < double > {
+            -25e-5, -25e-5, -25e-5,
+            -M_PI / 100., -M_PI / 100., -M_PI / 100.};
+    auto constraintsMax = std::vector < double > {
+            25e-5, 25e-5, 25e-5,
+            M_PI / 100., M_PI / 100., M_PI / 100.};
+
+    std::string registrationType = "XYZTAndRBot";
+    std::cout << registrationType << std::endl;
+    makeRegistration(ncCt, pointsCt, transformations, 1.e-9,
+                     constraintsMin, constraintsMax,
+                     registrationType, false);
+
 
 }
 
 
-std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
-        NcCt &ncCt, std::shared_ptr<PointsCt> &baseSquare) {
+std::shared_ptr <PointsCt> getCylinderSectorFromCtAAndBaseSquare(
+        NcCt &ncCt, std::shared_ptr <PointsCt> &baseSquare) {
 
     auto origin = baseSquare->getBasis()->getOrigin();
 
@@ -325,20 +328,35 @@ std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
 
 
 double getCylinderSectorFromCtB(NcCt &ncCt,
-                                std::shared_ptr<PointsCt> &pointsCt) {
+                                std::shared_ptr <PointsCt> &pointsCt) {
 
-    auto mult1 = processVariation(pointsCt, ncCt,
-                                  std::make_shared<StretchingXY>(),
-                                  0.007, 21, "cylinder1", false);
-    auto mult2 = processVariation(pointsCt, ncCt,
-                                  std::make_shared<StretchingXY>(),
-                                  0.0007, 21, "cylinder2", false);
-    auto mult3 = processVariation(pointsCt, ncCt,
-                                  std::make_shared<StretchingXY>(),
-                                  0.0002, 21, "cylinder3", false);
-    auto mult4 = processVariation(pointsCt, ncCt,
-                                  std::make_shared<StretchingXY>(),
-                                  0.00015, 21, "cylinder4", false);
+    // processVariation(pointsCt, ncCt,
+    //                  std::make_shared<StretchingXY>(),
+    //                  0.007, 21, "cylinder1", false);
+    // processVariation(pointsCt, ncCt,
+    //                  std::make_shared<StretchingXY>(),
+    //                  0.0007, 21, "cylinder2", false);
+    // processVariation(pointsCt, ncCt,
+    //                  std::make_shared<StretchingXY>(),
+    //                  0.0002, 21, "cylinder3", false);
+    // processVariation(pointsCt, ncCt,
+    //                  std::make_shared<StretchingXY>(),
+    //                               0.00015, 21, "cylinder4", false);
 
-    return mult1 * mult2 * mult3 * mult4 - 1;
+    // return mult1 * mult2 * mult3 * mult4 - 1;
+
+    auto transformations = generateStretchingXY();
+    auto constraintsMin = std::vector < double > {0.98};
+    auto constraintsMax = std::vector < double > {1.02};
+
+    std::string registrationType = "XYStretching";
+    std::cout << registrationType << std::endl;
+    auto answerVector = makeRegistration(ncCt, pointsCt,
+                                         transformations, 1.e-12,
+                                         constraintsMin, constraintsMax,
+                                         registrationType,
+                                         false);
+
+    return answerVector[0] - 1;
+
 }

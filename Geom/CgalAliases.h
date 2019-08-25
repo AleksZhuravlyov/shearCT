@@ -20,4 +20,5 @@ typedef Kernel::Vector_3 Vector;
 typedef Kernel::Direction_3 Direction;
 
 
+
 #endif //CGALALIASES_H

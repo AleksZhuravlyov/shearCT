@@ -12,6 +12,8 @@ find_package(pugixml)
 
 find_package(CGAL)
 
+find_package(dlib REQUIRED)
+
 set(SOURCE_CODE main.cpp
         NcCt/NcCt.cpp
         VtpCt/VtpCt.cpp
@@ -39,4 +41,5 @@ target_link_libraries(${POJECT_NAME} PRIVATE
         ${VTK_LIBRARIES}
         pugixml
         /usr/local/lib/libnetcdf-cxx4.dylib
-        CGAL::CGAL)
+        CGAL::CGAL
+        dlib::dlib)
