@@ -2,6 +2,7 @@
 
 #include <demo.h>
 #include <VtpCt.h>
+#include <Registration.h>
 
 
 double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
@@ -202,18 +203,53 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
 
 void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt) {
 
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-                     15e-5, 31, "bottom", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
-                     10e-5, 21, "bottom", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationY>(),
-                     10e-5, 21, "bottom", false);
-    processVariation(pointsCt, ncCt, std::make_shared<RotationX>(),
-                     M_PI / 140, 31, "bottom", false);
-    processVariation(pointsCt, ncCt, std::make_shared<RotationY>(),
-                     M_PI / 200, 21, "bottom", false);
-    processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
-                     1e-5, 21, "bottom", false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
+    //                  15e-5, 31, "bottom",
+    //                  false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationX>(),
+    //                  10e-5, 21, "bottom",
+    //                  false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationY>(),
+    //                  10e-5, 21, "bottom",
+    //                  false);
+    // processVariation(pointsCt, ncCt, std::make_shared<RotationX>(),
+    //                  M_PI / 140, 31, "bottom",
+    //                  false);
+    // processVariation(pointsCt, ncCt, std::make_shared<RotationY>(),
+    //                  M_PI / 200, 21, "bottom",
+    //                  false);
+    // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
+    //                  1e-5, 21, "bottom",
+    //                  false);
+
+
+    Transformations transformations;
+    transformations.push_back(std::make_shared<TranslationX>());
+    transformations.push_back(std::make_shared<TranslationY>());
+    transformations.push_back(std::make_shared<TranslationZ>());
+    transformations.push_back(std::make_shared<RotationX>());
+    transformations.push_back(std::make_shared<RotationY>());
+    transformations.push_back(std::make_shared<RotationZ>());
+
+    std::vector<double> constraintsMin;
+    constraintsMin.push_back(10e-5);
+    constraintsMin.push_back(10e-5);
+    constraintsMin.push_back(10e-5);
+    constraintsMin.push_back(M_PI / 200);
+    constraintsMin.push_back(M_PI / 200);
+    constraintsMin.push_back(M_PI / 200);
+
+    std::vector<double> constraintsMax;
+    constraintsMax.push_back(-10e-5);
+    constraintsMax.push_back(-10e-5);
+    constraintsMax.push_back(-10e-5);
+    constraintsMax.push_back(-M_PI / 200);
+    constraintsMax.push_back(-M_PI / 200);
+    constraintsMax.push_back(-M_PI / 200);
+
+
+    makeRegistration(ncCt, pointsCt, transformations,
+                     constraintsMin, constraintsMax);
 
 }
 

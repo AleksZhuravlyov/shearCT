@@ -19,8 +19,10 @@ set(SOURCE_CODE main.cpp
         NcCt/RegionCt.cpp
         PointsCt/PointsCt.cpp
         Geom/Transformation.cpp
-        Demo/demo.cpp)
+        Demo/demo.cpp
+        Registration/Registration.cpp)
 
+include_directories(Registration)
 include_directories(Demo)
 include_directories(ThirdParty)
 include_directories(NcCt)
