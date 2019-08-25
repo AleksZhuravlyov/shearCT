@@ -88,6 +88,29 @@ void PointsCt::transform(const Aff_transformation &transformation) {
 
 }
 
+void PointsCt::transform(
+        const std::vector<Aff_transformation> &transformations) {
+
+    auto basisTransformation = basis->generateTransformation();
+    auto basisInverseTransformation = basisTransformation.inverse();
+
+
+    for (auto &&point : *points)
+        point = basisInverseTransformation(point);
+    basis->transform(basisInverseTransformation);
+
+    for (auto &&transformation : transformations) {
+        for (auto &&point : *points)
+            point = transformation(point);
+        basis->transform(transformation);
+    }
+
+    for (auto &&point : *points)
+        point = basisTransformation(point);
+    basis->transform(basisTransformation);
+
+}
+
 
 void PointsCt::translateBasis(const Point &point) {
     basis->setOrigin(point);

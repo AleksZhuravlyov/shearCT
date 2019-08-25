@@ -79,6 +79,13 @@ public:
 
 
     /**
+     Make transformations for this PointsCt class.
+     @param[in] transformations acts on this PointsCt class.
+    */
+    void transform(const std::vector<Aff_transformation> &transformations);
+
+
+    /**
      Move origin attribute of basis attribute to particular point.
      @param[in] point setts origin attribute of basis attribute.
     */
