@@ -130,13 +130,13 @@ void NcCt::setRegionCt(const std::vector<size_t> &start,
 
 void NcCt::setRegionCt(const Bbox &bbox) {
 
-    auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 1;
-    auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 1;
-    auto zStart = size_t((bbox.zmin() - zInit) / zStep) - 1;
+    auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 3;
+    auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 3;
+    auto zStart = size_t((bbox.zmin() - zInit) / zStep) - 3;
 
-    auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep) + 5;
-    auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep) + 5;
-    auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep) + 5;
+    auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep) + 9;
+    auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep) + 9;
+    auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep) + 9;
 
 
     std::string errorMessage;

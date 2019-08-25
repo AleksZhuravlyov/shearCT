@@ -84,6 +84,7 @@ double RegionCt::computePointValue(Point point) {
 
 
     return pointValue;
+
 }
 
 
