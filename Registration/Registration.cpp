@@ -40,10 +40,18 @@ std::vector<double> makeRegistration(
     VtpCt vtpCt;
 
 
-    InvCorrelation invCorrelation(transformations, *pointsCt,
-                                  ncCt.regionCt,
-                                  fileNamesPrefix, isFilesSaved,
-                                  iteration, vtpCt);
+    InvCorrelation invCorrelation(
+            transformations, *pointsCt,
+            ncCt.regionCt,
+            fileNamesPrefix, isFilesSaved,
+            iteration, vtpCt);
+
+    int iterationForDerivative = -1;
+    InvCorrelation invCorrelationForDerivative(
+            transformations, *pointsCt,
+            ncCt.regionCt,
+            fileNamesPrefix, false,
+            iterationForDerivative, vtpCt);
 
 
     ColumnVector searchVector(transformations.size());
@@ -66,8 +74,8 @@ std::vector<double> makeRegistration(
     auto result = find_min_box_constrained(
             dlib::lbfgs_search_strategy(10),
             dlib::objective_delta_stop_strategy(accuracy).be_verbose(),
-            invCorrelation, dlib::derivative(invCorrelation), searchVector,
-            lowerConstraint, upperConstraint);
+            invCorrelation, dlib::derivative(invCorrelationForDerivative),
+            searchVector, lowerConstraint, upperConstraint);
 
 
     invCorrelation.implementResult(searchVector);
