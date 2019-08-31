@@ -5,8 +5,8 @@
 #include <Registration.h>
 
 
-double variatePoints(std::shared_ptr <PointsCt> pointsCt, RegionCt &regionCt,
-                     std::shared_ptr <Transformation> transformation,
+double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
+                     std::shared_ptr<Transformation> transformation,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
                      const std::vector<double> &valuesAbsoluteReverse,
@@ -27,15 +27,16 @@ double variatePoints(std::shared_ptr <PointsCt> pointsCt, RegionCt &regionCt,
         if (isFilesSaved)
             vtpCt.savePointsFile(
                     fileNamesPrefix + "_" +
-                    typeid(*transformation).name() +
+                    typeid(decltype(transformation)::element_type).name() +
                     toString(valuesAbsolute[i]) + ".vtp",
                     toString(valuesAbsolute[i]));
 
     }
 
     if (isFilesSaved)
-        vtpCt.saveCollectionFile(fileNamesPrefix + "_" +
-                                 typeid(*transformation).name() + ".pvd");
+        vtpCt.saveCollectionFile(
+                fileNamesPrefix + "_" +
+                typeid(decltype(transformation)::element_type).name() + ".pvd");
 
 
     int indMaxCorrelation = 0;
@@ -65,7 +66,8 @@ double variatePoints(std::shared_ptr <PointsCt> pointsCt, RegionCt &regionCt,
 
     GnuplotPipe gp;
     gp.sendLine("set title '" +
-                fileNamesPrefix + " " + typeid(*transformation).name() +
+                fileNamesPrefix + " " +
+                typeid(decltype(transformation)::element_type).name() +
                 ": max " + toString(valuesAbsolute[indMaxCorrelation]) + "'");
     gp.sendLine("set term dumb");
     //set term tikz latex size 17.9,6
@@ -78,8 +80,8 @@ double variatePoints(std::shared_ptr <PointsCt> pointsCt, RegionCt &regionCt,
 }
 
 
-double processVariation(std::shared_ptr <PointsCt> pointsCt, NcCt &ncCt,
-                        std::shared_ptr <Transformation> transformation,
+double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+                        std::shared_ptr<Transformation> transformation,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
                         const bool &isFilesSaved) {
@@ -92,7 +94,8 @@ double processVariation(std::shared_ptr <PointsCt> pointsCt, NcCt &ncCt,
     if (nValues % 2 == 0)
         _nValues += 1;
 
-    if (typeid(*transformation).name() == typeid(StretchingXY).name()) {
+    if (typeid(decltype(transformation)::element_type).name() ==
+        typeid(StretchingXY).name()) {
 
         double valuesStart = 1 - valueWidth / 2;
         double valuesStop = 1 + valueWidth / 2;
@@ -151,7 +154,7 @@ double processVariation(std::shared_ptr <PointsCt> pointsCt, NcCt &ncCt,
 }
 
 
-std::shared_ptr <PointsCt> getPointCtFromFile(const std::string &fileName) {
+std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName) {
     auto pointsCt = std::make_shared<PointsCt>();
     auto vtpCt = VtpCt(pointsCt);
     vtpCt.readPointsFile(fileName);
@@ -159,7 +162,7 @@ std::shared_ptr <PointsCt> getPointCtFromFile(const std::string &fileName) {
 }
 
 
-std::shared_ptr <PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
+std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
 
     double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) / 2;
     double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) / 2;
@@ -184,7 +187,7 @@ std::shared_ptr <PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
 
 void getBaseSquareFromCtAWithTop(
         NcCt &ncCt, const double &shiftZ,
-        std::shared_ptr <PointsCt> &pointsCt) {
+        std::shared_ptr<PointsCt> &pointsCt) {
 
     pointsCt->transform(TranslationZ()(shiftZ));
     ncCt.setRegionCt(pointsCt->generateBbox());
@@ -194,7 +197,7 @@ void getBaseSquareFromCtAWithTop(
 
 }
 
-std::shared_ptr <PointsCt> getBaseSquareFromCtAWithTop(
+std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
         NcCt &ncCt, const double &shiftZ, const std::string &fileName) {
     auto pointsCt = getPointCtFromFile(fileName);
     getBaseSquareFromCtAWithTop(ncCt, shiftZ, pointsCt);
@@ -202,7 +205,7 @@ std::shared_ptr <PointsCt> getBaseSquareFromCtAWithTop(
 }
 
 
-void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr <PointsCt> &pointsCt) {
+void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt) {
 
     // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
     //                  20e-5, 11, "bottom",
@@ -225,10 +228,10 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr <PointsCt> &pointsCt) {
 
 
     auto transformations = generateTranslationAnaRotationXYZ();
-    auto constraintsMin = std::vector < double > {
+    auto constraintsMin = std::vector<double>{
             -20e-5, -20e-5, -20e-5,
             -M_PI / 180., -M_PI / 180., -M_PI / 180.};
-    auto constraintsMax = std::vector < double > {
+    auto constraintsMax = std::vector<double>{
             20e-5, 20e-5, 20e-5,
             M_PI / 180., M_PI / 180., M_PI / 180.};
 
@@ -240,8 +243,8 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr <PointsCt> &pointsCt) {
 
 }
 
-std::shared_ptr <PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
-                                                const std::string &fileName) {
+std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
+                                               const std::string &fileName) {
     auto pointsCt = getPointCtFromFile(fileName);
     getBaseSquareFromCtB(ncCt, pointsCt);
     return pointsCt;
@@ -249,7 +252,7 @@ std::shared_ptr <PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
 
 
 void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
-                         std::shared_ptr <PointsCt> &pointsCt) {
+                         std::shared_ptr<PointsCt> &pointsCt) {
 
     pointsCt->swapTomoAAndTomoBuffer();
     pointsCt->transform(TranslationZ()(shiftZ));
@@ -284,10 +287,10 @@ void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
 
 
     auto transformations = generateTranslationAnaRotationXYZ();
-    auto constraintsMin = std::vector < double > {
+    auto constraintsMin = std::vector<double>{
             -25e-5, -25e-5, -25e-5,
             -M_PI / 100., -M_PI / 100., -M_PI / 100.};
-    auto constraintsMax = std::vector < double > {
+    auto constraintsMax = std::vector<double>{
             25e-5, 25e-5, 25e-5,
             M_PI / 100., M_PI / 100., M_PI / 100.};
 
@@ -301,8 +304,8 @@ void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
 }
 
 
-std::shared_ptr <PointsCt> getCylinderSectorFromCtAAndBaseSquare(
-        NcCt &ncCt, std::shared_ptr <PointsCt> &baseSquare) {
+std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
+        NcCt &ncCt, std::shared_ptr<PointsCt> &baseSquare) {
 
     auto origin = baseSquare->getBasis()->getOrigin();
 
@@ -328,7 +331,7 @@ std::shared_ptr <PointsCt> getCylinderSectorFromCtAAndBaseSquare(
 
 
 double getCylinderSectorFromCtB(NcCt &ncCt,
-                                std::shared_ptr <PointsCt> &pointsCt) {
+                                std::shared_ptr<PointsCt> &pointsCt) {
 
     // processVariation(pointsCt, ncCt,
     //                  std::make_shared<StretchingXY>(),
@@ -346,8 +349,8 @@ double getCylinderSectorFromCtB(NcCt &ncCt,
     // return mult1 * mult2 * mult3 * mult4 - 1;
 
     auto transformations = generateStretchingXY();
-    auto constraintsMin = std::vector < double > {0.98};
-    auto constraintsMax = std::vector < double > {1.02};
+    auto constraintsMin = std::vector<double>{0.98};
+    auto constraintsMax = std::vector<double>{1.02};
 
     std::string registrationType = "XYStretching";
     std::cout << registrationType << std::endl;
