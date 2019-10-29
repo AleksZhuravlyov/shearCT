@@ -13,19 +13,25 @@ std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName) {
 }
 
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt) {
+std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt,
+                                               const double &xCenterFactor,
+                                               const double &yCenterFactor,
+                                               const double &zCenterMeter,
+                                               const double &xWidthVoxel,
+                                               const double &yWidthVoxel,
+                                               const int &nX, const int &nY) {
 
-    double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) / 2;
-    double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) / 2;
+    double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) * xCenterFactor;
+    double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) * yCenterFactor;
 
-    double zCenter = ncCt.getZInit() + 90 * ncCt.getZStep();
+    double zCenter = ncCt.getZInit() + zCenterMeter;
 
-    double xWidth = 100 * ncCt.getXStep();
-    double yWidth = 100 * ncCt.getYStep();
+    double xWidth = xWidthVoxel * ncCt.getXStep();
+    double yWidth = yWidthVoxel * ncCt.getYStep();
 
     auto pointsCt = std::make_shared<PointsCt>();
     pointsCt->createXYSquare(xCenter, yCenter, zCenter,
-                             xWidth, yWidth, 1000, 1000);
+                             xWidth, yWidth, nX, nY);
 
     ncCt.setRegionCt(pointsCt->generateBbox());
     ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
@@ -55,7 +61,8 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
 }
 
 
-void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt) {
+void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+                          const double &accuracy) {
 
     // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
     //                  20e-5, 11, "bottom",
@@ -87,22 +94,24 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt) {
 
     std::string registrationType = "XYZTAndRTop";
     std::cout << registrationType << std::endl;
-    makeRegistration(ncCt, pointsCt, transformations, 1.e-7,
+    makeRegistration(ncCt, pointsCt, transformations, accuracy,
                      constraintsMin, constraintsMax,
                      registrationType, false);
 
 }
 
 std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
-                                               const std::string &fileName) {
+                                               const std::string &fileName,
+                                               const double &accuracy) {
     auto pointsCt = getPointCtFromFile(fileName);
-    getBaseSquareFromCtB(ncCt, pointsCt);
+    getBaseSquareFromCtB(ncCt, pointsCt, accuracy);
     return pointsCt;
 }
 
 
 void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
-                         std::shared_ptr<PointsCt> &pointsCt) {
+                         std::shared_ptr<PointsCt> &pointsCt,
+                         const double &accuracy) {
 
     pointsCt->swapTomoAAndTomoBuffer();
     pointsCt->transform(TranslationZ()(shiftZ));
@@ -146,7 +155,7 @@ void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
 
     std::string registrationType = "XYZTAndRBot";
     std::cout << registrationType << std::endl;
-    makeRegistration(ncCt, pointsCt, transformations, 1.e-9,
+    makeRegistration(ncCt, pointsCt, transformations, accuracy,
                      constraintsMin, constraintsMax,
                      registrationType, false);
 

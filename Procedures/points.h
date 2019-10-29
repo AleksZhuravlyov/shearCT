@@ -17,7 +17,13 @@
 std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName);
 
 // creating points taking snapshot form CT image
-std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt);
+std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt,
+                                               const double &xCenterFactor,
+                                               const double &yCenterFactor,
+                                               const double &zCenterMeter,
+                                               const double &xWidthVoxel,
+                                               const double &yWidthVoxel,
+                                               const int &nX, const int &nY);
 
 // writing values form shifted points into buffer
 void getBaseSquareFromCtAWithTop(NcCt &ncCt, const double &shiftZ,
@@ -32,11 +38,13 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
                                                const std::string &fileName);
 
 // search of base points in B CT image employing registration
-void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt);
+void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+                          const double &accuracy);
 
 // search of top points in B CT image employing registration
 void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
-                         std::shared_ptr<PointsCt> &pointsCt);
+                         std::shared_ptr<PointsCt> &pointsCt,
+                         const double &accuracy);
 
 // search of top points in B CT image employing registration
 std::shared_ptr<PointsCt> getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
@@ -49,7 +57,6 @@ std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
 // search of cylinder in B CT image
 double getCylinderSectorFromCtB(NcCt &ncCt,
                                 std::shared_ptr<PointsCt> &pointsCt);
-
 
 
 #endif //POINTS_H

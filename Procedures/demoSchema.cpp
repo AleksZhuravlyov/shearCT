@@ -37,11 +37,18 @@ void demoSchema() {
     /// Length of measurement
 
     double shiftZ = 0.0554 - 3.60179e-05 * 90;
+    double initZ = 3.60179e-05 * 90;
 
     /// Base square from CT A
 
     // Generate base square and save into file
-    auto squareCt = getBaseSquareFromCtA(ncCtA);
+    auto squareCt = getBaseSquareFromCtA(ncCtA,
+                                         0.5,
+                                         0.5,
+                                         initZ,
+                                         100,
+                                         100,
+                                         1000, 1000);
     vtpCt.setPointsCt(squareCt);
     vtpCt.savePointsFile(baseSquareFromCtAName);
 
@@ -54,7 +61,7 @@ void demoSchema() {
 
     /// Find base square from CT B
 
-    getBaseSquareFromCtB(ncCtB, squareCt);
+    getBaseSquareFromCtB(ncCtB, squareCt, 1.e-7);
     // Save base square from CT B into file
     vtpCt.setPointsCt(squareCt);
     vtpCt.savePointsFile(baseSquareFromCtBName);
@@ -67,7 +74,7 @@ void demoSchema() {
 
     /// Find top square from CT B
 
-    getTopSquareFromCtB(ncCtB, shiftZ, squareCt);
+    getTopSquareFromCtB(ncCtB, shiftZ, squareCt, 1.e-8);
     // Take origin from top square from CT B
     auto topOrigin = *(squareCt->getBasis()->getOrigin());
 

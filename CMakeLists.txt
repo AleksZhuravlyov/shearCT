@@ -25,7 +25,7 @@ set(SOURCE_CODE main.cpp
         Geom/Transformation.cpp
         Procedures/variation.cpp
         Procedures/points.cpp
-        Registration/Registration.cpp Procedures/points.cpp Procedures/points.h Procedures/demoSchema.cpp Procedures/demoSchema.h)
+        Registration/Registration.cpp Procedures/points.cpp Procedures/points.h Procedures/demoSchema.cpp Procedures/demoSchema.h Procedures/stretchZvsShift.cpp Procedures/stretchZvsShift.h)
 
 include_directories(Registration)
 include_directories(Procedures)
