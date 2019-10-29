@@ -96,7 +96,7 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
     std::cout << registrationType << std::endl;
     makeRegistration(ncCt, pointsCt, transformations, accuracy,
                      constraintsMin, constraintsMax,
-                     registrationType, false);
+                     registrationType, true);
 
 }
 

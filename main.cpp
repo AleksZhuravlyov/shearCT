@@ -11,12 +11,12 @@
 
 int main() {
 
-    // demoSchema();
+    demoSchema();
 
-    double shiftZ = 0.0522;
+    /*double shiftZ = 0.0522;
     double initZ = 0.0032;
 
-    /*auto stretchZ = stretchZVsShift(1.e-8,
+    *//*auto stretchZ = stretchZVsShift(1.e-8,
                                     shiftZ,
                                     0.5,
                                     0.5,
@@ -25,10 +25,10 @@ int main() {
                                     20,
                                     200, 200);
 
-    std::cout << "stretchZ " << stretchZ << std::endl;*/
+    std::cout << "stretchZ " << stretchZ << std::endl;*//*
 
 
-    int nDiv = 7;
+    int nDiv = 8;
     std::vector<std::vector<double>> stretchesZ(nDiv);
     std::vector<std::vector<double>> centersZ(nDiv);
     std::vector<double> shiftsZ(nDiv);
@@ -64,7 +64,7 @@ int main() {
 
     std::string fileDataName;
     for (int i = 0; i < nDiv; i++) {
-        fileDataName = toString(shiftsZ[i]) + ".txt";
+        fileDataName = toString(shiftsZ[i], 6, 4, false) + ".txt";
         stream.open(fileDataName.c_str());
         for (int j = 0; j < stretchesZ[i].size(); j++) {
             stream << std::setw(20) << centersZ[i][j];
@@ -80,16 +80,18 @@ int main() {
     stream << "set xlabel 'Z, m'" << std::endl;
     stream << "set key title 'shift Z, m'" << std::endl;
     stream << "set key out horiz cent top" << std::endl;
-    stream << "set xrange[0:" << toString(shiftZ) << "]" << std::endl;
+    stream << "set xrange[" << toString(initZ)  << ":";
+    stream << toString(initZ + shiftZ) << "]" << std::endl;
     stream << "set grid" << std::endl;
 
     stream << "plot\\" << std::endl;
     for (int i = 0; i < nDiv; i++) {
-        fileDataName = toString(shiftsZ[i]) + ".txt";
+        fileDataName = toString(shiftsZ[i], 6, 4, false) + ".txt";
         if (i > 0)
             stream << ",\\" << std::endl;
         stream << "'" << fileDataName << "' using 1:2 ";
-        stream << "w p pt 7" << " ti " << "'" << toString(shiftsZ[i]) << "'";
+        stream << "w p pt 7" << " ti " << "'"
+               << toString(shiftsZ[i], 6, 4, false) << "'";
     }
     stream << std::endl;
     stream << "pause -1" << std::endl;
@@ -97,7 +99,7 @@ int main() {
     stream.close();
 
     std::string command = "gnuplot stretchZVsShift.plt";
-    std::cout << system(command.c_str());
+    std::cout << system(command.c_str());*/
 
     return EXIT_SUCCESS;
 

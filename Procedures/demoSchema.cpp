@@ -14,8 +14,8 @@ void demoSchema() {
     /// General stuff
     /// =======================================================================
 
-    NcCt ncCtA("/Volumes/ElkData/CT/samples/5.nc");
-    NcCt ncCtB("/Volumes/ElkData/CT/samples/10.nc");
+    NcCt ncCtA("/Users/z5087785/data/projects/tmp/microCT/ncSamples/old/5.nc");
+    NcCt ncCtB("/Users/z5087785/data/projects/tmp/microCT/ncSamples/old/10.nc");
     VtpCt vtpCt;
 
     std::string baseSquareFromCtAName = "baseSquareFromCtA.vtp";
@@ -46,9 +46,9 @@ void demoSchema() {
                                          0.5,
                                          0.5,
                                          initZ,
-                                         100,
-                                         100,
-                                         1000, 1000);
+                                         20,
+                                         20,
+                                         100, 100);
     vtpCt.setPointsCt(squareCt);
     vtpCt.savePointsFile(baseSquareFromCtAName);
 
