@@ -53,15 +53,15 @@ double stretchZVsShift(const double &accuracy,
 
     auto distance = sqrt(CGAL::squared_distance(topOrigin, bottomOrigin));
     auto deltaL = shiftZ - distance;
-    auto stretchLength = deltaL / shiftZ;
+    auto stretchZ = deltaL / shiftZ;
 
     std::cout << std::setw(20) << "shiftZ";
-    std::cout << std::setw(20) << "stretchLength" << std::endl;
+    std::cout << std::setw(20) << "stretchZ" << std::endl;
 
     std::cout << std::setw(20) << shiftZ;
-    std::cout << std::setw(20) << stretchLength << std::endl;
+    std::cout << std::setw(20) << stretchZ << std::endl;
 
-    return stretchLength;
+    return stretchZ;
 
 }
 

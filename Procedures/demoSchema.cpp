@@ -26,7 +26,7 @@ void demoSchema() {
     std::string cylinderSectorFromCtBAndBaseSquareName =
             "cylinderSectorFromCtBAndBaseSquare.vtp";
 
-    double stretchLength = 0.000979212;
+    double stretchZ = 0.000979212;
 
     /// =======================================================================
 
@@ -85,9 +85,9 @@ void demoSchema() {
     std::cout << std::endl << "distance " << distance << std::endl;
     auto deltaL = shiftZ - distance;
     std::cout << std::endl << "deltaL " << deltaL << std::endl;
-    stretchLength = deltaL / shiftZ;
-    std::cout << std::endl << "stretchLength " << stretchLength << std::endl;
-    double youngsModulus = 500. / stretchLength;
+    stretchZ = deltaL / shiftZ;
+    std::cout << std::endl << "stretchZ " << stretchZ << std::endl;
+    double youngsModulus = 500. / stretchZ;
     std::cout << std::endl << "youngsModulus " << youngsModulus << std::endl;
 
     /// =======================================================================
@@ -138,10 +138,10 @@ void demoSchema() {
 
     /// Final Poisson's ratio calculation
 
-    auto poissonsRatio = stretchWidth / stretchLength;
+    auto poissonsRatio = stretchWidth / stretchZ;
 
     std::cout << "stretchWidth " << stretchWidth << std::endl;
-    std::cout << "stretchLength " << stretchLength << std::endl;
+    std::cout << "stretchZ " << stretchZ << std::endl;
     std::cout << "Poisson's ratio " << poissonsRatio << std::endl;
 
     /// =======================================================================
