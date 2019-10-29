@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -14,6 +14,8 @@ find_package(CGAL)
 
 find_package(dlib REQUIRED)
 
+find_package(Boost REQUIRED COMPONENTS thread system)
+
 set(SOURCE_CODE main.cpp
         NcCt/NcCt.cpp
         VtpCt/VtpCt.cpp
@@ -21,17 +23,18 @@ set(SOURCE_CODE main.cpp
         NcCt/RegionCt.cpp
         PointsCt/PointsCt.cpp
         Geom/Transformation.cpp
-        Demo/demo.cpp
-        Registration/Registration.cpp)
+        Procedures/variation.cpp
+        Procedures/points.cpp
+        Registration/Registration.cpp Procedures/points.cpp Procedures/points.h Procedures/demoSchema.cpp Procedures/demoSchema.h)
 
 include_directories(Registration)
-include_directories(Demo)
+include_directories(Procedures)
 include_directories(ThirdParty)
 include_directories(NcCt)
 include_directories(VtpCt)
 include_directories(Geom)
 include_directories(PointsCt)
-include_directories(/usr/local/Cellar/netcdf/4.6.2/include)
+include_directories(/usr/local/Cellar/netcdf/4.6.3_1/include)
 
 set(CMAKE_BUILD_TYPE Release)
 
