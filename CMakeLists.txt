@@ -6,6 +6,8 @@ set(POJECT_NAME shearCT)
 
 project(${POJECT_NAME})
 
+find_package(netCDF)
+
 find_package(VTK REQUIRED)
 
 find_package(pugixml)
@@ -23,9 +25,10 @@ set(SOURCE_CODE main.cpp
         NcCt/RegionCt.cpp
         PointsCt/PointsCt.cpp
         Geom/Transformation.cpp
-        Procedures/variation.cpp
-        Procedures/points.cpp
-        Registration/Registration.cpp Procedures/points.cpp Procedures/points.h Procedures/demoSchema.cpp Procedures/demoSchema.h Procedures/stretchZvsShift.cpp Procedures/stretchZvsShift.h)
+        Registration/Registration.cpp
+        Procedures/variation.cpp Procedures/points.cpp
+        Procedures/points.cpp Procedures/demoSchema.cpp
+        Procedures/stretchZvsShift.cpp)
 
 include_directories(Registration)
 include_directories(Procedures)
@@ -34,7 +37,6 @@ include_directories(NcCt)
 include_directories(VtpCt)
 include_directories(Geom)
 include_directories(PointsCt)
-include_directories(/usr/local/Cellar/netcdf/4.6.3_1/include)
 
 set(CMAKE_BUILD_TYPE Release)
 
