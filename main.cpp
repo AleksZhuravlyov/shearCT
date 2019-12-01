@@ -3,6 +3,7 @@
 
 #include <stretchZvsShift.h>
 #include <demoSchema.h>
+#include <demoVideo.h>
 #include <vector>
 #include <fstream>
 
@@ -11,7 +12,9 @@
 
 int main() {
 
-    demoSchema();
+    // demoSchema();
+
+    demoVideo();
 
     /*double shiftZ = 0.0522;
     double initZ = 0.0032;

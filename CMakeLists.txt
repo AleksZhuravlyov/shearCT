@@ -28,7 +28,7 @@ set(SOURCE_CODE main.cpp
         Registration/Registration.cpp
         Procedures/variation.cpp Procedures/points.cpp
         Procedures/points.cpp Procedures/demoSchema.cpp
-        Procedures/stretchZvsShift.cpp)
+        Procedures/stretchZvsShift.cpp Procedures/demoVideo.cpp Procedures/demoVideo.h)
 
 include_directories(Registration)
 include_directories(Procedures)
