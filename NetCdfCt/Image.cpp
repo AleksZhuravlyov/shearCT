@@ -1,13 +1,13 @@
 #include <algorithm>
 
-#include <NcCt.h>
+#include <Image.h>
 
 
-NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
-                                          path(fileName),
-                                          valueName("tomo"),
-                                          units("units"),
-                                          regionCt(RegionCt()) {
+Image::Image(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
+                                            path(fileName),
+                                            valueName("tomo"),
+                                            units("units"),
+                                            region(Region()) {
 
     for (auto &&varData : file.getVars()) {
         vars.push_back(Var());
@@ -28,16 +28,20 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
 
 
     for (int i = 0; i < dimArrays.size(); i++)
-        std::copy(dimArrays[i].begin() + regionCt.start[i],
-                  dimArrays[i].begin() + regionCt.start[i]
-                  + regionCt.width[i], regionCt.dimArrays[i].begin());
+        std::copy(dimArrays[i].begin() + region.start[i],
+                  dimArrays[i].begin() + region.start[i]
+                  + region.width[i], region.dimArrays[i].begin());
 
-    file.getVar(valueName).getVar(regionCt.start, regionCt.width,
-                                  regionCt.value.data());
+    file.getVar(valueName).getVar(region.start, region.width,
+                                  region.value.data());
 
     xInit = dimArrays[2][0];
     yInit = dimArrays[1][0];
     zInit = dimArrays[0][0];
+
+    nX = dims[2].size;
+    nY = dims[1].size;
+    nZ = dims[0].size;
 
     xStep = dimArrays[2][1] - xInit;
     yStep = dimArrays[1][1] - yInit;
@@ -46,7 +50,7 @@ NcCt::NcCt(const std::string &fileName) : file(fileName, netCDF::NcFile::read),
 }
 
 
-std::ostream &operator<<(std::ostream &stream, const NcCt &ncCt) {
+std::ostream &operator<<(std::ostream &stream, const Image &ncCt) {
 
     stream << "path: " << ncCt.path << std::endl;
 
@@ -71,64 +75,77 @@ std::ostream &operator<<(std::ostream &stream, const NcCt &ncCt) {
 }
 
 
-double NcCt::getXInit() {
+double Image::getXInit() {
     return xInit;
 }
 
-double NcCt::getYInit() {
+double Image::getYInit() {
     return yInit;
 }
 
-double NcCt::getZInit() {
+double Image::getZInit() {
     return zInit;
 }
 
 
-double NcCt::getXStep() {
+int Image::getNX() {
+    return nX;
+}
+
+int Image::getNY() {
+    return nY;
+}
+
+int Image::getNZ() {
+    return nZ;
+}
+
+
+double Image::getXStep() {
     return xStep;
 }
 
-double NcCt::getYStep() {
+double Image::getYStep() {
     return yStep;
 }
 
-double NcCt::getZStep() {
+double Image::getZStep() {
     return zStep;
 }
 
 
-std::shared_ptr<std::vector<Dim>> NcCt::getDims() {
+std::shared_ptr<std::vector<Dim>> Image::getDims() {
     return std::make_shared<std::vector<Dim>>(dims);
 }
 
-std::shared_ptr<std::vector<Var>> NcCt::getVars() {
+std::shared_ptr<std::vector<Var>> Image::getVars() {
     return std::make_shared<std::vector<Var>>(vars);
 }
 
-std::shared_ptr<std::vector<short>> NcCt::getValue() {
-    return std::make_shared<std::vector<short>>(regionCt.value);
+std::shared_ptr<std::vector<short>> Image::getValue() {
+    return std::make_shared<std::vector<short>>(region.value);
 }
 
 
-void NcCt::setRegionCt(const std::vector<size_t> &start,
-                       const std::vector<size_t> &width) {
+void Image::setRegion(const std::vector<size_t> &start,
+                      const std::vector<size_t> &width) {
 
-    regionCt.initiateRegionCt(start, width);
+    region.initiate(start, width);
 
     for (int i = 0; i < dimArrays.size(); i++)
-        std::copy(dimArrays[i].begin() + regionCt.start[i],
-                  dimArrays[i].begin() + regionCt.start[i]
-                  + regionCt.width[i], regionCt.dimArrays[i].begin());
+        std::copy(dimArrays[i].begin() + region.start[i],
+                  dimArrays[i].begin() + region.start[i]
+                  + region.width[i], region.dimArrays[i].begin());
 
-    regionCt.computeInitsAndSteps();
+    region.computeInitsAndSteps();
 
-    file.getVar(valueName).getVar(regionCt.start, regionCt.width,
-                                  regionCt.value.data());
+    file.getVar(valueName).getVar(region.start, region.width,
+                                  region.value.data());
 
 }
 
 
-void NcCt::setRegionCt(const Bbox &bbox) {
+void Image::setRegion(const Bbox &bbox) {
 
     auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 3;
     auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 3;
@@ -140,11 +157,11 @@ void NcCt::setRegionCt(const Bbox &bbox) {
 
 
     std::string errorMessage;
-    if ((xStart + xWidth) > dims[2].size)
+    if ((xStart + xWidth) > nX)
         errorMessage += " x ";
-    if ((yStart + yWidth) > dims[1].size)
+    if ((yStart + yWidth) > nY)
         errorMessage += " y ";
-    if ((zStart + zWidth) > dims[0].size)
+    if ((zStart + zWidth) > nZ)
         errorMessage += " z ";
 
     if (errorMessage != "") {
@@ -160,18 +177,18 @@ void NcCt::setRegionCt(const Bbox &bbox) {
     std::vector<size_t> start = {zStart, yStart, xStart};
     std::vector<size_t> width = {zWidth, yWidth, xWidth};
 
-    setRegionCt(start, width);
+    setRegion(start, width);
 
 }
 
 
-void NcCt::saveRegionCt(const std::string &fileName) {
+void Image::saveRegion(const std::string &fileName) {
 
     netCDF::NcFile regionCtFile(fileName, netCDF::NcFile::replace);
 
     std::vector<netCDF::NcDim> ncDims(dims.size());
     for (int i = 0; i < dims.size(); i++)
-        ncDims[i] = regionCtFile.addDim(dims[i].name, regionCt.width[i]);
+        ncDims[i] = regionCtFile.addDim(dims[i].name, region.width[i]);
 
     std::vector<netCDF::NcVar> ncVars(dims.size());
     for (int i = 0; i < dims.size(); i++)
@@ -185,7 +202,7 @@ void NcCt::saveRegionCt(const std::string &fileName) {
     valVar.putAtt(units, vars[dims.size()].unitName);
 
     for (int i = 0; i < dims.size(); i++)
-        ncVars[i].putVar(regionCt.dimArrays[i].data());
-    valVar.putVar(regionCt.value.data());
+        ncVars[i].putVar(region.dimArrays[i].data());
+    valVar.putVar(region.value.data());
 
 }

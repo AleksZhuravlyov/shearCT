@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include <NcCt.h>
+#include <Image.h>
 #include <VtpCt.h>
 #include <Basis.h>
 
@@ -14,8 +14,8 @@ void demoSchema() {
     /// General stuff
     /// =======================================================================
 
-    NcCt ncCtA("/Volumes/ElkData/CT/samples/5.nc");
-    NcCt ncCtB("/Volumes/ElkData/CT/samples/10.nc");
+    Image ncCtA("/Volumes/ElkData/CT/samples/5.nc");
+    Image ncCtB("/Volumes/ElkData/CT/samples/10.nc");
     VtpCt vtpCt;
 
     std::string baseSquareFromCtAName = "baseSquareFromCtA.vtp";
@@ -42,13 +42,13 @@ void demoSchema() {
     /// Base square from CT A
 
     // Generate base square and save into file
-    auto squareCt = getBaseSquareFromCtA(ncCtA,
-                                         0.5,
-                                         0.5,
-                                         initZ,
-                                         20,
-                                         20,
-                                         100, 100);
+    auto squareCt = extractSquarePointsCt(ncCtA,
+                                          0.5,
+                                          0.5,
+                                          initZ,
+                                          20,
+                                          20,
+                                          100, 100);
     vtpCt.setPointsCt(squareCt);
     vtpCt.savePointsFile(baseSquareFromCtAName);
 
@@ -108,7 +108,7 @@ void demoSchema() {
     vtpCt.setPointsCt(cylinderCt);
     vtpCt.savePointsFile(cylinderSectorFromCtAAndBaseSquareName);
     // Save nc region of cylinder sector into file
-    // ncCtA.saveRegionCt("cylinder.nc");
+    // ncCtA.saveRegion("cylinder.nc");
 
     /// Translation of cylinder sector to CT B and basis of base square CT B
 

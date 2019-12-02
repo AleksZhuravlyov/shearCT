@@ -13,55 +13,57 @@ std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName) {
 }
 
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtA(NcCt &ncCt,
-                                               const double &xCenterFactor,
-                                               const double &yCenterFactor,
-                                               const double &zCenterMeter,
-                                               const double &xWidthVoxel,
-                                               const double &yWidthVoxel,
-                                               const int &nX, const int &nY) {
+std::shared_ptr<PointsCt> extractSquarePointsCt(Image &image,
+                                                const double &xCenterFactor,
+                                                const double &yCenterFactor,
+                                                const double &zCenterMeter,
+                                                const double &xWidthVoxel,
+                                                const double &yWidthVoxel,
+                                                const int &nX, const int &nY) {
 
-    double xCenter = ncCt.getXInit() + (ncCt.getXStep() * 2399) * xCenterFactor;
-    double yCenter = ncCt.getYInit() + (ncCt.getYStep() * 2399) * yCenterFactor;
+    double xCenter = image.getXInit() +
+                     (image.getXStep() * image.getNX()) * xCenterFactor;
+    double yCenter = image.getYInit() +
+                     (image.getYStep() * image.getNY()) * yCenterFactor;
+    double zCenter = image.getZInit() + zCenterMeter;
 
-    double zCenter = ncCt.getZInit() + zCenterMeter;
-
-    double xWidth = xWidthVoxel * ncCt.getXStep();
-    double yWidth = yWidthVoxel * ncCt.getYStep();
+    double xWidth = xWidthVoxel * image.getXStep();
+    double yWidth = yWidthVoxel * image.getYStep();
 
     auto pointsCt = std::make_shared<PointsCt>();
     pointsCt->createXYSquare(xCenter, yCenter, zCenter,
-                             xWidth, yWidth, nX, nY);
+                             xWidth, yWidth,
+                             nX, nY);
 
-    ncCt.setRegionCt(pointsCt->generateBbox());
-    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
-    ncCt.regionCt.computePointsValue();
+    image.setRegion(pointsCt->generateBbox());
+    image.region.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
+    image.region.computePointsValue();
 
     return pointsCt;
 
 }
 
 
-void getBaseSquareFromCtAWithTop(NcCt &ncCt, const double &shiftZ,
+void getBaseSquareFromCtAWithTop(Image &ncCt, const double &shiftZ,
                                  std::shared_ptr<PointsCt> &pointsCt) {
 
     pointsCt->transform(TranslationZ()(shiftZ));
-    ncCt.setRegionCt(pointsCt->generateBbox());
-    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoBuffer());
-    ncCt.regionCt.computePointsValue();
+    ncCt.setRegion(pointsCt->generateBbox());
+    ncCt.region.setPoints(pointsCt->getPoints(), pointsCt->getTomoBuffer());
+    ncCt.region.computePointsValue();
     pointsCt->transform(TranslationZ()(-shiftZ));
 
 }
 
 std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
-        NcCt &ncCt, const double &shiftZ, const std::string &fileName) {
+        Image &ncCt, const double &shiftZ, const std::string &fileName) {
     auto pointsCt = getPointCtFromFile(fileName);
     getBaseSquareFromCtAWithTop(ncCt, shiftZ, pointsCt);
     return pointsCt;
 }
 
 
-void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+void getBaseSquareFromCtB(Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
                           const double &accuracy) {
 
     // processVariation(pointsCt, ncCt, std::make_shared<TranslationZ>(),
@@ -100,7 +102,7 @@ void getBaseSquareFromCtB(NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
 
 }
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
+std::shared_ptr<PointsCt> getBaseSquareFromCtB(Image &ncCt,
                                                const std::string &fileName,
                                                const double &accuracy) {
     auto pointsCt = getPointCtFromFile(fileName);
@@ -109,7 +111,7 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtB(NcCt &ncCt,
 }
 
 
-void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
+void getTopSquareFromCtB(Image &ncCt, const double &shiftZ,
                          std::shared_ptr<PointsCt> &pointsCt,
                          const double &accuracy) {
 
@@ -164,7 +166,7 @@ void getTopSquareFromCtB(NcCt &ncCt, const double &shiftZ,
 
 
 std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
-        NcCt &ncCt, std::shared_ptr<PointsCt> &baseSquare) {
+        Image &ncCt, std::shared_ptr<PointsCt> &baseSquare) {
 
     auto origin = baseSquare->getBasis()->getOrigin();
 
@@ -180,16 +182,16 @@ std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
                                      R, angleCenter, zWidth, angleWidth,
                                      nZ, nAngle);
 
-    ncCt.setRegionCt(pointsCt->generateBbox());
-    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
-    ncCt.regionCt.computePointsValue();
+    ncCt.setRegion(pointsCt->generateBbox());
+    ncCt.region.setPoints(pointsCt->getPoints(), pointsCt->getTomoA());
+    ncCt.region.computePointsValue();
 
     return pointsCt;
 
 }
 
 
-double getCylinderSectorFromCtB(NcCt &ncCt,
+double getCylinderSectorFromCtB(Image &ncCt,
                                 std::shared_ptr<PointsCt> &pointsCt) {
 
     // processVariation(pointsCt, ncCt,

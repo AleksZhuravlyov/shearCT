@@ -5,7 +5,7 @@
 #include <string>
 #include <iomanip>
 #include <PointsCt.h>
-#include <NcCt.h>
+#include <Image.h>
 #include <Transformation.h>
 #include <VtpCt.h>
 #include <dlib/optimization.h>
@@ -23,7 +23,7 @@ Transformations generateTranslationAnaRotationXYZ();
 Transformations generateStretchingXY();
 
 std::vector<double> makeRegistration(
-        NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+        Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
         Transformations &transformations,
         const double &accuracy,
         const std::vector<double> &constraintsMin,
@@ -42,7 +42,7 @@ public:
 
     InvCorrelation(Transformations &_transformations,
                    PointsCt &_pointsCt,
-                   RegionCt &_regionCt,
+                   Region &_regionCt,
                    const std::string &_fileNamesPrefix,
                    const bool &_isFilesSaved,
                    int &_iteration,
@@ -56,7 +56,7 @@ public:
 
     PointsCt &pointsCt;
 
-    RegionCt &regionCt;
+    Region &regionCt;
 
     std::string fileNamesPrefix;
 

@@ -7,11 +7,11 @@
 
 int main() {
 
-    // demoSchema();
+    demoSchema();
 
     // demoVideo();
 
-    demoStretchZvsShift();
+    // demoStretchZvsShift();
 
     return EXIT_SUCCESS;
 

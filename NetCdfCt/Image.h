@@ -1,11 +1,11 @@
 /**
  @file
- @brief File for NcCt class.
+ @brief File for Image class.
  It is header which contains NcCt class.
 */
 
-#ifndef NCCT_H
-#define NCCT_H
+#ifndef IMAGE_H
+#define IMAGE_H
 
 #include <string>
 #include <vector>
@@ -13,7 +13,7 @@
 #include <netcdf>
 
 #include <Basis.h>
-#include <RegionCt.h>
+#include <Region.h>
 
 
 /// This struct represents dims of NetCDF library.
@@ -30,25 +30,25 @@ struct Var {
 };
 
 /// This class provides io access for necessary NetCDF library functionality.
-class NcCt {
+class Image {
 
 public:
 
     /**
      Constructor by default is deleted.
     */
-    NcCt() = delete;
+    Image() = delete;
 
     /**
      Constructor sets the name of nc file.
      @param[in] fileName is the name of nc file.
     */
-    NcCt(const std::string &fileName);
+    Image(const std::string &fileName);
 
     /**
      Destructor sets by default.
     */
-    virtual ~NcCt() {}
+    virtual ~Image() {}
 
 
     /**
@@ -56,7 +56,7 @@ public:
      @param[in, out] stream is the instance of class std::ostream.
      @param[in] ncCt is the instance of class NcCt.
     */
-    friend std::ostream &operator<<(std::ostream &stream, const NcCt &ncCt);
+    friend std::ostream &operator<<(std::ostream &stream, const Image &ncCt);
 
 
     /**
@@ -76,6 +76,25 @@ public:
      @return zInit attribute.
     */
     double getZInit();
+
+
+    /**
+     Accessor for nX attribute.
+     @return nX attribute.
+    */
+    int getNX();
+
+    /**
+     Accessor for nY attribute.
+     @return nY attribute.
+    */
+    int getNY();
+
+    /**
+     Accessor for nZ attribute.
+     @return nZ attribute.
+    */
+    int getNZ();
 
 
     /**
@@ -117,28 +136,28 @@ public:
 
 
     /**
-     Mutator for regionCt attribute. This method initiates
-     the regionCt attribute and computes sate of regionCt attribute.
+     Mutator for region attribute. This method initiates
+     the regionCt attribute and computes sate of region attribute.
      @param[in] start is start point of RegionCt in terms of voxels.
      @param[in] width is widths of RegionCt in terms of voxels.
     */
-    void setRegionCt(const std::vector<size_t> &start,
-                     const std::vector<size_t> &width);
+    void setRegion(const std::vector<size_t> &start,
+                   const std::vector<size_t> &width);
 
     /**
-     Mutator for regionCt attribute. This method initiates
-     the regionCt attribute and computes sate of regionCt attribute.
+     Mutator for region attribute. This method initiates
+     the regionCt attribute and computes sate of region attribute.
      @param[in] bbox is CGAL library boundary box in terms of meters.
     */
-    void setRegionCt(const Bbox &bbox);
+    void setRegion(const Bbox &bbox);
 
     /**
-     Save regionCt attribute as nc file.
+     Save region attribute as nc file.
      @param[in] fileName is name of nc file for the regionCt attribute.
     */
-    void saveRegionCt(const std::string &fileName);
+    void saveRegion(const std::string &fileName);
 
-    RegionCt regionCt; ///< The region of general nc data.
+    Region region; ///< The region of general nc data.
 
 
 private:
@@ -167,6 +186,13 @@ private:
     double zInit; ///< Initial z of general nc data.
 
 
+    int nX; ///< Number of x elements of general nc data.
+
+    int nY; ///< Number of y elements of general nc data.
+
+    int nZ; ///< Number of z elements of general nc data.
+
+
     double xStep; ///< Step x of general nc data.
 
     double yStep; ///< Step y of general nc data.
@@ -176,4 +202,4 @@ private:
 };
 
 
-#endif //NCCT_H
+#endif //IMAGE_H

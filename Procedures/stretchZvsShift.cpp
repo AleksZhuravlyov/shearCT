@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include <NcCt.h>
+#include <Image.h>
 #include <VtpCt.h>
 #include <Basis.h>
 
@@ -21,19 +21,19 @@ double stretchZVsShift(const double &accuracy,
                        const std::string &ncBFileName) {
 
 
-    NcCt ncCtA(ncAFileName);
-    NcCt ncCtB(ncBFileName);
+    Image ncCtA(ncAFileName);
+    Image ncCtB(ncBFileName);
     VtpCt vtpCt;
 
 
     // Generate base square from CT A
-    auto squareCt = getBaseSquareFromCtA(ncCtA,
-                                         xCenterFactor,
-                                         yCenterFactor,
-                                         zCenterMeter,
-                                         xWidthVoxel,
-                                         yWidthVoxel,
-                                         nX, nY);
+    auto squareCt = extractSquarePointsCt(ncCtA,
+                                          xCenterFactor,
+                                          yCenterFactor,
+                                          zCenterMeter,
+                                          xWidthVoxel,
+                                          yWidthVoxel,
+                                          nX, nY);
     vtpCt.setPointsCt(squareCt);
 
     // Write CT A value from top square into tomoBuffer of squareCt

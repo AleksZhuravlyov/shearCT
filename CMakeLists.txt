@@ -19,10 +19,10 @@ find_package(dlib REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread system)
 
 set(SOURCE_CODE main.cpp
-        NcCt/NcCt.cpp
+        NetCdfCt/Image.cpp
         VtpCt/VtpCt.cpp
         Geom/Basis.cpp
-        NcCt/RegionCt.cpp
+        NetCdfCt/Region.cpp
         PointsCt/PointsCt.cpp
         Geom/Transformation.cpp
         Registration/Registration.cpp
@@ -34,7 +34,7 @@ set(SOURCE_CODE main.cpp
 include_directories(Registration)
 include_directories(Procedures)
 include_directories(ThirdParty)
-include_directories(NcCt)
+include_directories(NetCdfCt)
 include_directories(VtpCt)
 include_directories(Geom)
 include_directories(PointsCt)

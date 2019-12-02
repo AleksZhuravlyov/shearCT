@@ -7,12 +7,12 @@
 #include <gnuplot.h>
 
 #include <VtpCt.h>
-#include <NcCt.h>
+#include <Image.h>
 #include <PointsCt.h>
 #include <Transformation.h>
 
 
-double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
+double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
                      std::shared_ptr<Transformation> transformation,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
@@ -87,7 +87,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
 }
 
 
-double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+double processVariation(std::shared_ptr<PointsCt> pointsCt, Image &ncCt,
                         std::shared_ptr<Transformation> transformation,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
@@ -144,10 +144,10 @@ double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
     auto bBoxBack = pointsCt->generateBbox();
     pointsCt->transform((*transformation)(valuesAbsoluteReverse.back()));
 
-    ncCt.setRegionCt(bBoxFront + bBoxBack);
-    ncCt.regionCt.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
+    ncCt.setRegion(bBoxFront + bBoxBack);
+    ncCt.region.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
 
-    auto value = variatePoints(pointsCt, ncCt.regionCt,
+    auto value = variatePoints(pointsCt, ncCt.region,
                                transformation,
                                valuesRelative,
                                valuesAbsolute,

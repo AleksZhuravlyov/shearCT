@@ -1,7 +1,7 @@
 /**
  @file
- @brief File for RegionCt class.
- It is header which contains RegionCt class.
+ @brief File for Region class.
+ It is header which contains Region class.
 */
 
 #ifndef REGIONCT_H
@@ -15,19 +15,19 @@
 
 
 /// This class provide access to region of NetCDF library data file.
-class RegionCt {
+class Region {
 
 public:
 
     /**
      Constructor sets by default.
     */
-    RegionCt();
+    Region();
 
     /**
      Destructor sets by default.
     */
-    virtual ~RegionCt() {}
+    virtual ~Region() {}
 
     /**
      Initiate the state of this class. Method sets start and width attributes
@@ -35,8 +35,8 @@ public:
      @param[in] _start is start point of RegionCt in terms of voxels.
      @param[in] _width is widths of RegionCt in terms of voxels.
     */
-    void initiateRegionCt(const std::vector<size_t> &_start,
-                          const std::vector<size_t> &_width);
+    void initiate(const std::vector<size_t> &_start,
+                  const std::vector<size_t> &_width);
 
     std::vector<size_t> start; ///< Start point of region in terms of voxels.
     std::vector<size_t> width; ///< Widths of region in terms of voxels.

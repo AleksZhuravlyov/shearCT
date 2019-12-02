@@ -24,7 +24,7 @@ Transformations generateStretchingXY() {
 
 
 std::vector<double> makeRegistration(
-        NcCt &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+        Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
         Transformations &transformations,
         const double &accuracy,
         const std::vector<double> &constraintsMin,
@@ -35,21 +35,21 @@ std::vector<double> makeRegistration(
     auto bBoxGeneral = calculateGeneralBbox(pointsCt, transformations,
                                             constraintsMin, constraintsMax);
 
-    ncCt.setRegionCt(bBoxGeneral);
+    ncCt.setRegion(bBoxGeneral);
     int iteration = -1;
     VtpCt vtpCt;
 
 
     InvCorrelation invCorrelation(
             transformations, *pointsCt,
-            ncCt.regionCt,
+            ncCt.region,
             fileNamesPrefix, isFilesSaved,
             iteration, vtpCt);
 
     int iterationForDerivative = -1;
     InvCorrelation invCorrelationForDerivative(
             transformations, *pointsCt,
-            ncCt.regionCt,
+            ncCt.region,
             fileNamesPrefix, false,
             iterationForDerivative, vtpCt);
 
@@ -197,7 +197,7 @@ void InvCorrelation::implementResult(const ColumnVector &x) {
 
 InvCorrelation::InvCorrelation(Transformations &_transformations,
                                PointsCt &_pointsCt,
-                               RegionCt &_regionCt,
+                               Region &_regionCt,
                                const std::string &_fileNamesPrefix,
                                const bool &_isFilesSaved,
                                int &_iteration,

@@ -1,10 +1,10 @@
-#include <RegionCt.h>
+#include <Region.h>
 
 
-RegionCt::RegionCt() : start({0, 0, 0}),
-                       width({1, 1, 1}),
-                       dimArrays(std::vector<std::vector<float>>(3)),
-                       value(std::vector<short>(1)) {
+Region::Region() : start({0, 0, 0}),
+                   width({1, 1, 1}),
+                   dimArrays(std::vector<std::vector<float>>(3)),
+                   value(std::vector<short>(1)) {
 
     for (int i = 0; i < width.size(); i++)
         dimArrays[i].resize(width[i]);
@@ -12,8 +12,8 @@ RegionCt::RegionCt() : start({0, 0, 0}),
     value.resize(width[0] * width[1] * width[2]);
 }
 
-void RegionCt::initiateRegionCt(const std::vector<size_t> &_start,
-                                const std::vector<size_t> &_width) {
+void Region::initiate(const std::vector<size_t> &_start,
+                      const std::vector<size_t> &_width) {
     start = _start;
 
     if (width != _width) {
@@ -27,7 +27,7 @@ void RegionCt::initiateRegionCt(const std::vector<size_t> &_start,
 }
 
 
-double RegionCt::computePointValue(Point point) {
+double Region::computePointValue(Point point) {
 
     auto x = point.x();
     auto y = point.y();
@@ -88,7 +88,7 @@ double RegionCt::computePointValue(Point point) {
 }
 
 
-void RegionCt::computePointsValue() {
+void Region::computePointsValue() {
 
     for (int i = 0; i < points->size(); i++)
         (*pointsValue)[i] = computePointValue((*points)[i]);
@@ -96,7 +96,7 @@ void RegionCt::computePointsValue() {
 }
 
 
-void RegionCt::computeInitsAndSteps() {
+void Region::computeInitsAndSteps() {
 
     xInit = dimArrays[2][0];
     yInit = dimArrays[1][0];

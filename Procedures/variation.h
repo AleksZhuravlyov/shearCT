@@ -5,12 +5,12 @@
 #include <string>
 #include <vector>
 
-#include <NcCt.h>
+#include <Image.h>
 #include <PointsCt.h>
 #include <Transformation.h>
 
 // using automatic registration
-double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
+double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
                      std::shared_ptr<Transformation> transformation,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
@@ -19,7 +19,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, RegionCt &regionCt,
                      const bool &isFilesSaved);
 
 // using manual registration
-double processVariation(std::shared_ptr<PointsCt> pointsCt, NcCt &ncCt,
+double processVariation(std::shared_ptr<PointsCt> pointsCt, Image &ncCt,
                         std::shared_ptr<Transformation> transformation,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
