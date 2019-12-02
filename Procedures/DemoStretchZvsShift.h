@@ -1,0 +1,6 @@
+#ifndef DEMOSTRETCHZVSSHIFT_H
+#define DEMOSTRETCHZVSSHIFT_H
+
+void demoStretchZvsShift();
+
+#endif //DEMOSTRETCHZVSSHIFT_H

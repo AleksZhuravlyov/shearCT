@@ -16,11 +16,13 @@ double stretchZVsShift(const double &accuracy,
                        const double &zCenterMeter,
                        const double &xWidthVoxel,
                        const double &yWidthVoxel,
-                       const int &nX, const int &nY) {
+                       const int &nX, const int &nY,
+                       const std::string &ncAFileName,
+                       const std::string &ncBFileName) {
 
 
-    NcCt ncCtA("/Users/z5087785/data/projects/tmp/microCT/ncSamples/old/5.nc");
-    NcCt ncCtB("/Users/z5087785/data/projects/tmp/microCT/ncSamples/old/10.nc");
+    NcCt ncCtA(ncAFileName);
+    NcCt ncCtB(ncBFileName);
     VtpCt vtpCt;
 
 
