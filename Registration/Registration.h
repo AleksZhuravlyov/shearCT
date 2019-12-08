@@ -7,7 +7,7 @@
 #include <PointsCt.h>
 #include <Image.h>
 #include <Transformation.h>
-#include <VtpCt.h>
+#include <VtkPointsCt.h>
 #include <dlib/optimization.h>
 #include <dlib/global_optimization.h>
 
@@ -46,7 +46,7 @@ public:
                    const std::string &_fileNamesPrefix,
                    const bool &_isFilesSaved,
                    int &_iteration,
-                   VtpCt &_vtpCt);
+                   VtkPointsCt &_vtpCt);
 
     virtual ~InvCorrelation() = default;
 
@@ -64,7 +64,7 @@ public:
 
     int &iteration;
 
-    VtpCt &vtpCt;
+    VtkPointsCt &vtpCt;
 
 
     void implementResult(const ColumnVector &x);

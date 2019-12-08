@@ -20,7 +20,7 @@ find_package(Boost REQUIRED COMPONENTS thread system)
 
 set(SOURCE_CODE main.cpp
         NetCdfCt/Image.cpp
-        VtpCt/VtpCt.cpp
+        VtpCt/VtkPointsCt.cpp
         Geom/Basis.cpp
         NetCdfCt/Region.cpp
         PointsCt/PointsCt.cpp

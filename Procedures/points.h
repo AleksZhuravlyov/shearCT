@@ -13,8 +13,6 @@
 #include <PointsCt.h>
 #include <Transformation.h>
 
-// just reading points from file
-std::shared_ptr<PointsCt> getPointCtFromFile(const std::string &fileName);
 
 // creating points taking snapshot form CT image
 std::shared_ptr<PointsCt> extractSquarePointsCt(Image &image,

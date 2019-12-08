@@ -4,7 +4,7 @@
 #include <string>
 
 #include <Image.h>
-#include <VtpCt.h>
+#include <VtkPointsCt.h>
 #include <Basis.h>
 
 #include <points.h>
@@ -23,7 +23,7 @@ double stretchZVsShift(const double &accuracy,
 
     Image ncCtA(ncAFileName);
     Image ncCtB(ncBFileName);
-    VtpCt vtpCt;
+    VtkPointsCt vtpCt;
 
 
     // Generate base square from CT A

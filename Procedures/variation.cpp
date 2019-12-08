@@ -6,7 +6,7 @@
 #include <StringAndNumber.h>
 #include <gnuplot.h>
 
-#include <VtpCt.h>
+#include <VtkPointsCt.h>
 #include <Image.h>
 #include <PointsCt.h>
 #include <Transformation.h>
@@ -22,7 +22,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
 
     std::vector<double> correlations;
 
-    auto vtpCt = VtpCt(pointsCt);
+    auto vtpCt = VtkPointsCt(pointsCt);
 
     for (int i = 0; i < valuesRelative.size(); i++) {
 
@@ -32,7 +32,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
         correlations.push_back(pointsCt->computePearsonCorrelation());
 
         if (isFilesSaved)
-            vtpCt.savePointsFile(
+            vtpCt.savePointsCtToFile(
                     fileNamesPrefix + "_" +
                     typeid(decltype(transformation)::element_type).name() +
                     toString(valuesAbsolute[i]) + ".vtp",
@@ -41,7 +41,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
     }
 
     if (isFilesSaved)
-        vtpCt.saveCollectionFile(
+        vtpCt.saveFilesCollectionToFile(
                 fileNamesPrefix + "_" +
                 typeid(decltype(transformation)::element_type).name() + ".pvd");
 

@@ -37,7 +37,7 @@ std::vector<double> makeRegistration(
 
     ncCt.setRegion(bBoxGeneral);
     int iteration = -1;
-    VtpCt vtpCt;
+    VtkPointsCt vtpCt;
 
 
     InvCorrelation invCorrelation(
@@ -168,8 +168,8 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
 
     if (isFilesSaved) {
         vtpCt.setPointsCt(std::make_shared<PointsCt>(pointsCtCurr));
-        vtpCt.savePointsFile(fileNamesPrefix + "_" + toString(iteration) +
-                             ".vtp", toString(iteration));
+        vtpCt.savePointsCtToFile(fileNamesPrefix + "_" + toString(iteration) +
+                                 ".vtp", toString(iteration));
     }
 
     return 1. - pointsCtCurr.computePearsonCorrelation();
@@ -179,7 +179,7 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
 void InvCorrelation::implementResult(const ColumnVector &x) {
 
     if (isFilesSaved)
-        vtpCt.saveCollectionFile(fileNamesPrefix + ".pvd");
+        vtpCt.saveFilesCollectionToFile(fileNamesPrefix + ".pvd");
 
     regionCt.setPoints(pointsCt.getPoints(), pointsCt.getTomoB());
 
@@ -201,7 +201,7 @@ InvCorrelation::InvCorrelation(Transformations &_transformations,
                                const std::string &_fileNamesPrefix,
                                const bool &_isFilesSaved,
                                int &_iteration,
-                               VtpCt &_vtpCt) :
+                               VtkPointsCt &_vtpCt) :
         transformations(_transformations),
         pointsCt(_pointsCt),
         regionCt(_regionCt),
