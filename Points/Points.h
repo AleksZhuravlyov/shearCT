@@ -1,7 +1,7 @@
 /**
  @file
- @brief File for PointsCt class.
- It is header which contains PointsCt class.
+ @brief File for Points class.
+ It is header which contains Points class.
 */
 
 #ifndef POINTSCT_H
@@ -10,104 +10,108 @@
 #include <vector>
 #include <string>
 
-#include <Basis.h>
+#include <CGAL/Point_3.h>
+#include <CGAL/Bbox_3.h>
 
+#include <Geometry/Basis.h>
 
 typedef std::vector<double> Value;
+typedef std::vector<Point_3> Points_3;
+typedef CGAL::Bbox_3 Bbox_3;
 
 
-/// This class is set of CGAL points with convenient methods and attributes.
-class PointsCt {
+/// This class is set of CGAL points_3 with convenient methods and attributes.
+class Points {
 
 public:
 
     /**
      Constructor sets by default.
     */
-    PointsCt();
+    Points();
 
     /**
-     Constructor sets CGAL points.
-     @param[in] _points is CGAL points for points attribute.
+     Constructor sets CGAL points_3.
+     @param[in] _points_3 is CGAL points_3 for points_3 attribute.
     */
-    PointsCt(std::shared_ptr<Points> _points);
+    Points(std::shared_ptr<Points_3> _points_3);
 
     /**
-     Constructor sets CGAL Bbox.
-     @param[in] bBox is CGAL Bbox for points settings.
+     Constructor sets CGAL Bbox_3.
+     @param[in] bbox_3 is CGAL Bbox_3 for points_3 settings.
     */
-    PointsCt(const Bbox &bBox);
+    Points(const Bbox_3 &bbox_3);
 
     /**
-     Constructor sets CGAL points and basis.
-     @param[in] _points is CGAL points for points attribute.
+     Constructor sets CGAL points_3 and basis.
+     @param[in] _points_3 is CGAL points_3 for points_3 attribute.
      @param[in] _basis is CGAL based basis for basis attribute.
     */
-    PointsCt(std::shared_ptr<Points> _points,
-             std::shared_ptr<Basis> _basis);
+    Points(std::shared_ptr<Points_3> _points_3,
+           std::shared_ptr<Basis> _basis);
 
     /**
      Move constructor.
-     @param[in] pointsCt is the instance of class PointsCt.
+     @param[in] points is the instance of class Points.
     */
-    PointsCt(const PointsCt &pointsCt);
+    Points(const Points &points);
 
     /**
      Copy constructor.
-     @param[in, out] pointsCt is the instance of class PointsCt.
+     @param[in, out] points is the instance of class Points.
     */
-    PointsCt(PointsCt &&pointsCt);
+    Points(Points &&points);
 
 
     /**
      Destructor sets by default.
     */
-    virtual ~PointsCt() {}
+    virtual ~Points() {}
 
     /**
      Overload assignment operator.
-     @param[in, out] pointsCt is the instance of class PointsCt.
+     @param[in, out] points is the instance of class Points.
     */
-    PointsCt &operator=(PointsCt &&pointsCt);
+    Points &operator=(Points &&points);
 
 
     /**
-     Make transformation for this PointsCt class.
-     @param[in] transformation acts on this PointsCt class.
+     Make aff_transformation_3 for this Points class.
+     @param[in] aff_transformation_3 acts on this Points class.
     */
-    void transform(const Aff_transformation &transformation);
+    void transform(const Aff_transformation_3 &aff_transformation_3);
 
 
     /**
-     Make transformations for this PointsCt class.
-     @param[in] transformations acts on this PointsCt class.
+     Make aff_transformations_3 for this Points class.
+     @param[in] aff_transformations_3 acts on this Points class.
     */
-    void transform(const std::vector<Aff_transformation> &transformations);
+    void transform(const std::vector<Aff_transformation_3> &aff_transformations_3);
 
 
     /**
-     Move origin attribute of basis attribute to particular point.
-     @param[in] point setts origin attribute of basis attribute.
+     Move origin attribute of basis attribute to particular point_3.
+     @param[in] point_3 setts origin attribute of basis attribute.
     */
-    void translateBasis(const Point &point);
+    void translateBasis(const Point_3 &point_3);
 
     /**
-     Move basis attribute to the center of points attribute.
+     Move basis attribute to the center of points_3 attribute.
     */
     void translateBasisToCenter();
 
 
     /**
-     Accessor for points number in points attribute.
-     @return number of points in points attribute.
+     Accessor for points_3 number in points_3 attribute.
+     @return number of points_3 in points_3 attribute.
     */
     int size();
 
     /**
-     Mutator for points attribute.
-     @param[in] _points is assigned to points attribute.
+     Mutator for points_3 attribute.
+     @param[in] _points_3 is assigned to points_3 attribute.
     */
-    void setPoints(std::shared_ptr<Points> _points);
+    void setPoints(std::shared_ptr<Points_3> _points_3);
 
     /**
      Mutator for basis attribute.
@@ -147,10 +151,10 @@ public:
 
 
     /**
-     Accessor for points attribute.
-     @return points attribute.
+     Accessor for points_3 attribute.
+     @return points_3 attribute.
     */
-    std::shared_ptr<Points> getPoints();
+    std::shared_ptr<Points_3> getPoints();
 
     /**
      Accessor for basis attribute.
@@ -185,9 +189,9 @@ public:
 
 
     /**
-     Generate CGAL boundary box from points attribute.
+     Generate CGAL boundary box from points_3 attribute.
     */
-    Bbox generateBbox();
+    Bbox_3 generateBbox();
 
     /**
      Assign subtraction tomoA and TomoB attributes to result attribute.
@@ -201,14 +205,14 @@ public:
     double computePearsonCorrelation();
 
     /**
-     Generate square in XY plane inside this class PointsCt.
+     Generate square in XY plane inside this class Points.
      @param[in] xCenter is the X center of square.
      @param[in] yCenter is the Y center of square.
      @param[in] zCenter is the Z center of square.
      @param[in] xWidth is the X width of square.
      @param[in] yWidth is the Y width of square.
-     @param[in] nX is the number of points on X axis.
-     @param[in] nY is the number of points on Y axis.
+     @param[in] nX is the number of points_3 on X axis.
+     @param[in] nY is the number of points_3 on Y axis.
     */
     void createXYSquare(const double &xCenter,
                         const double &yCenter,
@@ -217,7 +221,7 @@ public:
                         const int &nX, const int &nY);
 
     /**
-     Generate cylinder surface segment in XY plane inside this class PointsCt.
+     Generate cylinder surface segment in XY plane inside this class Points.
      @param[in] xCylinderBaseCenter is the X center of cylinder base.
      @param[in] yCylinderBaseCenter is the Y center of cylinder base.
      @param[in] zCylinderBaseCenter is the Z center of cylinder base.
@@ -225,8 +229,8 @@ public:
      @param[in] angleCenter is the orientation of cylinder segment.
      @param[in] zWidth is height of cylinder segment.
      @param[in] angleWidth is the angle width of cylinder segment.
-     @param[in] nZ is the number of points on Z axis.
-     @param[in] nAngle is the number of points on nAngle axis.
+     @param[in] nZ is the number of points_3 on Z axis.
+     @param[in] nAngle is the number of points_3 on nAngle axis.
     */
     void createZCylinderSegment(const double &xCylinderBaseCenter,
                                 const double &yCylinderBaseCenter,
@@ -240,18 +244,18 @@ public:
 
 private:
 
-    std::shared_ptr<Points> points; ///< CGAL points.
+    std::shared_ptr<Points_3> points_3; ///< CGAL points_3.
 
     std::shared_ptr<Basis> basis; ///< Basis based on CGAL.
 
 
-    std::shared_ptr<Value> tomoA; ///< Value connected to points.
+    std::shared_ptr<Value> tomoA; ///< Value connected to points_3.
 
-    std::shared_ptr<Value> tomoB; ///< Value connected to points.
+    std::shared_ptr<Value> tomoB; ///< Value connected to points_3.
 
-    std::shared_ptr<Value> tomoBuffer; ///< Value connected to points.
+    std::shared_ptr<Value> tomoBuffer; ///< Value connected to points_3.
 
-    std::shared_ptr<Value> result; ///< Value connected to points.
+    std::shared_ptr<Value> result; ///< Value connected to points_3.
 
 };
 

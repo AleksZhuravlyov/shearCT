@@ -2,17 +2,17 @@
 
 #include <cmath>
 
-#include <VtkPointsCt.h>
+#include <Vtp/PointsIO.h>
 #include <Registration.h>
 
 
-std::shared_ptr<PointsCt> extractSquarePointsCt(Image &image,
-                                                const double &xCenterFactor,
-                                                const double &yCenterFactor,
-                                                const double &zCenterMeter,
-                                                const double &xWidthVoxel,
-                                                const double &yWidthVoxel,
-                                                const int &nX, const int &nY) {
+std::shared_ptr<Points> extractSquarePointsCt(Image &image,
+                                              const double &xCenterFactor,
+                                              const double &yCenterFactor,
+                                              const double &zCenterMeter,
+                                              const double &xWidthVoxel,
+                                              const double &yWidthVoxel,
+                                              const int &nX, const int &nY) {
 
   double xCenter = image.getXInit() +
                    (image.getXStep() * image.getNX()) * xCenterFactor;
@@ -23,7 +23,7 @@ std::shared_ptr<PointsCt> extractSquarePointsCt(Image &image,
   double xWidth = xWidthVoxel * image.getXStep();
   double yWidth = yWidthVoxel * image.getYStep();
 
-  auto pointsCt = std::make_shared<PointsCt>();
+  auto pointsCt = std::make_shared<Points>();
   pointsCt->createXYSquare(xCenter, yCenter, zCenter,
                            xWidth, yWidth,
                            nX, nY);
@@ -38,7 +38,7 @@ std::shared_ptr<PointsCt> extractSquarePointsCt(Image &image,
 
 
 void getBaseSquareFromCtAWithTop(Image &ncCt, const double &shiftZ,
-                                 std::shared_ptr<PointsCt> &pointsCt) {
+                                 std::shared_ptr<Points> &pointsCt) {
 
   pointsCt->transform(TranslationZ()(shiftZ));
   ncCt.setRegion(pointsCt->generateBbox());
@@ -48,12 +48,12 @@ void getBaseSquareFromCtAWithTop(Image &ncCt, const double &shiftZ,
 
 }
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
+std::shared_ptr<Points> getBaseSquareFromCtAWithTop(
         Image &ncCt, const double &shiftZ, const std::string &fileName) {
 
-  auto pointsCt = std::make_shared<PointsCt>();
+  auto pointsCt = std::make_shared<Points>();
 
-  auto vtkPointsCt = VtkPointsCt();
+  auto vtkPointsCt = PointsIO();
   vtkPointsCt.setPointsCt(pointsCt);
   vtkPointsCt.loadPointsCtFromFile(fileName);
 
@@ -64,7 +64,7 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
 }
 
 
-void getBaseSquareFromCtB(Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+void getBaseSquareFromCtB(Image &ncCt, std::shared_ptr<Points> &pointsCt,
                           const double &accuracy) {
 
   // processVariation(pointsCt_, ncCt, std::make_shared<TranslationZ>(),
@@ -103,13 +103,13 @@ void getBaseSquareFromCtB(Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
 
 }
 
-std::shared_ptr<PointsCt> getBaseSquareFromCtB(Image &ncCt,
-                                               const std::string &fileName,
-                                               const double &accuracy) {
+std::shared_ptr<Points> getBaseSquareFromCtB(Image &ncCt,
+                                             const std::string &fileName,
+                                             const double &accuracy) {
 
-  auto pointsCt = std::make_shared<PointsCt>();
+  auto pointsCt = std::make_shared<Points>();
 
-  auto vtkPointsCt = VtkPointsCt();
+  auto vtkPointsCt = PointsIO();
   vtkPointsCt.setPointsCt(pointsCt);
   vtkPointsCt.loadPointsCtFromFile(fileName);
 
@@ -122,7 +122,7 @@ std::shared_ptr<PointsCt> getBaseSquareFromCtB(Image &ncCt,
 
 
 void getTopSquareFromCtB(Image &ncCt, const double &shiftZ,
-                         std::shared_ptr<PointsCt> &pointsCt,
+                         std::shared_ptr<Points> &pointsCt,
                          const double &accuracy) {
 
   pointsCt->swapTomoAAndTomoBuffer();
@@ -175,8 +175,8 @@ void getTopSquareFromCtB(Image &ncCt, const double &shiftZ,
 }
 
 
-std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
-        Image &ncCt, std::shared_ptr<PointsCt> &baseSquare) {
+std::shared_ptr<Points> getCylinderSectorFromCtAAndBaseSquare(
+        Image &ncCt, std::shared_ptr<Points> &baseSquare) {
 
   auto origin = baseSquare->getBasis()->getOrigin();
 
@@ -187,7 +187,7 @@ std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
   int nZ = 500;
   int nAngle = 5000;
 
-  auto pointsCt = std::make_shared<PointsCt>();
+  auto pointsCt = std::make_shared<Points>();
   pointsCt->createZCylinderSegment(origin->x(), origin->y(), origin->z(),
                                    R, angleCenter, zWidth, angleWidth,
                                    nZ, nAngle);
@@ -202,7 +202,7 @@ std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
 
 
 double getCylinderSectorFromCtB(Image &ncCt,
-                                std::shared_ptr<PointsCt> &pointsCt) {
+                                std::shared_ptr<Points> &pointsCt) {
 
   // processVariation(pointsCt_, ncCt,
   //                  std::make_shared<StretchingXY>(),

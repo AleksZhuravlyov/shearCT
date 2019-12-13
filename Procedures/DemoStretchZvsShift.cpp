@@ -21,8 +21,8 @@ void demoStretchZvsShift() {
                                   20,
                                   20,
                                   200, 200,
-                                  "/Users/bigelk/data/samples/tomography/shearCT/processed/5.nc",
-                                  "/Users/bigelk/data/samples/tomography/shearCT/processed/10.nc");
+                                  "/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc",
+                                  "/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc");
 
   std::cout << "stretchZ " << stretchZ << std::endl;
 

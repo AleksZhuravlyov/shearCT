@@ -1,5 +1,4 @@
-#include <VtkPointsCt.h>
-
+#include <Vtp/PointsIO.h>
 
 #include <vector>
 #include <string>
@@ -16,27 +15,27 @@
 
 #include <pugixml.hpp>
 
-#include <PointsCt.h>
-#include <Basis.h>
+#include <Points/Points.h>
+#include <Geometry/Basis.h>
 
 
-VtkPointsCt::VtkPointsCt() : VtkPointsCt(std::make_shared<PointsCt>()) {}
+PointsIO::PointsIO() : PointsIO(std::make_shared<Points>()) {}
 
-VtkPointsCt::VtkPointsCt(std::shared_ptr<PointsCt> pointsCt) :
+PointsIO::PointsIO(std::shared_ptr<Points> pointsCt) :
         pointsCt_(pointsCt),
         formatIsBinary_(true) {}
 
 
-void VtkPointsCt::setPointsCt(std::shared_ptr<PointsCt> pointsCt) {
+void PointsIO::setPointsCt(std::shared_ptr<Points> pointsCt) {
   pointsCt_ = pointsCt;
 }
 
-std::shared_ptr<PointsCt> VtkPointsCt::getPointsCt() {
+std::shared_ptr<Points> PointsIO::getPointsCt() {
   return pointsCt_;
 }
 
 
-void VtkPointsCt::loadPointsCtFromFile(const std::string &fileName) {
+void PointsIO::loadPointsCtFromFile(const std::string &fileName) {
 
   auto polyDataReaderVtk = vtkSmartPointer<vtkXMLPolyDataReader>::New();
   polyDataReaderVtk->SetFileName(fileName.c_str());
@@ -52,10 +51,10 @@ void VtkPointsCt::loadPointsCtFromFile(const std::string &fileName) {
 
   int nPoints = pointsVtk->GetNumberOfPoints();
 
-  auto points = std::make_shared<Points>();
+  auto points = std::make_shared<Points_3>();
   for (int i = 0; i < nPoints; i++) {
     auto xyz = pointsVtk->GetPoint(i);
-    points->push_back(Point(xyz[0], xyz[1], xyz[2]));
+    points->push_back(Point_3(xyz[0], xyz[1], xyz[2]));
   }
 
   pointsCt_->setPoints(points);
@@ -77,31 +76,31 @@ void VtkPointsCt::loadPointsCtFromFile(const std::string &fileName) {
   for (int i = 0; i < 12; i++)
     basisValues.push_back(basisVtk->GetVariantValue(vtkIdType(i)).ToDouble());
 
-  std::vector<Direction> axes;
+  std::vector<Direction_3> axes;
   for (int i = 0; i < 3; i++)
-    axes.push_back(Direction(basisValues[i * 3 + 0],
-                             basisValues[i * 3 + 1],
-                             basisValues[i * 3 + 2]));
+    axes.push_back(Direction_3(basisValues[i * 3 + 0],
+                               basisValues[i * 3 + 1],
+                               basisValues[i * 3 + 2]));
 
-  auto origin = Point(basisValues[9],
-                      basisValues[10],
-                      basisValues[11]);
+  auto origin = Point_3(basisValues[9],
+                        basisValues[10],
+                        basisValues[11]);
 
   pointsCt_->setBasis(std::make_shared<Basis>(Basis(axes, origin)));
 
 }
 
 
-void VtkPointsCt::setFormatIsBinary(const bool &formatIsBinary) {
+void PointsIO::setFormatIsBinary(const bool &formatIsBinary) {
   formatIsBinary_ = formatIsBinary;
 }
 
-bool VtkPointsCt::getFormatIsBinary() {
+bool PointsIO::getFormatIsBinary() {
   return formatIsBinary_;
 }
 
-void VtkPointsCt::savePointsCtToFile(const std::string &fileName,
-                                     const std::string &fileDescription) {
+void PointsIO::savePointsCtToFile(const std::string &fileName,
+                                  const std::string &fileDescription) {
 
   auto pointsVtk = vtkSmartPointer<vtkPoints>::New();
   auto tomoAVtk = vtkSmartPointer<vtkDoubleArray>::New();
@@ -186,18 +185,18 @@ void VtkPointsCt::savePointsCtToFile(const std::string &fileName,
 
 }
 
-void VtkPointsCt::savePointsCtToFile(const std::string &fileName) {
+void PointsIO::savePointsCtToFile(const std::string &fileName) {
   savePointsCtToFile(fileName, "0");
 }
 
 
-void VtkPointsCt::clearFilesCollection() {
+void PointsIO::clearFilesCollection() {
   pointsCtFileNames_.clear();
   pointsCtFileDescriptions_.clear();
 }
 
 
-void VtkPointsCt::saveFilesCollectionToFile(const std::string &fileName) {
+void PointsIO::saveFilesCollectionToFile(const std::string &fileName) {
 
   pugi::xml_document doc;
 

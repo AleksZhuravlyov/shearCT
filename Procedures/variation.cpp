@@ -6,13 +6,13 @@
 #include <StringAndNumber.h>
 #include <gnuplot.h>
 
-#include <VtkPointsCt.h>
-#include <Image.h>
-#include <PointsCt.h>
-#include <Transformation.h>
+#include <Vtp/PointsIO.h>
+#include <NcOps/Image.h>
+#include <Points/Points.h>
+#include <Geometry/Transformation.h>
 
 
-double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
+double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
                      std::shared_ptr<Transformation> transformation,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
@@ -22,7 +22,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
 
     std::vector<double> correlations;
 
-    auto vtpCt = VtkPointsCt(pointsCt);
+    auto vtpCt = PointsIO(pointsCt);
 
     for (int i = 0; i < valuesRelative.size(); i++) {
 
@@ -62,7 +62,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
 
 
     std::string plotLine =
-            "plot \"-\" using 1:2 with points pt \"*\" notitle";
+            "plot \"-\" using 1:2 with points_3 pt \"*\" notitle";
     /*std::string plotLine =
             "plot \"-\" using 1:2 with linespoint lw 2 pt 8 notitle";*/
 
@@ -87,7 +87,7 @@ double variatePoints(std::shared_ptr<PointsCt> pointsCt, Region &regionCt,
 }
 
 
-double processVariation(std::shared_ptr<PointsCt> pointsCt, Image &ncCt,
+double processVariation(std::shared_ptr<Points> pointsCt, Image &ncCt,
                         std::shared_ptr<Transformation> transformation,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,

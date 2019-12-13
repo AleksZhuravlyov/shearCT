@@ -19,12 +19,12 @@ find_package(dlib REQUIRED)
 find_package(Boost REQUIRED COMPONENTS thread system)
 
 set(SOURCE_CODE main.cpp
-        NetCdfCt/Image.cpp
-        VtpCt/VtkPointsCt.cpp
-        Geom/Basis.cpp
-        NetCdfCt/Region.cpp
-        PointsCt/PointsCt.cpp
-        Geom/Transformation.cpp
+        NcOps/Image.cpp
+        NcOps/Region.cpp
+        Vtp/PointsIO.cpp
+        Geometry/Transformation.cpp
+        Geometry/Basis.cpp
+        Points/Points.cpp
         Registration/Registration.cpp
         Procedures/variation.cpp Procedures/points.cpp
         Procedures/points.cpp Procedures/demoSchema.cpp
@@ -34,10 +34,7 @@ set(SOURCE_CODE main.cpp
 include_directories(Registration)
 include_directories(Procedures)
 include_directories(ThirdParty)
-include_directories(NetCdfCt)
-include_directories(VtpCt)
-include_directories(Geom)
-include_directories(PointsCt)
+include_directories(.)
 
 set(CMAKE_BUILD_TYPE Release)
 

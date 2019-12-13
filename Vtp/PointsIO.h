@@ -1,50 +1,50 @@
 /**
  @file
- @brief File for VtkPointsCt class.
- It is header which contains VtkPointsCt class.
+ @brief File for PointsIO class.
+ It is header which contains PointsIO class.
 */
 
-#ifndef VTKPOINTSCT_H
-#define VTKPOINTSCT_H
+#ifndef VTP_POINTSIO_H
+#define VTP_POINTSIO_H
 
 #include <vector>
 #include <string>
 
-#include <PointsCt.h>
+#include <Points/Points.h>
 
 /// This class provides io access for necessary VTK library functionality.
-class VtkPointsCt {
+class PointsIO {
 
 public:
 
   /**
    Constructor by default.
   */
-  VtkPointsCt();
+  PointsIO();
 
   /**
-   Constructor sets instance of PointsCt class.
-   @param[in] pointsCt is instance of PointsCt class for pointsCt attribute.
+   Constructor sets instance of Points class.
+   @param[in] pointsCt is instance of Points class for pointsCt attribute.
   */
-  VtkPointsCt(std::shared_ptr<PointsCt> pointsCt);
+  PointsIO(std::shared_ptr<Points> pointsCt);
 
   /**
    Destructor sets by default.
   */
-  virtual ~VtkPointsCt() {}
+  virtual ~PointsIO() {}
 
 
   /**
    Mutator for pointsCt attribute.
    @param[in] pointsCt is assigned to _pointsCt attribute.
   */
-  void setPointsCt(std::shared_ptr<PointsCt> pointsCt);
+  void setPointsCt(std::shared_ptr<Points> pointsCt);
 
   /**
    Accessor for pointsCt attribute.
    @return pointsCt attribute.
   */
-  std::shared_ptr<PointsCt> getPointsCt();
+  std::shared_ptr<Points> getPointsCt();
 
 
   /**
@@ -92,8 +92,8 @@ public:
 
 
 private:
-  /// Set of points of PointsCt type.
-  std::shared_ptr<PointsCt> pointsCt_;
+  /// Set of points_3 of Points type.
+  std::shared_ptr<Points> pointsCt_;
 
   /// Binarity flag for pointsCt files.
   bool formatIsBinary_;
@@ -107,4 +107,4 @@ private:
 };
 
 
-#endif //VTKPOINTSCT_H
+#endif // VTP_POINTSIO_H

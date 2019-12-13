@@ -813,7 +813,7 @@ WARN_LOGFILE           =
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = . Geom PointsCt VtkPointsCt Image ThirdParty Demo
+INPUT                  = . Geom PointsCt PointsIO Image ThirdParty Demo
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
@@ -1073,7 +1073,7 @@ SOURCE_TOOLTIPS        = YES
 # To use it do the following:
 # - Install the latest version of global
 # - Enable SOURCE_BROWSER and USE_HTAGS in the configuration file
-# - Make sure the INPUT points to the root of the source tree
+# - Make sure the INPUT points_3 to the root of the source tree
 # - Run doxygen as normal
 #
 # Doxygen will invoke htags (and that will in turn invoke gtags), so these
@@ -1565,7 +1565,7 @@ MATHJAX_FORMAT         = HTML-CSS
 # output directory using the MATHJAX_RELPATH option. The destination directory
 # should contain the MathJax.js script. For instance, if the mathjax directory
 # is located at the same level as the HTML output directory, then
-# MATHJAX_RELPATH should be ../mathjax. The default value points to the MathJax
+# MATHJAX_RELPATH should be ../mathjax. The default value points_3 to the MathJax
 # Content Delivery Network so you can quickly see the result without installing
 # MathJax. However, it is strongly recommended to install a local copy of
 # MathJax from https://www.mathjax.org before deployment.
@@ -2281,7 +2281,7 @@ DOT_NUM_THREADS        = 0
 
 DOT_FONTNAME           = Helvetica
 
-# The DOT_FONTSIZE tag can be used to set the size (in points) of the font of
+# The DOT_FONTSIZE tag can be used to set the size (in points_3) of the font of
 # dot graphs.
 # Minimum value: 4, maximum value: 24, default value: 10.
 # This tag requires that the tag HAVE_DOT is set to YES.

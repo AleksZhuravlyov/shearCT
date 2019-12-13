@@ -1,6 +1,5 @@
 #include <Registration.h>
 
-#include <CgalAliases.h>
 
 #include <iomanip>
 
@@ -24,7 +23,7 @@ Transformations generateStretchingXY() {
 
 
 std::vector<double> makeRegistration(
-        Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+        Image &ncCt, std::shared_ptr<Points> &pointsCt,
         Transformations &transformations,
         const double &accuracy,
         const std::vector<double> &constraintsMin,
@@ -37,7 +36,7 @@ std::vector<double> makeRegistration(
 
     ncCt.setRegion(bBoxGeneral);
     int iteration = -1;
-    VtkPointsCt vtpCt;
+    PointsIO vtpCt;
 
 
     InvCorrelation invCorrelation(
@@ -93,14 +92,14 @@ std::vector<double> makeRegistration(
 }
 
 
-Bbox calculateGeneralBbox(std::shared_ptr<PointsCt> &pointsCt,
-                          const Transformations &transformations,
-                          const std::vector<double> &constraintsMin,
-                          const std::vector<double> &constraintsMax) {
+Bbox_3 calculateGeneralBbox(std::shared_ptr<Points> &pointsCt,
+                            const Transformations &transformations,
+                            const std::vector<double> &constraintsMin,
+                            const std::vector<double> &constraintsMax) {
 
     auto bBoxIni = pointsCt->generateBbox();
-    std::vector<Bbox> bBoxesRotation;
-    auto pointsCtBboxIni = PointsCt(bBoxIni);
+    std::vector<Bbox_3> bBoxesRotation;
+    auto pointsCtBboxIni = Points(bBoxIni);
 
     for (int i = 0; i < transformations.size(); i++)
 
@@ -123,8 +122,8 @@ Bbox calculateGeneralBbox(std::shared_ptr<PointsCt> &pointsCt,
         bBoxRotation += bBox;
 
 
-    std::vector<Bbox> bBoxesTranslation;
-    auto pointsCtBboxRotation = PointsCt(bBoxRotation);
+    std::vector<Bbox_3> bBoxesTranslation;
+    auto pointsCtBboxRotation = Points(bBoxRotation);
 
     for (int i = 0; i < transformations.size(); i++)
 
@@ -158,7 +157,7 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
     auto pointsCtCurr = pointsCt;
     regionCt.setPoints(pointsCtCurr.getPoints(), pointsCtCurr.getTomoB());
 
-    std::vector<Aff_transformation> aff_transformations;
+    std::vector<Aff_transformation_3> aff_transformations;
     for (int i = 0; i < transformations.size(); i++)
         aff_transformations.push_back((*transformations[i])(x(i)));
 
@@ -167,7 +166,7 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
     pointsCtCurr.computeResult();
 
     if (isFilesSaved) {
-        vtpCt.setPointsCt(std::make_shared<PointsCt>(pointsCtCurr));
+        vtpCt.setPointsCt(std::make_shared<Points>(pointsCtCurr));
         vtpCt.savePointsCtToFile(fileNamesPrefix + "_" + toString(iteration) +
                                  ".vtp", toString(iteration));
     }
@@ -183,7 +182,7 @@ void InvCorrelation::implementResult(const ColumnVector &x) {
 
     regionCt.setPoints(pointsCt.getPoints(), pointsCt.getTomoB());
 
-    std::vector<Aff_transformation> aff_transformations;
+    std::vector<Aff_transformation_3> aff_transformations;
     for (int i = 0; i < transformations.size(); i++)
         aff_transformations.push_back((*transformations[i])(x(i)));
 
@@ -196,12 +195,12 @@ void InvCorrelation::implementResult(const ColumnVector &x) {
 
 
 InvCorrelation::InvCorrelation(Transformations &_transformations,
-                               PointsCt &_pointsCt,
+                               Points &_pointsCt,
                                Region &_regionCt,
                                const std::string &_fileNamesPrefix,
                                const bool &_isFilesSaved,
                                int &_iteration,
-                               VtkPointsCt &_vtpCt) :
+                               PointsIO &_vtpCt) :
         transformations(_transformations),
         pointsCt(_pointsCt),
         regionCt(_regionCt),

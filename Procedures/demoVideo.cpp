@@ -3,9 +3,9 @@
 #include <iostream>
 #include <string>
 
-#include <Image.h>
-#include <VtkPointsCt.h>
-#include <Basis.h>
+#include <NcOps/Image.h>
+#include <Vtp/PointsIO.h>
+#include <Geometry/Basis.h>
 
 #include <points.h>
 
@@ -14,9 +14,9 @@ void demoVideo() {
   /// General stuff
   /// =======================================================================
 
-  Image imageA("/Users/bigelk/data/samples/tomography/shearCT/processed/5.nc");
-  Image imageB("/Users/bigelk/data/samples/tomography/shearCT/processed/10.nc");
-  VtkPointsCt vtkPointsCt;
+  Image imageA("/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc");
+  Image imageB("/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc");
+  PointsIO vtkPointsCt;
 
   std::string baseSquareFromCtAName = "baseSquareFromCtA.vtp";
   std::string baseSquareFromCtBName = "baseSquareFromCtB.vtp";
@@ -100,7 +100,7 @@ void demoVideo() {
   /// Take cylinder sector from CT A and base square
 
   // Take CT A base square from file
-  auto baseCtA = std::make_shared<PointsCt>();
+  auto baseCtA = std::make_shared<Points>();
   vtkPointsCt.setPointsCt(baseCtA);
   vtkPointsCt.loadPointsCtFromFile(baseSquareFromCtAName);
 
@@ -115,7 +115,7 @@ void demoVideo() {
   /// Translation of cylinder sector to CT B and basis of base square CT B
 
   // Take CT B base square from file
-  auto baseCtB = std::make_shared<PointsCt>();
+  auto baseCtB = std::make_shared<Points>();
   vtkPointsCt.setPointsCt(baseCtB);
   vtkPointsCt.loadPointsCtFromFile(baseSquareFromCtBName);
 

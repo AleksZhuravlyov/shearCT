@@ -8,53 +8,53 @@
 #include <StringAndNumber.h>
 #include <gnuplot.h>
 
-#include <Image.h>
-#include <Basis.h>
-#include <PointsCt.h>
-#include <Transformation.h>
+#include <NcOps/Image.h>
+#include <Geometry/Basis.h>
+#include <Points/Points.h>
+#include <Geometry/Transformation.h>
 
 
-// creating points taking snapshot form CT image
-std::shared_ptr<PointsCt> extractSquarePointsCt(Image &image,
-                                                const double &xCenterFactor,
-                                                const double &yCenterFactor,
-                                                const double &zCenterMeter,
-                                                const double &xWidthVoxel,
-                                                const double &yWidthVoxel,
-                                                const int &nX, const int &nY);
+// creating points_3 taking snapshot form CT image
+std::shared_ptr<Points> extractSquarePointsCt(Image &image,
+                                              const double &xCenterFactor,
+                                              const double &yCenterFactor,
+                                              const double &zCenterMeter,
+                                              const double &xWidthVoxel,
+                                              const double &yWidthVoxel,
+                                              const int &nX, const int &nY);
 
-// writing values form shifted points into buffer
+// writing values form shifted points_3 into buffer
 void getBaseSquareFromCtAWithTop(Image &ncCt, const double &shiftZ,
-                                 std::shared_ptr<PointsCt> &pointsCt);
+                                 std::shared_ptr<Points> &pointsCt);
 
-// writing values form shifted points into buffer
-std::shared_ptr<PointsCt> getBaseSquareFromCtAWithTop(
+// writing values form shifted points_3 into buffer
+std::shared_ptr<Points> getBaseSquareFromCtAWithTop(
         Image &ncCt, const double &shiftZ, const std::string &fileName);
 
-// search of base points in B CT image employing registration
-std::shared_ptr<PointsCt> getBaseSquareFromCtB(Image &ncCt,
-                                               const std::string &fileName);
+// search of base points_3 in B CT image employing registration
+std::shared_ptr<Points> getBaseSquareFromCtB(Image &ncCt,
+                                             const std::string &fileName);
 
-// search of base points in B CT image employing registration
-void getBaseSquareFromCtB(Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+// search of base points_3 in B CT image employing registration
+void getBaseSquareFromCtB(Image &ncCt, std::shared_ptr<Points> &pointsCt,
                           const double &accuracy);
 
-// search of top points in B CT image employing registration
+// search of top points_3 in B CT image employing registration
 void getTopSquareFromCtB(Image &ncCt, const double &shiftZ,
-                         std::shared_ptr<PointsCt> &pointsCt,
+                         std::shared_ptr<Points> &pointsCt,
                          const double &accuracy);
 
-// search of top points in B CT image employing registration
-std::shared_ptr<PointsCt> getTopSquareFromCtB(Image &ncCt, const double &shiftZ,
-                                              const std::string &fileName);
+// search of top points_3 in B CT image employing registration
+std::shared_ptr<Points> getTopSquareFromCtB(Image &ncCt, const double &shiftZ,
+                                            const std::string &fileName);
 
-// getting cylinder from A CT image and base points
-std::shared_ptr<PointsCt> getCylinderSectorFromCtAAndBaseSquare(
-        Image &ncCt, std::shared_ptr<PointsCt> &baseSquare);
+// getting cylinder from A CT image and base points_3
+std::shared_ptr<Points> getCylinderSectorFromCtAAndBaseSquare(
+        Image &ncCt, std::shared_ptr<Points> &baseSquare);
 
 // search of cylinder in B CT image
 double getCylinderSectorFromCtB(Image &ncCt,
-                                std::shared_ptr<PointsCt> &pointsCt);
+                                std::shared_ptr<Points> &pointsCt);
 
 
 #endif //POINTS_H

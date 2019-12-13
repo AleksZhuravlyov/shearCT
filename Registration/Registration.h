@@ -4,14 +4,14 @@
 #include <vector>
 #include <string>
 #include <iomanip>
-#include <PointsCt.h>
-#include <Image.h>
-#include <Transformation.h>
-#include <VtkPointsCt.h>
+#include <Points/Points.h>
+#include <NcOps/Image.h>
+#include <Geometry/Transformation.h>
+#include <Vtp/PointsIO.h>
 #include <dlib/optimization.h>
 #include <dlib/global_optimization.h>
 
-#include <CgalAliases.h>
+
 #include <StringAndNumber.h>
 
 typedef dlib::matrix<double, 0, 1> ColumnVector;
@@ -23,7 +23,7 @@ Transformations generateTranslationAnaRotationXYZ();
 Transformations generateStretchingXY();
 
 std::vector<double> makeRegistration(
-        Image &ncCt, std::shared_ptr<PointsCt> &pointsCt,
+        Image &ncCt, std::shared_ptr<Points> &pointsCt,
         Transformations &transformations,
         const double &accuracy,
         const std::vector<double> &constraintsMin,
@@ -31,22 +31,22 @@ std::vector<double> makeRegistration(
         const std::string &fileNamesPrefix,
         const bool &isFilesSaved);
 
-Bbox calculateGeneralBbox(std::shared_ptr<PointsCt> &pointsCt,
-                          const Transformations &transformations,
-                          const std::vector<double> &constraintsMin,
-                          const std::vector<double> &constraintsMax);
+Bbox_3 calculateGeneralBbox(std::shared_ptr<Points> &pointsCt,
+                            const Transformations &transformations,
+                            const std::vector<double> &constraintsMin,
+                            const std::vector<double> &constraintsMax);
 
 class InvCorrelation {
 
 public:
 
     InvCorrelation(Transformations &_transformations,
-                   PointsCt &_pointsCt,
+                   Points &_pointsCt,
                    Region &_regionCt,
                    const std::string &_fileNamesPrefix,
                    const bool &_isFilesSaved,
                    int &_iteration,
-                   VtkPointsCt &_vtpCt);
+                   PointsIO &_vtpCt);
 
     virtual ~InvCorrelation() = default;
 
@@ -54,7 +54,7 @@ public:
 
     Transformations &transformations;
 
-    PointsCt &pointsCt;
+    Points &pointsCt;
 
     Region &regionCt;
 
@@ -64,7 +64,7 @@ public:
 
     int &iteration;
 
-    VtkPointsCt &vtpCt;
+    PointsIO &vtpCt;
 
 
     void implementResult(const ColumnVector &x);

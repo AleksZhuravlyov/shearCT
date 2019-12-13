@@ -4,16 +4,20 @@
  It is header which contains NcCt class.
 */
 
-#ifndef IMAGE_H
-#define IMAGE_H
+#ifndef NETCDF_IMAGE_H
+#define NETCDF_IMAGE_H
 
 #include <string>
 #include <vector>
 
 #include <netcdf>
 
-#include <Basis.h>
-#include <Region.h>
+#include <NcOps/Region.h>
+
+#include <CGAL/Bbox_3.h>
+
+
+typedef CGAL::Bbox_3 Bbox_3;
 
 
 /// This struct represents dims of NetCDF library.
@@ -149,7 +153,7 @@ public:
      the regionCt attribute and computes sate of region attribute.
      @param[in] bbox is CGAL library boundary box in terms of meters.
     */
-    void setRegion(const Bbox &bbox);
+    void setRegion(const Bbox_3 &bbox);
 
     /**
      Save region attribute as nc file.
@@ -202,4 +206,4 @@ private:
 };
 
 
-#endif //IMAGE_H
+#endif // NETCDF_IMAGE_H
