@@ -42,13 +42,13 @@ double stretchZVsShift(const double &accuracy,
     // Find base square from CT B
     getBaseSquareFromCtB(ncCtB, squareCt, accuracy);
 
-    // Take origin from base square from CT B
+    // Take origin_ from base square from CT B
     auto bottomOrigin = *(squareCt->getBasis()->getOrigin());
 
     // Find top square from CT B
     getTopSquareFromCtB(ncCtB, shiftZ, squareCt, accuracy);
 
-    // Take origin from top square from CT B
+    // Take origin_ from top square from CT B
     auto topOrigin = *(squareCt->getBasis()->getOrigin());
 
     // Final stretch Z calculation

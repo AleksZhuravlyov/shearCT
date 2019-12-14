@@ -69,13 +69,13 @@ void demoVideo() {
   // Read base square from CT B from file
   // auto squareCt = getPointCtFromFile(baseSquareFromCtBName);
 
-  // Take origin from base square from CT B
+  // Take origin_ from base square from CT B
   auto bottomOrigin = *(squareCt->getBasis()->getOrigin());
 
   /// Find top square from CT B
 
   getTopSquareFromCtB(imageB, shiftZ, squareCt, 1.e-8);
-  // Take origin from top square from CT B
+  // Take origin_ from top square from CT B
   auto topOrigin = *(squareCt->getBasis()->getOrigin());
 
   /// Final Young's modulus calculation

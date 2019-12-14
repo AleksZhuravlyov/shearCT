@@ -34,7 +34,7 @@ void Region::setPoints(std::shared_ptr<Points_3> _points,
 }
 
 
-double Region::computePointValue(Point_3 point) {
+double Region::computePointValue(CgalPoint point) {
 
   auto x = point.x();
   auto y = point.y();

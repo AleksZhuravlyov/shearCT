@@ -16,7 +16,7 @@
 #include <Geometry/Basis.h>
 
 typedef std::vector<double> Value;
-typedef std::vector<Point_3> Points_3;
+typedef std::vector<CgalPoint> Points_3;
 typedef CGAL::Bbox_3 Bbox_3;
 
 
@@ -79,21 +79,21 @@ public:
      Make aff_transformation_3 for this Points class.
      @param[in] aff_transformation_3 acts on this Points class.
     */
-    void transform(const Aff_transformation_3 &aff_transformation_3);
+    void transform(const CgalTransformation &aff_transformation_3);
 
 
     /**
      Make aff_transformations_3 for this Points class.
      @param[in] aff_transformations_3 acts on this Points class.
     */
-    void transform(const std::vector<Aff_transformation_3> &aff_transformations_3);
+    void transform(const std::vector<CgalTransformation> &aff_transformations_3);
 
 
     /**
-     Move origin attribute of basis attribute to particular point_3.
-     @param[in] point_3 setts origin attribute of basis attribute.
+     Move origin_ attribute of basis attribute to particular point_3.
+     @param[in] point_3 setts origin_ attribute of basis attribute.
     */
-    void translateBasis(const Point_3 &point_3);
+    void translateBasis(const CgalPoint &point_3);
 
     /**
      Move basis attribute to the center of points_3 attribute.

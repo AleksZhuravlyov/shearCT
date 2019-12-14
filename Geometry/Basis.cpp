@@ -3,28 +3,28 @@
 #include <cmath>
 
 
-Basis::Basis() :
-    Basis({Direction_3(1, 0, 0),
-           Direction_3(0, 1, 0),
-           Direction_3(0, 0, 1)},
-          Point_3(0, 0, 0)) {}
+Basis::Basis() : Basis({CgalDirection(1, 0, 0),
+                        CgalDirection(0, 1, 0),
+                        CgalDirection(0, 0, 1)},
+                       CgalPoint(0, 0, 0)) {}
 
-Basis::Basis(const Point_3 &_origin) :
-    Basis({Direction_3(1, 0, 0),
-           Direction_3(0, 1, 0),
-           Direction_3(0, 0, 1)},
-          _origin) {}
+Basis::Basis(const CgalPoint &origin) : Basis({CgalDirection(1, 0, 0),
+                                               CgalDirection(0, 1, 0),
+                                               CgalDirection(0, 0, 1)},
+                                              origin) {}
 
-Basis::Basis(const std::vector<Direction_3> &_axes) :
-    Basis(_axes, Point_3(0, 0, 0)) {}
+Basis::Basis(const std::vector<CgalDirection> &axes) :
+    Basis(axes, CgalPoint(0, 0, 0)) {}
 
-Basis::Basis(const std::vector<Direction_3> &_axes, const Point_3 &_origin) :
-    axes(_axes), origin(_origin) {}
+Basis::Basis(const std::vector<CgalDirection> &axes,
+             const CgalPoint &origin) : axes_(axes), origin_(origin) {}
 
 
-Basis::Basis(const Basis &basis) : axes(basis.axes), origin(basis.origin) {}
+Basis::Basis(const Basis &basis) : axes_(basis.axes_),
+                                   origin_(basis.origin_) {}
 
-Basis::Basis(Basis &&basis) : axes(basis.axes), origin(basis.origin) {}
+Basis::Basis(Basis &&basis) : axes_(basis.axes_),
+                              origin_(basis.origin_) {}
 
 
 Basis &Basis::operator=(Basis &&basis) {
@@ -32,81 +32,81 @@ Basis &Basis::operator=(Basis &&basis) {
   if (&basis == this)
     return *this;
 
-  axes = basis.axes;
-  origin = basis.origin;
+  axes_ = basis.axes_;
+  origin_ = basis.origin_;
   return *this;
 
 }
 
 
-void Basis::transform(const Aff_transformation_3 &aff_transformation_3) {
+void Basis::transform(const CgalTransformation &cgalTransformation) {
 
-  origin = aff_transformation_3(origin);
+  origin_ = cgalTransformation(origin_);
 
-  for (auto &&axis : axes)
-    axis = aff_transformation_3(axis);
+  for (auto &&axis : axes_)
+    axis = cgalTransformation(axis);
 
   double absValue;
-  for (auto &&axis : axes) {
+  for (auto &&axis : axes_) {
 
     absValue = sqrt(axis.dx() * axis.dx() +
                     axis.dy() * axis.dy() +
                     axis.dz() * axis.dz());
 
-    axis = Direction_3(axis.dx() / absValue,
-                       axis.dy() / absValue,
-                       axis.dz() / absValue);
+    axis = CgalDirection(axis.dx() / absValue,
+                         axis.dy() / absValue,
+                         axis.dz() / absValue);
 
   }
 
 }
 
 
-Aff_transformation_3 Basis::generateTransformation() {
+CgalTransformation Basis::generateTransformation() {
 
-  double m00 = axes[0].dx();
-  double m01 = axes[0].dy();
-  double m02 = axes[0].dz();
+  double m00 = axes_[0].dx();
+  double m01 = axes_[0].dy();
+  double m02 = axes_[0].dz();
 
-  double m10 = axes[1].dx();
-  double m11 = axes[1].dy();
-  double m12 = axes[1].dz();
+  double m10 = axes_[1].dx();
+  double m11 = axes_[1].dy();
+  double m12 = axes_[1].dz();
 
-  double m20 = axes[2].dx();
-  double m21 = axes[2].dy();
-  double m22 = axes[2].dz();
+  double m20 = axes_[2].dx();
+  double m21 = axes_[2].dy();
+  double m22 = axes_[2].dz();
 
-  double m03 = origin.x();
-  double m13 = origin.y();
-  double m23 = origin.z();
+  double m03 = origin_.x();
+  double m13 = origin_.y();
+  double m23 = origin_.z();
 
-  return Aff_transformation_3(m00, m01, m02, m03,
-                              m10, m11, m12, m13,
-                              m20, m21, m22, m23);
+  return CgalTransformation(m00, m01, m02, m03,
+                            m10, m11, m12, m13,
+                            m20, m21, m22, m23);
 }
 
 
-void Basis::setOrigin(const Point_3 &_origin) {
-  origin = _origin;
+void Basis::setOrigin(const CgalPoint &origin) {
+  origin_ = origin;
 }
 
-void Basis::setAxes(const std::vector<Direction_3> &_axes) {
-  axes = _axes;
+void Basis::setAxes(const std::vector<CgalDirection> &axes) {
+  axes_ = axes;
 }
 
 
-std::shared_ptr<Point_3> Basis::getOrigin() {
-  return std::make_shared<Point_3>(origin);
+std::shared_ptr<CgalPoint> Basis::getOrigin() {
+  return std::make_shared<CgalPoint>(origin_);
 }
 
-std::shared_ptr<std::vector<Direction_3>> Basis::getAxes() {
-  return std::make_shared<std::vector<Direction_3>>(axes);
+std::shared_ptr<std::vector<CgalDirection>> Basis::getAxes() {
+  return std::make_shared<std::vector<CgalDirection>>(axes_);
 }
 
 
 std::ostream &operator<<(std::ostream &stream, const Basis &basis) {
-  for (auto axes : basis.axes)
+  for (auto axes : basis.axes_)
     stream << axes << std::endl;
-  stream << basis.origin << std::endl;
+  stream << basis.origin_ << std::endl;
   return stream;
 }

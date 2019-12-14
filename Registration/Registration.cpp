@@ -1,8 +1,10 @@
 #include <Registration.h>
 
-
 #include <iomanip>
 
+#include <Geometry/Translation.h>
+#include <Geometry/Rotation.h>
+#include <Geometry/Stretch.h>
 
 Transformations generateTranslationAnaRotationXYZ() {
     Transformations transformations;
@@ -17,7 +19,7 @@ Transformations generateTranslationAnaRotationXYZ() {
 
 Transformations generateStretchingXY() {
     Transformations transformations;
-    transformations.push_back(std::make_shared<StretchingXY>());
+    transformations.push_back(std::make_shared<StretchXY>());
     return transformations;
 }
 
@@ -58,7 +60,7 @@ std::vector<double> makeRegistration(
     ColumnVector upperConstraint(transformations.size());
     for (int i = 0; i < transformations.size(); i++) {
 
-        if (typeid(*transformations[i]).name() == typeid(StretchingXY).name())
+        if (typeid(*transformations[i]).name() == typeid(StretchXY).name())
             searchVector(i) = 1;
         else
             searchVector(i) = 0;
@@ -157,7 +159,7 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
     auto pointsCtCurr = pointsCt;
     regionCt.setPoints(pointsCtCurr.getPoints(), pointsCtCurr.getTomoB());
 
-    std::vector<Aff_transformation_3> aff_transformations;
+    std::vector<CgalTransformation> aff_transformations;
     for (int i = 0; i < transformations.size(); i++)
         aff_transformations.push_back((*transformations[i])(x(i)));
 
@@ -182,7 +184,7 @@ void InvCorrelation::implementResult(const ColumnVector &x) {
 
     regionCt.setPoints(pointsCt.getPoints(), pointsCt.getTomoB());
 
-    std::vector<Aff_transformation_3> aff_transformations;
+    std::vector<CgalTransformation> aff_transformations;
     for (int i = 0; i < transformations.size(); i++)
         aff_transformations.push_back((*transformations[i])(x(i)));
 

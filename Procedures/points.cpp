@@ -4,6 +4,7 @@
 
 #include <Vtp/PointsIO.h>
 #include <Registration.h>
+#include <Geometry/Translation.h>
 
 
 std::shared_ptr<Points> extractSquarePointsCt(Image &image,
@@ -205,16 +206,16 @@ double getCylinderSectorFromCtB(Image &ncCt,
                                 std::shared_ptr<Points> &pointsCt) {
 
   // processVariation(pointsCt_, ncCt,
-  //                  std::make_shared<StretchingXY>(),
+  //                  std::make_shared<StretchXY>(),
   //                  0.007, 21, "cylinder1", false);
   // processVariation(pointsCt_, ncCt,
-  //                  std::make_shared<StretchingXY>(),
+  //                  std::make_shared<StretchXY>(),
   //                  0.0007, 21, "cylinder2", false);
   // processVariation(pointsCt_, ncCt,
-  //                  std::make_shared<StretchingXY>(),
+  //                  std::make_shared<StretchXY>(),
   //                  0.0002, 21, "cylinder3", false);
   // processVariation(pointsCt_, ncCt,
-  //                  std::make_shared<StretchingXY>(),
+  //                  std::make_shared<StretchXY>(),
   //                               0.00015, 21, "cylinder4", false);
 
   // return mult1 * mult2 * mult3 * mult4 - 1;

@@ -14,9 +14,9 @@
 
 
 typedef std::vector<double> Value;
-typedef CGAL::Simple_cartesian<double> Kernel_3;
-typedef Kernel_3::Point_3 Point_3;
-typedef std::vector<Point_3> Points_3;
+typedef CGAL::Simple_cartesian<double> CgalKernel;
+typedef CgalKernel::Point_3 CgalPoint;
+typedef std::vector<CgalPoint> Points_3;
 
 
 /// This class provide access to region of NetCDF library data file.
@@ -63,7 +63,7 @@ public:
    @param[in] point is CGAL point value computation.
    @return value is computed.
   */
-  double computePointValue(Point_3 point);
+  double computePointValue(CgalPoint point);
 
   /**
    Compute value for all array of CGAL points_3.

@@ -2,7 +2,7 @@
 
 
 Points::Points() :
-    Points(std::make_shared<Points_3>(1, Point_3(0, 0, 0)),
+    Points(std::make_shared<Points_3>(1, CgalPoint(0, 0, 0)),
            std::make_shared<Basis>()) {};
 
 Points::Points(std::shared_ptr<Points_3> _points_3) :
@@ -12,14 +12,14 @@ Points::Points(std::shared_ptr<Points_3> _points_3) :
 
 Points::Points(const Bbox_3 &bbox_3) :
     Points(std::make_shared<Points_3>(
-            Points_3{Point_3(bbox_3.xmin(), bbox_3.ymin(), bbox_3.zmin()),
-                     Point_3(bbox_3.xmax(), bbox_3.ymin(), bbox_3.zmin()),
-                     Point_3(bbox_3.xmin(), bbox_3.ymax(), bbox_3.zmin()),
-                     Point_3(bbox_3.xmax(), bbox_3.ymax(), bbox_3.zmin()),
-                     Point_3(bbox_3.xmin(), bbox_3.ymin(), bbox_3.zmax()),
-                     Point_3(bbox_3.xmax(), bbox_3.ymin(), bbox_3.zmax()),
-                     Point_3(bbox_3.xmin(), bbox_3.ymax(), bbox_3.zmax()),
-                     Point_3(bbox_3.xmax(), bbox_3.ymax(), bbox_3.zmax())}),
+            Points_3{CgalPoint(bbox_3.xmin(), bbox_3.ymin(), bbox_3.zmin()),
+                     CgalPoint(bbox_3.xmax(), bbox_3.ymin(), bbox_3.zmin()),
+                     CgalPoint(bbox_3.xmin(), bbox_3.ymax(), bbox_3.zmin()),
+                     CgalPoint(bbox_3.xmax(), bbox_3.ymax(), bbox_3.zmin()),
+                     CgalPoint(bbox_3.xmin(), bbox_3.ymin(), bbox_3.zmax()),
+                     CgalPoint(bbox_3.xmax(), bbox_3.ymin(), bbox_3.zmax()),
+                     CgalPoint(bbox_3.xmin(), bbox_3.ymax(), bbox_3.zmax()),
+                     CgalPoint(bbox_3.xmax(), bbox_3.ymax(), bbox_3.zmax())}),
            std::make_shared<Basis>()) {
     translateBasisToCenter();
 }
@@ -68,7 +68,7 @@ Points &Points::operator=(Points &&points) {
 }
 
 
-void Points::transform(const Aff_transformation_3 &aff_transformation_3) {
+void Points::transform(const CgalTransformation &aff_transformation_3) {
 
     auto basisTransformation = basis->generateTransformation();
     auto basisInverseTransformation = basisTransformation.inverse();
@@ -89,7 +89,7 @@ void Points::transform(const Aff_transformation_3 &aff_transformation_3) {
 }
 
 void Points::transform(
-        const std::vector<Aff_transformation_3> &aff_transformations_3) {
+        const std::vector<CgalTransformation> &aff_transformations_3) {
 
     auto basisTransformation = basis->generateTransformation();
     auto basisInverseTransformation = basisTransformation.inverse();
@@ -112,7 +112,7 @@ void Points::transform(
 }
 
 
-void Points::translateBasis(const Point_3 &point_3) {
+void Points::translateBasis(const CgalPoint &point_3) {
     basis->setOrigin(point_3);
 }
 
@@ -120,7 +120,7 @@ void Points::translateBasisToCenter() {
 
     auto bbox = CGAL::bbox_3(points_3->begin(), points_3->end());
 
-    auto center = Point_3((bbox.xmax() + bbox.xmin()) / 2,
+    auto center = CgalPoint((bbox.xmax() + bbox.xmin()) / 2,
                         (bbox.ymax() + bbox.ymin()) / 2,
                         (bbox.zmax() + bbox.zmin()) / 2);
 
@@ -255,9 +255,9 @@ void Points::createXYSquare(const double &xCenter,
     for (int i = 0; i < nX; i++)
         for (int j = 0; j < nY; j++)
             _points->push_back(
-                Point_3(xInit + xStep * i,
+                CgalPoint(xInit + xStep * i,
                           yInit + yStep * j,
-                        zInit));
+                          zInit));
 
     setPoints(_points);
 
@@ -287,14 +287,14 @@ void Points::createZCylinderSegment(const double &xCylinderBaseCenter,
     for (int i = 0; i < nAngle; i++)
         for (int j = 0; j < nZ; j++)
             _points->push_back(
-                Point_3(xInit + R * cos(angleInit + angleStep * i),
+                CgalPoint(xInit + R * cos(angleInit + angleStep * i),
                           yInit + R * sin(angleInit + angleStep * i),
                           zInit + zStep * j));
 
     setPoints(_points);
 
-    translateBasis(Point_3(xCylinderBaseCenter,
-                           yCylinderBaseCenter,
-                           zCylinderBaseCenter));
+    translateBasis(CgalPoint(xCylinderBaseCenter,
+                             yCylinderBaseCenter,
+                             zCylinderBaseCenter));
 
 }

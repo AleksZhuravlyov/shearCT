@@ -54,7 +54,7 @@ void PointsIO::loadPointsCtFromFile(const std::string &fileName) {
   auto points = std::make_shared<Points_3>();
   for (int i = 0; i < nPoints; i++) {
     auto xyz = pointsVtk->GetPoint(i);
-    points->push_back(Point_3(xyz[0], xyz[1], xyz[2]));
+    points->push_back(CgalPoint(xyz[0], xyz[1], xyz[2]));
   }
 
   pointsCt_->setPoints(points);
@@ -76,15 +76,15 @@ void PointsIO::loadPointsCtFromFile(const std::string &fileName) {
   for (int i = 0; i < 12; i++)
     basisValues.push_back(basisVtk->GetVariantValue(vtkIdType(i)).ToDouble());
 
-  std::vector<Direction_3> axes;
+  std::vector<CgalDirection> axes;
   for (int i = 0; i < 3; i++)
-    axes.push_back(Direction_3(basisValues[i * 3 + 0],
-                               basisValues[i * 3 + 1],
-                               basisValues[i * 3 + 2]));
+    axes.push_back(CgalDirection(basisValues[i * 3 + 0],
+                                 basisValues[i * 3 + 1],
+                                 basisValues[i * 3 + 2]));
 
-  auto origin = Point_3(basisValues[9],
-                        basisValues[10],
-                        basisValues[11]);
+  auto origin = CgalPoint(basisValues[9],
+                          basisValues[10],
+                          basisValues[11]);
 
   pointsCt_->setBasis(std::make_shared<Basis>(Basis(axes, origin)));
 

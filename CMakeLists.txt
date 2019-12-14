@@ -22,8 +22,10 @@ set(SOURCE_CODE main.cpp
         NcOps/Image.cpp
         NcOps/Region.cpp
         Vtp/PointsIO.cpp
-        Geometry/Transformation.cpp
         Geometry/Basis.cpp
+        Geometry/Translation.cpp
+        Geometry/Rotation.cpp
+        Geometry/Stretch.cpp
         Points/Points.cpp
         Registration/Registration.cpp
         Procedures/variation.cpp Procedures/points.cpp

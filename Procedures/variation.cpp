@@ -9,7 +9,8 @@
 #include <Vtp/PointsIO.h>
 #include <NcOps/Image.h>
 #include <Points/Points.h>
-#include <Geometry/Transformation.h>
+#include <Geometry/Translation.h>
+#include <Geometry/Stretch.h>
 
 
 double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
@@ -102,7 +103,7 @@ double processVariation(std::shared_ptr<Points> pointsCt, Image &ncCt,
         _nValues += 1;
 
     if (typeid(decltype(transformation)::element_type).name() ==
-        typeid(StretchingXY).name()) {
+        typeid(StretchXY).name()) {
 
         double valuesStart = 1 - valueWidth / 2;
         double valuesStop = 1 + valueWidth / 2;
