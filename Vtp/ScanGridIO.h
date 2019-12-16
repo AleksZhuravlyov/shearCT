@@ -1,50 +1,50 @@
 /**
  @file
- @brief File for PointsIO class.
- It is header which contains PointsIO class.
+ @brief File for ScanGridIO class.
+ It is header which contains ScanGridIO class.
 */
 
-#ifndef VTP_POINTSIO_H
-#define VTP_POINTSIO_H
+#ifndef VTP_SCANGRIDIO_H
+#define VTP_SCANGRIDIO_H
 
 #include <vector>
 #include <string>
 
-#include <Points/Points.h>
+#include <ScanGrid/ScanGrid.h>
 
 /// This class provides io access for necessary VTK library functionality.
-class PointsIO {
+class ScanGridIO {
 
 public:
 
   /**
    Constructor by default.
   */
-  PointsIO();
+  ScanGridIO();
 
   /**
-   Constructor sets instance of Points class.
-   @param[in] pointsCt is instance of Points class for pointsCt attribute.
+   Constructor sets instance of ScanGrid class.
+   @param[in] scanGrid is instance of ScanGrid class for scanGrid attribute.
   */
-  PointsIO(std::shared_ptr<Points> pointsCt);
+  ScanGridIO(std::shared_ptr<ScanGrid> scanGrid);
 
   /**
    Destructor sets by default.
   */
-  virtual ~PointsIO() {}
+  virtual ~ScanGridIO() {}
 
 
   /**
-   Mutator for pointsCt attribute.
-   @param[in] pointsCt is assigned to _pointsCt attribute.
+   Mutator for scanGrid_ attribute.
+   @param[in] scanGrid is assigned to scanGrid_ attribute.
   */
-  void setPointsCt(std::shared_ptr<Points> pointsCt);
+  void setScanGrid(std::shared_ptr<ScanGrid> scanGrid);
 
   /**
-   Accessor for pointsCt attribute.
+   Accessor for scanGrid_ attribute.
    @return pointsCt attribute.
   */
-  std::shared_ptr<Points> getPointsCt();
+  std::shared_ptr<ScanGrid> getScanGrid();
 
 
   /**
@@ -92,19 +92,19 @@ public:
 
 
 private:
-  /// Set of points_3 of Points type.
-  std::shared_ptr<Points> pointsCt_;
+  /// Set of points of ScanGrid type.
+  std::shared_ptr<ScanGrid> scanGrid_;
 
-  /// Binarity flag for pointsCt files.
+  /// Binarity flag for scanGrid files.
   bool formatIsBinary_;
 
-  /// Names of saved pointsCt files.
-  std::vector<std::string> pointsCtFileNames_;
+  /// Names of saved scanGrid files.
+  std::vector<std::string> scanGridFileNames_;
 
-  /// Descriptions of saved pointsCt files.
-  std::vector<std::string> pointsCtFileDescriptions_;
+  /// Descriptions of saved scanGrid files.
+  std::vector<std::string> scanGridFileDescriptions_;
 
 };
 
 
-#endif // VTP_POINTSIO_H
+#endif // VTP_SCANGRIDIO_H

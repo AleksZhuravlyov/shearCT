@@ -6,12 +6,12 @@
 #include <vector>
 
 #include <NcOps/Image.h>
-#include <Points/Points.h>
-#include <Geometry/Transformation.h>
+#include <ScanGrid/ScanGrid.h>
+#include <Geometry/TransformationFunctor.h>
 
 // using automatic registration
-double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
-                     std::shared_ptr<Transformation> transformation,
+double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
+                     std::shared_ptr<TransformationFunctor> transformationFunctor,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
                      const std::vector<double> &valuesAbsoluteReverse,
@@ -19,8 +19,8 @@ double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
                      const bool &isFilesSaved);
 
 // using manual registration
-double processVariation(std::shared_ptr<Points> pointsCt, Image &ncCt,
-                        std::shared_ptr<Transformation> transformation,
+double processVariation(std::shared_ptr<ScanGrid> pointsCt, Image &ncCt,
+                        std::shared_ptr<TransformationFunctor> transformationFunctor,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
                         const bool &isFilesSaved);

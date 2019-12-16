@@ -1,14 +1,14 @@
 #ifndef GEOMETRY_STRETCH_H
 #define GEOMETRY_STRETCH_H
 
-#include <Geometry/Transformation.h>
+#include <Geometry/TransformationFunctor.h>
 
 
-/// This class is realization of interface Transformation for XY stretching.
-class StretchXY : public Transformation {
+/// This class is realization of interface TransformationFunctor for XY stretching.
+class StretchXY : public TransformationFunctor {
 public:
   StretchXY() {}
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
 

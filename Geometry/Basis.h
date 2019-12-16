@@ -14,10 +14,10 @@
 #include <CGAL/Point_3.h>
 #include <CGAL/Direction_3.h>
 
-typedef CGAL::Simple_cartesian<double> CgalKernel;
-typedef CGAL::Aff_transformation_3<CgalKernel> CgalTransformation;
-typedef CgalKernel::Point_3 CgalPoint;
-typedef CgalKernel::Direction_3 CgalDirection;
+typedef CGAL::Simple_cartesian<double> Kernel;
+typedef CGAL::Aff_transformation_3<Kernel> Transformation;
+typedef Kernel::Point_3 Point;
+typedef Kernel::Direction_3 Direction;
 
 
 /// This class is realisation of orthogonal coordinate system on CGAL library.
@@ -31,24 +31,24 @@ public:
   Basis();
 
   /**
-   Constructor sets the point of basis origin_.
+   Constructor sets the point of basis_ origin_.
    @param[in] origin is the point of base origin_.
   */
-  Basis(const CgalPoint &origin);
+  Basis(const Point &origin);
 
   /**
-   Constructor sets the directions for basis axes_.
-   @param[in] axes is the directions for basis axes_.
+   Constructor sets the directions for basis_ axes_.
+   @param[in] axes is the directions for basis_ axes_.
   */
-  Basis(const std::vector<CgalDirection> &axes);
+  Basis(const std::vector<Direction> &axes);
 
   /**
-   Constructor sets the point of basis origin_ and
-   the directions for basis axes_. It is general constructor.
-   @param[in] axes is the directions for basis axes_.
+   Constructor sets the point of basis_ origin_ and
+   the directions for basis_ axes_. It is general constructor.
+   @param[in] axes is the directions for basis_ axes_.
    @param[in] origin is the point of base origin_.
   */
-  Basis(const std::vector<CgalDirection> &axes, const CgalPoint &origin);
+  Basis(const std::vector<Direction> &axes, const Point &origin);
 
   /**
    Move constructor.
@@ -76,40 +76,40 @@ public:
   Basis &operator=(Basis &&basis);
 
   /**
-   Make cgalTransformation for this basis.
-   @param[in] cgalTransformation acts on this Basis class.
+   Make transformation for this basis_.
+   @param[in] transformation acts on this Basis class.
   */
-  void transform(const CgalTransformation &cgalTransformation);
+  void transform(const Transformation &transformation);
 
   /**
    Generate transformation constructed from this Basis class.
    @return transformation is constructed from this Basis class.
   */
-  CgalTransformation generateTransformation();
+  Transformation generateTransformation();
 
   /**
    Mutator for origin_ attribute.
    @param[in] origin is assigned to origin_ attribute.
   */
-  void setOrigin(const CgalPoint &origin);
+  void setOrigin(const Point &origin);
 
   /**
    Mutator for axes_ attribute.
    @param[in] axes is assigned to axes_ attribute.
   */
-  void setAxes(const std::vector<CgalDirection> &axes);
+  void setAxes(const std::vector<Direction> &axes);
 
   /**
    Accessor for origin_ attribute.
    @return shared pointer of origin_ attribute.
   */
-  std::shared_ptr<CgalPoint> getOrigin();
+  std::shared_ptr<Point> getOrigin();
 
   /**
    Accessor for axes_ attribute.
    @return shared pointer of axes_ attribute.
   */
-  std::shared_ptr<std::vector<CgalDirection>> getAxes();
+  std::shared_ptr<std::vector<Direction>> getAxes();
 
   /**
    Overload insertion operator.
@@ -121,9 +121,9 @@ public:
 
 private:
 
-  CgalPoint origin_; ///< The origin_ point of this basis.
+  Point origin_; ///< The origin_ point of this basis_.
 
-  std::vector<CgalDirection> axes_; ///< The directions of axes_ of this basis.
+  std::vector<Direction> axes_; ///< The directions of axes_ of this basis_.
 
 };
 

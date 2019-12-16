@@ -4,31 +4,31 @@
  It is header which contains Transformation class and its inheritances.
 */
 
-#ifndef GEOMETRY_TRANSFORMATION_H
-#define GEOMETRY_TRANSFORMATION_H
+#ifndef GEOMETRY_TRANSFORMATIONFUCTOR_H
+#define GEOMETRY_TRANSFORMATIONFUCTOR_H
 
 #include <CGAL/Simple_cartesian.h>
 #include <CGAL/Aff_transformation_3.h>
 
 
-typedef CGAL::Simple_cartesian<double> CgalKernel;
-typedef CGAL::Aff_transformation_3<CgalKernel> CgalTransformation;
+typedef CGAL::Simple_cartesian<double> Kernel;
+typedef CGAL::Aff_transformation_3<Kernel> Transformation;
 
 
 /// This class is interface for translations of CGAL library.
-class Transformation {
+class TransformationFunctor {
 
 public:
 
   /**
    Constructor sets by default.
   */
-  Transformation() = default;
+  TransformationFunctor() = default;
 
   /**
    Constructor sets by default.
   */
-  virtual ~Transformation() {}
+  virtual ~TransformationFunctor() {}
 
   /**
    Pure virtual overload function call operator.
@@ -36,9 +36,9 @@ public:
    @param[in] value is parameter for transformation.
    @return transformation is constructed by this method.
   */
-  virtual CgalTransformation operator()(const double &value) = 0;
+  virtual Transformation operator()(const double &value) = 0;
 
 };
 
 
-#endif // GEOMETRY_TRANSFORMATION_H
+#endif // GEOMETRY_TRANSFORMATIONFUCTOR_H

@@ -146,7 +146,7 @@ void Image::setRegion(const std::vector<size_t> &start,
 }
 
 
-void Image::setRegion(const Bbox_3 &bbox) {
+void Image::setRegion(const Bbox &bbox) {
 
   auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 3;
   auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 3;
@@ -167,7 +167,7 @@ void Image::setRegion(const Bbox_3 &bbox) {
 
   if (errorMessage != "") {
 
-    std::cerr << "Points are out range for " <<
+    std::cerr << "ScanGrid are out range for " <<
               errorMessage << std::endl;
 
     std::exit(EXIT_FAILURE);

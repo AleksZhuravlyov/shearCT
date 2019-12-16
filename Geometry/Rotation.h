@@ -1,31 +1,31 @@
 #ifndef GEOMETRY_ROTATION_H
 #define GEOMETRY_ROTATION_H
 
-#include <Geometry/Transformation.h>
+#include <Geometry/TransformationFunctor.h>
 
 
-/// This class is realization of interface Transformation for X rotation.
-class RotationX : public Transformation {
+/// This class is realization of interface TransformationFunctor for X rotation.
+class RotationX : public TransformationFunctor {
 public:
   RotationX() {}
 
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
-/// This class is realization of interface Transformation for Y rotation.
-class RotationY : public Transformation {
+/// This class is realization of interface TransformationFunctor for Y rotation.
+class RotationY : public TransformationFunctor {
 public:
   RotationY() {}
 
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
-/// This class is realization of interface Transformation for Z rotation.
-class RotationZ : public Transformation {
+/// This class is realization of interface TransformationFunctor for Z rotation.
+class RotationZ : public TransformationFunctor {
 public:
   RotationZ() {}
 
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
 

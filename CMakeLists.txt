@@ -16,20 +16,20 @@ find_package(CGAL)
 
 find_package(dlib REQUIRED)
 
-find_package(Boost REQUIRED COMPONENTS thread system)
+find_package(Boost REQUIRED COMPONENTS thread)
 
 set(SOURCE_CODE main.cpp
         NcOps/Image.cpp
         NcOps/Region.cpp
-        Vtp/PointsIO.cpp
+        Vtp/ScanGridIO.cpp
         Geometry/Basis.cpp
         Geometry/Translation.cpp
         Geometry/Rotation.cpp
         Geometry/Stretch.cpp
-        Points/Points.cpp
+        ScanGrid/ScanGrid.cpp
         Registration/Registration.cpp
-        Procedures/variation.cpp Procedures/points.cpp
-        Procedures/points.cpp Procedures/demoSchema.cpp
+        Procedures/variation.cpp Procedures/ScanGridUtilities.cpp
+        Procedures/ScanGridUtilities.cpp Procedures/demoSchema.cpp
         Procedures/stretchZvsShift.cpp
         Procedures/demoVideo.cpp Procedures/DemoStretchZvsShift.cpp)
 

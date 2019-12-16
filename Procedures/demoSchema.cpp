@@ -4,10 +4,10 @@
 #include <string>
 
 #include <NcOps/Image.h>
-#include <Vtp/PointsIO.h>
+#include <Vtp/ScanGridIO.h>
 #include <Geometry/Basis.h>
 
-#include <points.h>
+#include <ScanGridUtilities.h>
 
 void demoSchema() {
 
@@ -16,7 +16,7 @@ void demoSchema() {
 
   Image imageA("/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc");
   Image imageB("/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc");
-  PointsIO vtkPointsCt;
+  ScanGridIO vtkPointsCt;
 
   std::string baseSquareFromCtAName = "baseSquareFromCtA.vtp";
   std::string baseSquareFromCtBName = "baseSquareFromCtB.vtp";
@@ -49,13 +49,13 @@ void demoSchema() {
                                         20,
                                         20,
                                         100, 100);
-  vtkPointsCt.setPointsCt(squareCt);
+  vtkPointsCt.setScanGrid(squareCt);
   vtkPointsCt.savePointsCtToFile(baseSquareFromCtAName);
 
   // Read base square from file
   // auto squareCt = getPointCtFromFile(baseSquareFromCtAName);
 
-  /// Write CT A value from top square into tomoBuffer of squareCt
+  /// Write CT A value from top square into buffer_ of squareCt
 
   getBaseSquareFromCtAWithTop(imageA, shiftZ, squareCt);
 
@@ -63,7 +63,7 @@ void demoSchema() {
 
   getBaseSquareFromCtB(imageB, squareCt, 1.e-7);
   // Save base square from CT B into file
-  vtkPointsCt.setPointsCt(squareCt);
+  vtkPointsCt.setScanGrid(squareCt);
   vtkPointsCt.savePointsCtToFile(baseSquareFromCtBName);
 
   // Read base square from CT B from file
@@ -101,8 +101,8 @@ void demoSchema() {
 
   // Take CT A base square from file
 
-  auto baseCtA = std::make_shared<Points>();
-  vtkPointsCt.setPointsCt(baseCtA);
+  auto baseCtA = std::make_shared<ScanGrid>();
+  vtkPointsCt.setScanGrid(baseCtA);
   vtkPointsCt.loadPointsCtFromFile(baseSquareFromCtAName);
 
   // auto baseCtA = getPointCtFromFile(baseSquareFromCtAName);
@@ -110,16 +110,16 @@ void demoSchema() {
   auto cylinderCt = getCylinderSectorFromCtAAndBaseSquare(imageA, baseCtA);
 
   // Save cylinder sector into file
-  vtkPointsCt.setPointsCt(cylinderCt);
+  vtkPointsCt.setScanGrid(cylinderCt);
   vtkPointsCt.savePointsCtToFile(cylinderSectorFromCtAAndBaseSquareName);
   // Save nc region of cylinder sector into file
   // imageA.saveRegion("cylinder.nc");
 
-  /// Translation of cylinder sector to CT B and basis of base square CT B
+  /// Translation of cylinder sector to CT B and basis_ of base square CT B
 
   // Take CT B base square from file
-  auto baseCtB = std::make_shared<Points>();
-  vtkPointsCt.setPointsCt(baseCtB);
+  auto baseCtB = std::make_shared<ScanGrid>();
+  vtkPointsCt.setScanGrid(baseCtB);
   vtkPointsCt.loadPointsCtFromFile(baseSquareFromCtBName);
 
 
@@ -130,7 +130,7 @@ void demoSchema() {
   cylinderCt->transform(transformationB);
 
   // Save cylinder sector into file
-  vtkPointsCt.setPointsCt(cylinderCt);
+  vtkPointsCt.setScanGrid(cylinderCt);
   vtkPointsCt.savePointsCtToFile(cylinderSectorFromCtBAndBaseSquareName);
 
   // Demonstration of transformation validity

@@ -9,9 +9,9 @@ int main(int nArg, char** args) {
 
     demoSchema();
 
-    demoVideo();
+    // demoVideo();
 
-    demoStretchZvsShift();
+    // demoStretchZvsShift();
 
     return EXIT_SUCCESS;
 

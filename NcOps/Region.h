@@ -14,9 +14,9 @@
 
 
 typedef std::vector<double> Value;
-typedef CGAL::Simple_cartesian<double> CgalKernel;
-typedef CgalKernel::Point_3 CgalPoint;
-typedef std::vector<CgalPoint> Points_3;
+typedef CGAL::Simple_cartesian<double> Kernel;
+typedef Kernel::Point_3 Point;
+typedef std::vector<Point> Points;
 
 
 /// This class provide access to region of NetCDF library data file.
@@ -50,11 +50,11 @@ public:
 
 
   /**
-   Mutator for points_3 and pointsValue attributes.
-   @param[in] _points is assigned to points_3 attribute.
+   Mutator for cgalPoints_ and pointsValue attributes.
+   @param[in] _points is assigned to cgalPoints_ attribute.
    @param[in] _pointsValue is assigned to pointsValue attribute.
   */
-  void setPoints(std::shared_ptr<Points_3> _points,
+  void setPoints(std::shared_ptr<Points> _points,
                  std::shared_ptr<std::vector<double>> _pointsValue);
 
 
@@ -63,11 +63,11 @@ public:
    @param[in] point is CGAL point value computation.
    @return value is computed.
   */
-  double computePointValue(CgalPoint point);
+  double computePointValue(Point point);
 
   /**
-   Compute value for all array of CGAL points_3.
-   Points_3 are taken from the points_3 attribute.
+   Compute value for all array of CGAL cgalPoints_.
+   Points are taken from the cgalPoints_ attribute.
   */
   void computePointsValue();
 
@@ -79,9 +79,9 @@ public:
 
 private:
 
-  std::shared_ptr<Points_3> points; ///< CGAL points_3 for data extraction.
+  std::shared_ptr<Points> points; ///< CGAL cgalPoints_ for data extraction.
 
-  std::shared_ptr<std::vector<double>> pointsValue; ///< CGAL points_3 value.
+  std::shared_ptr<std::vector<double>> pointsValue; ///< CGAL cgalPoints_ value.
 
 
   double xInit; ///< Initial x of region nc data.

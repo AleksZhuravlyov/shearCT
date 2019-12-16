@@ -6,15 +6,15 @@
 #include <StringAndNumber.h>
 #include <gnuplot.h>
 
-#include <Vtp/PointsIO.h>
+#include <Vtp/ScanGridIO.h>
 #include <NcOps/Image.h>
-#include <Points/Points.h>
+#include <ScanGrid/ScanGrid.h>
 #include <Geometry/Translation.h>
 #include <Geometry/Stretch.h>
 
 
-double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
-                     std::shared_ptr<Transformation> transformation,
+double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
+                     std::shared_ptr<TransformationFunctor> transformationFunctor,
                      const std::vector<double> &valuesRelative,
                      const std::vector<double> &valuesAbsolute,
                      const std::vector<double> &valuesAbsoluteReverse,
@@ -23,28 +23,28 @@ double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
 
     std::vector<double> correlations;
 
-    auto vtpCt = PointsIO(pointsCt);
+    auto vtpCt = ScanGridIO(pointsCt);
 
     for (int i = 0; i < valuesRelative.size(); i++) {
 
-        pointsCt->transform((*transformation)(valuesRelative[i]));
+        pointsCt->transform((*transformationFunctor)(valuesRelative[i]));
         regionCt.computePointsValue();
         pointsCt->computeResult();
         correlations.push_back(pointsCt->computePearsonCorrelation());
 
         if (isFilesSaved)
             vtpCt.savePointsCtToFile(
-                    fileNamesPrefix + "_" +
-                    typeid(decltype(transformation)::element_type).name() +
-                    toString(valuesAbsolute[i]) + ".vtp",
+                fileNamesPrefix + "_" +
+                typeid(decltype(transformationFunctor)::element_type).name() +
+                toString(valuesAbsolute[i]) + ".vtp",
                     toString(valuesAbsolute[i]));
 
     }
 
     if (isFilesSaved)
         vtpCt.saveFilesCollectionToFile(
-                fileNamesPrefix + "_" +
-                typeid(decltype(transformation)::element_type).name() + ".pvd");
+            fileNamesPrefix + "_" +
+            typeid(decltype(transformationFunctor)::element_type).name() + ".pvd");
 
 
     int indMaxCorrelation = 0;
@@ -56,14 +56,14 @@ double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
             indMaxCorrelation = i;
         }
 
-    pointsCt->transform((*transformation)(valuesAbsoluteReverse.back()));
-    pointsCt->transform((*transformation)(valuesAbsolute[indMaxCorrelation]));
+    pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
+    pointsCt->transform((*transformationFunctor)(valuesAbsolute[indMaxCorrelation]));
     regionCt.computePointsValue();
     pointsCt->computeResult();
 
 
     std::string plotLine =
-            "plot \"-\" using 1:2 with points_3 pt \"*\" notitle";
+            "plot \"-\" using 1:2 with cgalPoints_ pt \"*\" notitle";
     /*std::string plotLine =
             "plot \"-\" using 1:2 with linespoint lw 2 pt 8 notitle";*/
 
@@ -75,7 +75,7 @@ double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
     GnuplotPipe gp;
     gp.sendLine("set title '" +
                 fileNamesPrefix + " " +
-                typeid(decltype(transformation)::element_type).name() +
+                typeid(decltype(transformationFunctor)::element_type).name() +
                 ": max " + toString(valuesAbsolute[indMaxCorrelation]) + "'");
     gp.sendLine("set term dumb");
     //set term tikz latex size 17.9,6
@@ -88,8 +88,8 @@ double variatePoints(std::shared_ptr<Points> pointsCt, Region &regionCt,
 }
 
 
-double processVariation(std::shared_ptr<Points> pointsCt, Image &ncCt,
-                        std::shared_ptr<Transformation> transformation,
+double processVariation(std::shared_ptr<ScanGrid> pointsCt, Image &ncCt,
+                        std::shared_ptr<TransformationFunctor> transformationFunctor,
                         const double &valueWidth, const int &nValues,
                         const std::string &fileNamesPrefix,
                         const bool &isFilesSaved) {
@@ -102,7 +102,7 @@ double processVariation(std::shared_ptr<Points> pointsCt, Image &ncCt,
     if (nValues % 2 == 0)
         _nValues += 1;
 
-    if (typeid(decltype(transformation)::element_type).name() ==
+    if (typeid(decltype(transformationFunctor)::element_type).name() ==
         typeid(StretchXY).name()) {
 
         double valuesStart = 1 - valueWidth / 2;
@@ -137,19 +137,19 @@ double processVariation(std::shared_ptr<Points> pointsCt, Image &ncCt,
     }
 
 
-    pointsCt->transform((*transformation)(valuesAbsolute.front()));
+    pointsCt->transform((*transformationFunctor)(valuesAbsolute.front()));
     auto bBoxFront = pointsCt->generateBbox();
-    pointsCt->transform((*transformation)(valuesAbsoluteReverse.front()));
+    pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.front()));
 
-    pointsCt->transform((*transformation)(valuesAbsolute.back()));
+    pointsCt->transform((*transformationFunctor)(valuesAbsolute.back()));
     auto bBoxBack = pointsCt->generateBbox();
-    pointsCt->transform((*transformation)(valuesAbsoluteReverse.back()));
+    pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
 
     ncCt.setRegion(bBoxFront + bBoxBack);
     ncCt.region.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
 
     auto value = variatePoints(pointsCt, ncCt.region,
-                               transformation,
+                               transformationFunctor,
                                valuesRelative,
                                valuesAbsolute,
                                valuesAbsoluteReverse,

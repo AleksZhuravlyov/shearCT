@@ -27,14 +27,14 @@ void Region::initiate(const std::vector<size_t> &_start,
 }
 
 
-void Region::setPoints(std::shared_ptr<Points_3> _points,
+void Region::setPoints(std::shared_ptr<Points> _points,
                        std::shared_ptr<std::vector<double>> _pointsValue) {
   points = _points;
   pointsValue = _pointsValue;
 }
 
 
-double Region::computePointValue(CgalPoint point) {
+double Region::computePointValue(Point point) {
 
   auto x = point.x();
   auto y = point.y();

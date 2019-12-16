@@ -4,10 +4,10 @@
 #include <vector>
 #include <string>
 #include <iomanip>
-#include <Points/Points.h>
+#include <ScanGrid/ScanGrid.h>
 #include <NcOps/Image.h>
-#include <Geometry/Transformation.h>
-#include <Vtp/PointsIO.h>
+#include <Geometry/TransformationFunctor.h>
+#include <Vtp/ScanGridIO.h>
 #include <dlib/optimization.h>
 #include <dlib/global_optimization.h>
 
@@ -16,14 +16,14 @@
 
 typedef dlib::matrix<double, 0, 1> ColumnVector;
 
-typedef std::vector<std::shared_ptr<Transformation>> Transformations;
+typedef std::vector<std::shared_ptr<TransformationFunctor>> Transformations;
 
 Transformations generateTranslationAnaRotationXYZ();
 
 Transformations generateStretchingXY();
 
 std::vector<double> makeRegistration(
-        Image &ncCt, std::shared_ptr<Points> &pointsCt,
+        Image &ncCt, std::shared_ptr<ScanGrid> &pointsCt,
         Transformations &transformations,
         const double &accuracy,
         const std::vector<double> &constraintsMin,
@@ -31,22 +31,22 @@ std::vector<double> makeRegistration(
         const std::string &fileNamesPrefix,
         const bool &isFilesSaved);
 
-Bbox_3 calculateGeneralBbox(std::shared_ptr<Points> &pointsCt,
-                            const Transformations &transformations,
-                            const std::vector<double> &constraintsMin,
-                            const std::vector<double> &constraintsMax);
+Bbox calculateGeneralBbox(std::shared_ptr<ScanGrid> &pointsCt,
+                          const Transformations &transformations,
+                          const std::vector<double> &constraintsMin,
+                          const std::vector<double> &constraintsMax);
 
 class InvCorrelation {
 
 public:
 
     InvCorrelation(Transformations &_transformations,
-                   Points &_pointsCt,
+                   ScanGrid &_pointsCt,
                    Region &_regionCt,
                    const std::string &_fileNamesPrefix,
                    const bool &_isFilesSaved,
                    int &_iteration,
-                   PointsIO &_vtpCt);
+                   ScanGridIO &_vtpCt);
 
     virtual ~InvCorrelation() = default;
 
@@ -54,7 +54,7 @@ public:
 
     Transformations &transformations;
 
-    Points &pointsCt;
+    ScanGrid &pointsCt;
 
     Region &regionCt;
 
@@ -64,7 +64,7 @@ public:
 
     int &iteration;
 
-    PointsIO &vtpCt;
+    ScanGridIO &vtpCt;
 
 
     void implementResult(const ColumnVector &x);

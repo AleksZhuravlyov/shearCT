@@ -4,10 +4,10 @@
 #include <string>
 
 #include <NcOps/Image.h>
-#include <Vtp/PointsIO.h>
+#include <Vtp/ScanGridIO.h>
 #include <Geometry/Basis.h>
 
-#include <points.h>
+#include <ScanGridUtilities.h>
 
 double stretchZVsShift(const double &accuracy,
                        const double &shiftZ,
@@ -23,7 +23,7 @@ double stretchZVsShift(const double &accuracy,
 
     Image ncCtA(ncAFileName);
     Image ncCtB(ncBFileName);
-    PointsIO vtpCt;
+    ScanGridIO vtpCt;
 
 
     // Generate base square from CT A
@@ -34,9 +34,9 @@ double stretchZVsShift(const double &accuracy,
                                           xWidthVoxel,
                                           yWidthVoxel,
                                           nX, nY);
-    vtpCt.setPointsCt(squareCt);
+    vtpCt.setScanGrid(squareCt);
 
-    // Write CT A value from top square into tomoBuffer of squareCt
+    // Write CT A value from top square into buffer_ of squareCt
     getBaseSquareFromCtAWithTop(ncCtA, shiftZ, squareCt);
 
     // Find base square from CT B

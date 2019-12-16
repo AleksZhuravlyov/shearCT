@@ -25,7 +25,7 @@ Transformations generateStretchingXY() {
 
 
 std::vector<double> makeRegistration(
-        Image &ncCt, std::shared_ptr<Points> &pointsCt,
+        Image &ncCt, std::shared_ptr<ScanGrid> &pointsCt,
         Transformations &transformations,
         const double &accuracy,
         const std::vector<double> &constraintsMin,
@@ -38,7 +38,7 @@ std::vector<double> makeRegistration(
 
     ncCt.setRegion(bBoxGeneral);
     int iteration = -1;
-    PointsIO vtpCt;
+    ScanGridIO vtpCt;
 
 
     InvCorrelation invCorrelation(
@@ -94,14 +94,14 @@ std::vector<double> makeRegistration(
 }
 
 
-Bbox_3 calculateGeneralBbox(std::shared_ptr<Points> &pointsCt,
-                            const Transformations &transformations,
-                            const std::vector<double> &constraintsMin,
-                            const std::vector<double> &constraintsMax) {
+Bbox calculateGeneralBbox(std::shared_ptr<ScanGrid> &pointsCt,
+                          const Transformations &transformations,
+                          const std::vector<double> &constraintsMin,
+                          const std::vector<double> &constraintsMax) {
 
     auto bBoxIni = pointsCt->generateBbox();
-    std::vector<Bbox_3> bBoxesRotation;
-    auto pointsCtBboxIni = Points(bBoxIni);
+    std::vector<Bbox> bBoxesRotation;
+    auto pointsCtBboxIni = ScanGrid(bBoxIni);
 
     for (int i = 0; i < transformations.size(); i++)
 
@@ -124,8 +124,8 @@ Bbox_3 calculateGeneralBbox(std::shared_ptr<Points> &pointsCt,
         bBoxRotation += bBox;
 
 
-    std::vector<Bbox_3> bBoxesTranslation;
-    auto pointsCtBboxRotation = Points(bBoxRotation);
+    std::vector<Bbox> bBoxesTranslation;
+    auto pointsCtBboxRotation = ScanGrid(bBoxRotation);
 
     for (int i = 0; i < transformations.size(); i++)
 
@@ -159,7 +159,7 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
     auto pointsCtCurr = pointsCt;
     regionCt.setPoints(pointsCtCurr.getPoints(), pointsCtCurr.getTomoB());
 
-    std::vector<CgalTransformation> aff_transformations;
+    std::vector<Transformation> aff_transformations;
     for (int i = 0; i < transformations.size(); i++)
         aff_transformations.push_back((*transformations[i])(x(i)));
 
@@ -168,7 +168,7 @@ double InvCorrelation::operator()(const ColumnVector &x) const {
     pointsCtCurr.computeResult();
 
     if (isFilesSaved) {
-        vtpCt.setPointsCt(std::make_shared<Points>(pointsCtCurr));
+        vtpCt.setScanGrid(std::make_shared<ScanGrid>(pointsCtCurr));
         vtpCt.savePointsCtToFile(fileNamesPrefix + "_" + toString(iteration) +
                                  ".vtp", toString(iteration));
     }
@@ -184,7 +184,7 @@ void InvCorrelation::implementResult(const ColumnVector &x) {
 
     regionCt.setPoints(pointsCt.getPoints(), pointsCt.getTomoB());
 
-    std::vector<CgalTransformation> aff_transformations;
+    std::vector<Transformation> aff_transformations;
     for (int i = 0; i < transformations.size(); i++)
         aff_transformations.push_back((*transformations[i])(x(i)));
 
@@ -197,12 +197,12 @@ void InvCorrelation::implementResult(const ColumnVector &x) {
 
 
 InvCorrelation::InvCorrelation(Transformations &_transformations,
-                               Points &_pointsCt,
+                               ScanGrid &_pointsCt,
                                Region &_regionCt,
                                const std::string &_fileNamesPrefix,
                                const bool &_isFilesSaved,
                                int &_iteration,
-                               PointsIO &_vtpCt) :
+                               ScanGridIO &_vtpCt) :
         transformations(_transformations),
         pointsCt(_pointsCt),
         regionCt(_regionCt),

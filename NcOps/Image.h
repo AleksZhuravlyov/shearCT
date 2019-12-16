@@ -17,7 +17,7 @@
 #include <CGAL/Bbox_3.h>
 
 
-typedef CGAL::Bbox_3 Bbox_3;
+typedef CGAL::Bbox_3 Bbox;
 
 
 /// This struct represents dims of NetCDF library.
@@ -153,7 +153,7 @@ public:
      the regionCt attribute and computes sate of region attribute.
      @param[in] bbox is CGAL library boundary box in terms of meters.
     */
-    void setRegion(const Bbox_3 &bbox);
+    void setRegion(const Bbox &bbox);
 
     /**
      Save region attribute as nc file.

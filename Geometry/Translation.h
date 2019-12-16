@@ -1,28 +1,28 @@
 #ifndef GEOMETRY_TRANSLATION_H
 #define GEOMETRY_TRANSLATION_H
 
-#include <Geometry/Transformation.h>
+#include <Geometry/TransformationFunctor.h>
 
 
-/// This class is realization of interface Transformation for X translation.
-class TranslationX : public Transformation {
+/// This class is realization of interface TransformationFunctor for X translation.
+class TranslationX : public TransformationFunctor {
 public:
   TranslationX() {}
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
-/// This class is realization of interface Transformation for Y translation.
-class TranslationY : public Transformation {
+/// This class is realization of interface TransformationFunctor for Y translation.
+class TranslationY : public TransformationFunctor {
 public:
   TranslationY() {}
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
-/// This class is realization of interface Transformation for Z translation.
-class TranslationZ : public Transformation {
+/// This class is realization of interface TransformationFunctor for Z translation.
+class TranslationZ : public TransformationFunctor {
 public:
   TranslationZ() {}
-  virtual CgalTransformation operator()(const double &value) override final;
+  virtual Transformation operator()(const double &value) override final;
 };
 
 
