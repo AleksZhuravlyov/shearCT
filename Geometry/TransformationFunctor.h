@@ -1,7 +1,7 @@
 /**
  @file
- @brief File for Transformation interface and its realization.
- It is header which contains Transformation class and its inheritances.
+ @brief File for TransformationFunctor class which is interface.
+ It is header which contains TransformationFunctor class.
 */
 
 #ifndef GEOMETRY_TRANSFORMATIONFUCTOR_H
@@ -15,24 +15,24 @@ typedef CGAL::Simple_cartesian<double> Kernel;
 typedef CGAL::Aff_transformation_3<Kernel> Transformation;
 
 
-/// This class is interface for translations of CGAL library.
+/// This class is interface for translations functor.
 class TransformationFunctor {
 
 public:
 
   /**
-   Constructor sets by default.
+   Constructor is set by default.
   */
   TransformationFunctor() = default;
 
   /**
-   Constructor sets by default.
+   Destructor is set by default.
   */
   virtual ~TransformationFunctor() {}
 
   /**
    Pure virtual overload function call operator.
-   This method constructs CGAL transformation.
+   This method constructs simple transformation.
    @param[in] value is parameter for transformation.
    @return transformation is constructed by this method.
   */

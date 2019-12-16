@@ -3,21 +3,25 @@
 #include <cmath>
 
 
-Basis::Basis() : Basis({Direction(1, 0, 0),
-                        Direction(0, 1, 0),
-                        Direction(0, 0, 1)},
-                       Point(0, 0, 0)) {}
+Basis::Basis() :
+    Basis({Direction(1, 0, 0),
+           Direction(0, 1, 0),
+           Direction(0, 0, 1)},
+          Point(0, 0, 0)) {}
 
-Basis::Basis(const Point &origin) : Basis({Direction(1, 0, 0),
-                                           Direction(0, 1, 0),
-                                           Direction(0, 0, 1)},
-                                          origin) {}
+Basis::Basis(const Point &origin) :
+    Basis({Direction(1, 0, 0),
+           Direction(0, 1, 0),
+           Direction(0, 0, 1)},
+          origin) {}
 
 Basis::Basis(const std::vector<Direction> &axes) :
-    Basis(axes, Point(0, 0, 0)) {}
+    Basis(axes,
+          Point(0, 0, 0)) {}
 
-Basis::Basis(const std::vector<Direction> &axes,
-             const Point &origin) : axes_(axes), origin_(origin) {}
+Basis::Basis(const std::vector<Direction> &axes, const Point &origin) :
+    axes_(axes),
+    origin_(origin) {}
 
 
 Basis::Basis(const Basis &basis) : axes_(basis.axes_),
@@ -54,13 +58,12 @@ void Basis::transform(const Transformation &transformation) {
                     axis.dz() * axis.dz());
 
     axis = Direction(axis.dx() / absValue,
-                         axis.dy() / absValue,
-                         axis.dz() / absValue);
+                     axis.dy() / absValue,
+                     axis.dz() / absValue);
 
   }
 
 }
-
 
 Transformation Basis::generateTransformation() {
 
