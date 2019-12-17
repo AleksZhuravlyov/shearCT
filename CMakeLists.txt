@@ -7,31 +7,35 @@ set(POJECT_NAME shearCT)
 project(${POJECT_NAME})
 
 find_package(netCDF)
-
 find_package(VTK REQUIRED)
-
 find_package(pugixml)
-
 find_package(CGAL)
-
 find_package(dlib REQUIRED)
-
 find_package(Boost REQUIRED COMPONENTS thread)
 
 set(SOURCE_CODE main.cpp
+
         NcOps/Image.cpp
         NcOps/Region.cpp
+
         Vtp/ScanGridIO.cpp
+
         Geometry/Basis.cpp
         Geometry/Translation.cpp
         Geometry/Rotation.cpp
         Geometry/Stretch.cpp
+
         ScanGrid/ScanGrid.cpp
+
         Registration/Registration.cpp
-        Procedures/variation.cpp Procedures/ScanGridUtilities.cpp
-        Procedures/ScanGridUtilities.cpp Procedures/demoSchema.cpp
-        Procedures/stretchZvsShift.cpp
-        Procedures/demoVideo.cpp Procedures/DemoStretchZvsShift.cpp)
+
+        Procedures/variation.cpp
+        Procedures/ScanGridUtilities.cpp
+
+        Procedures/demoSchema.cpp
+        Procedures/demoVideo.cpp
+        Procedures/DemoStretchZvsShift.cpp
+        Procedures/stretchZvsShift.cpp)
 
 include_directories(Registration)
 include_directories(Procedures)

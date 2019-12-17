@@ -4,8 +4,8 @@
  It is header which contains Region class.
 */
 
-#ifndef NETCDF_REGIONCT_H
-#define NETCDF_REGIONCT_H
+#ifndef NCOPS_REGIONCT_H
+#define NCOPS_REGIONCT_H
 
 #include <vector>
 
@@ -13,13 +13,12 @@
 #include <CGAL/Point_3.h>
 
 
-typedef std::vector<double> Value;
 typedef CGAL::Simple_cartesian<double> Kernel;
 typedef Kernel::Point_3 Point;
 typedef std::vector<Point> Points;
 
 
-/// This class provide access to region of NetCDF library data file.
+/// This class provide access to region of NetCDF nc data.
 class Region {
 
 public:
@@ -37,67 +36,66 @@ public:
   /**
    Initiate the state of this class. Method sets start and width attributes
    and defines sizes of arrays.
-   @param[in] _start is start point of RegionCt in terms of voxels.
-   @param[in] _width is widths of RegionCt in terms of voxels.
+   @param[in] _start is start point for region in terms of voxels.
+   @param[in] _width is width for region in terms of voxels.
   */
   void initiate(const std::vector<size_t> &_start,
                 const std::vector<size_t> &_width);
 
   std::vector<size_t> start; ///< Start point of region in terms of voxels.
-  std::vector<size_t> width; ///< Widths of region in terms of voxels.
+  std::vector<size_t> width; ///< Width of region in terms of voxels.
   std::vector<std::vector<float>> dimArrays; ///< Axes X, Y and Z of region.
-  std::vector<short> value; ///< Region array of general nc value.
+  std::vector<short> value; ///< Value array of region.
 
 
   /**
-   Mutator for cgalPoints_ and pointsValue attributes.
-   @param[in] _points is assigned to cgalPoints_ attribute.
-   @param[in] _pointsValue is assigned to pointsValue attribute.
+   Mutator for points_ and pointsValue_ attributes.
+   @param[in] points is assigned to points_ attribute.
+   @param[in] pointsValue is assigned to pointsValue_ attribute.
   */
-  void setPoints(std::shared_ptr<Points> _points,
-                 std::shared_ptr<std::vector<double>> _pointsValue);
+  void setPoints(std::shared_ptr<Points> points,
+                 std::shared_ptr<std::vector<double>> pointsValue);
 
 
   /**
    Compute value for one point.
-   @param[in] point is CGAL point value computation.
+   @param[in] point is point for value computation.
    @return value is computed.
   */
   double computePointValue(Point point);
 
   /**
-   Compute value for all array of CGAL cgalPoints_.
-   Points are taken from the cgalPoints_ attribute.
+   Compute value for points_.
   */
   void computePointsValue();
 
   /**
-   Compute xInit, yInit, zInit, xStep, yStep and zStep attribute.
+   Compute xInit_, yInit_, zInit_, xStep_, yStep_ and zStep_ attributes.
   */
   void computeInitsAndSteps();
 
 
 private:
 
-  std::shared_ptr<Points> points; ///< CGAL cgalPoints_ for data extraction.
+  std::shared_ptr<Points> points_; ///< Points for data extraction.
 
-  std::shared_ptr<std::vector<double>> pointsValue; ///< CGAL cgalPoints_ value.
-
-
-  double xInit; ///< Initial x of region nc data.
-
-  double yInit; ///< Initial y of region nc data.
-
-  double zInit; ///< Initial z of region nc data.
+  std::shared_ptr<std::vector<double>> pointsValue_; ///< Points value.
 
 
-  double xStep; ///< Step x of region nc data.
+  double xInit_; ///< Initial x of region nc data.
 
-  double yStep; ///< Step y of region nc data.
+  double yInit_; ///< Initial y of region nc data.
 
-  double zStep; ///< Step z of region nc data.
+  double zInit_; ///< Initial z of region nc data.
+
+
+  double xStep_; ///< Step x of region nc data.
+
+  double yStep_; ///< Step y of region nc data.
+
+  double zStep_; ///< Step z of region nc data.
 
 };
 
 
-#endif // NETCDF_REGIONCT_H
+#endif // NCOPS_REGIONCT_H

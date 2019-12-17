@@ -24,13 +24,14 @@ void Region::initiate(const std::vector<size_t> &_start,
 
     value.resize(width[0] * width[1] * width[2]);
   }
+
 }
 
 
-void Region::setPoints(std::shared_ptr<Points> _points,
-                       std::shared_ptr<std::vector<double>> _pointsValue) {
-  points = _points;
-  pointsValue = _pointsValue;
+void Region::setPoints(std::shared_ptr<Points> points,
+                       std::shared_ptr<std::vector<double>> pointsValue) {
+  points_ = points;
+  pointsValue_ = pointsValue;
 }
 
 
@@ -46,14 +47,14 @@ double Region::computePointValue(Point point) {
   auto nx = int(dimArrays[2].size());
 
 
-  auto ix = int((x - xInit) / xStep);
-  auto iy = int((y - yInit) / yStep);
-  auto iz = int((z - zInit) / zStep);
+  auto ix = int((x - xInit_) / xStep_);
+  auto iy = int((y - yInit_) / yStep_);
+  auto iz = int((z - zInit_) / zStep_);
 
 
-  auto xWeight = double((x - ix * xStep - xInit) / xStep);
-  auto yWeight = double((y - iy * yStep - yInit) / yStep);
-  auto zWeight = double((z - iz * zStep - zInit) / zStep);
+  auto xWeight = double((x - ix * xStep_ - xInit_) / xStep_);
+  auto yWeight = double((y - iy * yStep_ - yInit_) / yStep_);
+  auto zWeight = double((z - iz * zStep_ - zInit_) / zStep_);
 
 
   int nCorners = 8;
@@ -97,20 +98,20 @@ double Region::computePointValue(Point point) {
 
 void Region::computePointsValue() {
 
-  for (int i = 0; i < points->size(); i++)
-    (*pointsValue)[i] = computePointValue((*points)[i]);
+  for (int i = 0; i < points_->size(); i++)
+    (*pointsValue_)[i] = computePointValue((*points_)[i]);
 
 }
 
 
 void Region::computeInitsAndSteps() {
 
-  xInit = dimArrays[2][0];
-  yInit = dimArrays[1][0];
-  zInit = dimArrays[0][0];
+  xInit_ = dimArrays[2][0];
+  yInit_ = dimArrays[1][0];
+  zInit_ = dimArrays[0][0];
 
-  xStep = dimArrays[2][1] - xInit;
-  yStep = dimArrays[1][1] - yInit;
-  zStep = dimArrays[0][1] - zInit;
+  xStep_ = dimArrays[2][1] - xInit_;
+  yStep_ = dimArrays[1][1] - yInit_;
+  zStep_ = dimArrays[0][1] - zInit_;
 
 }

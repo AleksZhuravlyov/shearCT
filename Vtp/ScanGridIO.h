@@ -48,8 +48,8 @@ public:
 
 
   /**
-   Read pointsCt attribute from file.
-   @param[in] fileName is the name of file with pointsCt attribute.
+   Read pointsCt attribute from ncFile_.
+   @param[in] fileName is the name of ncFile_ with pointsCt attribute.
   */
   void loadPointsCtFromFile(const std::string &fileName);
 
@@ -66,15 +66,15 @@ public:
   bool getFormatIsBinary();
 
   /**
-   Save pointsCt attribute into file.
+   Save pointsCt attribute into ncFile_.
    @param[in] fileName is the name for saving pointsCt attribute.
-   @param[in] fileDescription is description for file.
+   @param[in] fileDescription is description for ncFile_.
   */
   void savePointsCtToFile(const std::string &fileName,
                           const std::string &fileDescription);
 
   /**
-   Save pointsCt attribute into file. Description for file is default.
+   Save pointsCt attribute into ncFile_. Description for ncFile_ is default.
    @param[in] fileName is the name for saving pointsCt attribute.
   */
   void savePointsCtToFile(const std::string &fileName);
@@ -85,14 +85,14 @@ public:
   void clearFilesCollection();
 
   /**
-   Save file for paraview for loading all saved pointsCt files as one.
-   @param[in] fileName is the name for collection file.
+   Save ncFile_ for paraview for loading all saved pointsCt files as one.
+   @param[in] fileName is the name for collection ncFile_.
   */
   void saveFilesCollectionToFile(const std::string &fileName);
 
 
 private:
-  /// Set of points of ScanGrid type.
+  /// Set of points_ of ScanGrid type.
   std::shared_ptr<ScanGrid> scanGrid_;
 
   /// Binarity flag for scanGrid files.

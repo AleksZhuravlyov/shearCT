@@ -3,61 +3,61 @@
 #include <algorithm>
 
 
-Image::Image(const std::string &fileName) : file(fileName,
-                                                 netCDF::NcFile::read),
-                                            path(fileName),
-                                            valueName("tomo"),
-                                            units("units"),
+Image::Image(const std::string &fileName) : ncFile_(fileName,
+                                                    netCDF::NcFile::read),
+                                            path_(fileName),
+                                            valueName_("tomo"),
+                                            units_("units"),
                                             region(Region()) {
 
-  for (auto &&varData : file.getVars()) {
-    vars.push_back(Var());
-    vars.back().name = varData.first;
-    varData.second.getAtt(units).getValues(vars.back().unitName);
-    vars.back().dim = varData.second.getDimCount();
+  for (auto &&varData : ncFile_.getVars()) {
+    vars_.push_back(Var());
+    vars_.back().name = varData.first;
+    varData.second.getAtt(units_).getValues(vars_.back().unitName);
+    vars_.back().dim = varData.second.getDimCount();
   }
 
-  std::reverse(vars.begin(), vars.end() - 1);
+  std::reverse(vars_.begin(), vars_.end() - 1);
 
-  for (auto &&dimData : file.getVar(valueName).getDims()) {
-    dims.push_back(Dim());
-    dims.back().name = dimData.getName();
-    dims.back().size = dimData.getSize();
-    dimArrays.push_back(std::vector<float>(dims.back().size));
-    file.getVar(dims.back().name).getVar(dimArrays.back().data());
+  for (auto &&dimData : ncFile_.getVar(valueName_).getDims()) {
+    dims_.push_back(Dim());
+    dims_.back().name = dimData.getName();
+    dims_.back().size = dimData.getSize();
+    dimArrays_.push_back(std::vector<float>(dims_.back().size));
+    ncFile_.getVar(dims_.back().name).getVar(dimArrays_.back().data());
   }
 
 
-  for (int i = 0; i < dimArrays.size(); i++)
-    std::copy(dimArrays[i].begin() + region.start[i],
-              dimArrays[i].begin() + region.start[i]
+  for (int i = 0; i < dimArrays_.size(); i++)
+    std::copy(dimArrays_[i].begin() + region.start[i],
+              dimArrays_[i].begin() + region.start[i]
               + region.width[i], region.dimArrays[i].begin());
 
-  file.getVar(valueName).getVar(region.start, region.width,
-                                region.value.data());
+  ncFile_.getVar(valueName_).getVar(region.start, region.width,
+                                    region.value.data());
 
-  xInit = dimArrays[2][0];
-  yInit = dimArrays[1][0];
-  zInit = dimArrays[0][0];
+  xInit_ = dimArrays_[2][0];
+  yInit_ = dimArrays_[1][0];
+  zInit_ = dimArrays_[0][0];
 
-  nX = dims[2].size;
-  nY = dims[1].size;
-  nZ = dims[0].size;
+  nX_ = dims_[2].size;
+  nY_ = dims_[1].size;
+  nZ_ = dims_[0].size;
 
-  xStep = dimArrays[2][1] - xInit;
-  yStep = dimArrays[1][1] - yInit;
-  zStep = dimArrays[0][1] - zInit;
+  xStep_ = dimArrays_[2][1] - xInit_;
+  yStep_ = dimArrays_[1][1] - yInit_;
+  zStep_ = dimArrays_[0][1] - zInit_;
 
 }
 
 
-std::ostream &operator<<(std::ostream &stream, const Image &ncCt) {
+std::ostream &operator<<(std::ostream &stream, const Image &image) {
 
-  stream << "path: " << ncCt.path << std::endl;
+  stream << "path: " << image.path_ << std::endl;
 
   stream << "vars:" << std::endl;
   stream << "name unitName dim:" << std::endl;
-  for (auto &&var : ncCt.vars) {
+  for (auto &&var : image.vars_) {
     stream << var.name << " ";
     stream << var.unitName << " ";
     stream << var.dim << std::endl;
@@ -65,10 +65,10 @@ std::ostream &operator<<(std::ostream &stream, const Image &ncCt) {
 
   stream << "dims:" << std::endl;
   stream << "name size step:" << std::endl;
-  for (int i = 0; i < ncCt.dims.size(); i++) {
-    stream << ncCt.dims[i].name << " ";
-    stream << ncCt.dims[i].size << " ";
-    stream << ncCt.dimArrays[i][1] - ncCt.dimArrays[i][0] << std::endl;
+  for (int i = 0; i < image.dims_.size(); i++) {
+    stream << image.dims_[i].name << " ";
+    stream << image.dims_[i].size << " ";
+    stream << image.dimArrays_[i][1] - image.dimArrays_[i][0] << std::endl;
   }
 
   return stream;
@@ -77,50 +77,50 @@ std::ostream &operator<<(std::ostream &stream, const Image &ncCt) {
 
 
 double Image::getXInit() {
-  return xInit;
+  return xInit_;
 }
 
 double Image::getYInit() {
-  return yInit;
+  return yInit_;
 }
 
 double Image::getZInit() {
-  return zInit;
+  return zInit_;
 }
 
 
 int Image::getNX() {
-  return nX;
+  return nX_;
 }
 
 int Image::getNY() {
-  return nY;
+  return nY_;
 }
 
 int Image::getNZ() {
-  return nZ;
+  return nZ_;
 }
 
 
 double Image::getXStep() {
-  return xStep;
+  return xStep_;
 }
 
 double Image::getYStep() {
-  return yStep;
+  return yStep_;
 }
 
 double Image::getZStep() {
-  return zStep;
+  return zStep_;
 }
 
 
 std::shared_ptr<std::vector<Dim>> Image::getDims() {
-  return std::make_shared<std::vector<Dim>>(dims);
+  return std::make_shared<std::vector<Dim>>(dims_);
 }
 
 std::shared_ptr<std::vector<Var>> Image::getVars() {
-  return std::make_shared<std::vector<Var>>(vars);
+  return std::make_shared<std::vector<Var>>(vars_);
 }
 
 std::shared_ptr<std::vector<short>> Image::getValue() {
@@ -133,36 +133,36 @@ void Image::setRegion(const std::vector<size_t> &start,
 
   region.initiate(start, width);
 
-  for (int i = 0; i < dimArrays.size(); i++)
-    std::copy(dimArrays[i].begin() + region.start[i],
-              dimArrays[i].begin() + region.start[i]
+  for (int i = 0; i < dimArrays_.size(); i++)
+    std::copy(dimArrays_[i].begin() + region.start[i],
+              dimArrays_[i].begin() + region.start[i]
               + region.width[i], region.dimArrays[i].begin());
 
   region.computeInitsAndSteps();
 
-  file.getVar(valueName).getVar(region.start, region.width,
-                                region.value.data());
+  ncFile_.getVar(valueName_).getVar(region.start, region.width,
+                                    region.value.data());
 
 }
 
 
 void Image::setRegion(const Bbox &bbox) {
 
-  auto xStart = size_t((bbox.xmin() - xInit) / xStep) - 3;
-  auto yStart = size_t((bbox.ymin() - yInit) / yStep) - 3;
-  auto zStart = size_t((bbox.zmin() - zInit) / zStep) - 3;
+  auto xStart = size_t((bbox.xmin() - xInit_) / xStep_) - 3;
+  auto yStart = size_t((bbox.ymin() - yInit_) / yStep_) - 3;
+  auto zStart = size_t((bbox.zmin() - zInit_) / zStep_) - 3;
 
-  auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep) + 9;
-  auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep) + 9;
-  auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep) + 9;
+  auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep_) + 9;
+  auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep_) + 9;
+  auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep_) + 9;
 
 
   std::string errorMessage;
-  if ((xStart + xWidth) > nX)
+  if ((xStart + xWidth) > nX_)
     errorMessage += " x ";
-  if ((yStart + yWidth) > nY)
+  if ((yStart + yWidth) > nY_)
     errorMessage += " y ";
-  if ((zStart + zWidth) > nZ)
+  if ((zStart + zWidth) > nZ_)
     errorMessage += " z ";
 
   if (errorMessage != "") {
@@ -187,22 +187,22 @@ void Image::saveRegion(const std::string &fileName) {
 
   netCDF::NcFile regionCtFile(fileName, netCDF::NcFile::replace);
 
-  std::vector<netCDF::NcDim> ncDims(dims.size());
-  for (int i = 0; i < dims.size(); i++)
-    ncDims[i] = regionCtFile.addDim(dims[i].name, region.width[i]);
+  std::vector<netCDF::NcDim> ncDims(dims_.size());
+  for (int i = 0; i < dims_.size(); i++)
+    ncDims[i] = regionCtFile.addDim(dims_[i].name, region.width[i]);
 
-  std::vector<netCDF::NcVar> ncVars(dims.size());
-  for (int i = 0; i < dims.size(); i++)
-    ncVars[i] = regionCtFile.addVar(vars[i].name,
+  std::vector<netCDF::NcVar> ncVars(dims_.size());
+  for (int i = 0; i < dims_.size(); i++)
+    ncVars[i] = regionCtFile.addVar(vars_[i].name,
                                     netCDF::ncFloat, ncDims[i]);
-  netCDF::NcVar valVar = regionCtFile.addVar(valueName,
+  netCDF::NcVar valVar = regionCtFile.addVar(valueName_,
                                              netCDF::ncShort, ncDims);
 
-  for (int i = 0; i < dims.size(); i++)
-    ncVars[i].putAtt(units, vars[i].unitName);
-  valVar.putAtt(units, vars[dims.size()].unitName);
+  for (int i = 0; i < dims_.size(); i++)
+    ncVars[i].putAtt(units_, vars_[i].unitName);
+  valVar.putAtt(units_, vars_[dims_.size()].unitName);
 
-  for (int i = 0; i < dims.size(); i++)
+  for (int i = 0; i < dims_.size(); i++)
     ncVars[i].putVar(region.dimArrays[i].data());
   valVar.putVar(region.value.data());
 

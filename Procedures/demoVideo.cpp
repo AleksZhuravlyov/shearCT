@@ -41,7 +41,7 @@ void demoVideo() {
 
   /// Base square from CT A
 
-  // Generate base square and save into file
+  // Generate base square and save into ncFile_
   auto squareCt = extractSquarePointsCt(imageA,
                                         0.5,
                                         0.5,
@@ -52,7 +52,7 @@ void demoVideo() {
   vtkPointsCt.setScanGrid(squareCt);
   vtkPointsCt.savePointsCtToFile(baseSquareFromCtAName);
 
-  // Read base square from file
+  // Read base square from ncFile_
   // auto squareCt = getPointCtFromFile(baseSquareFromCtAName);
 
   /// Write CT A value from top square into buffer_ of squareCt
@@ -62,11 +62,11 @@ void demoVideo() {
   /// Find base square from CT B
 
   getBaseSquareFromCtB(imageB, squareCt, 1.e-7);
-  // Save base square from CT B into file
+  // Save base square from CT B into ncFile_
   vtkPointsCt.setScanGrid(squareCt);
   vtkPointsCt.savePointsCtToFile(baseSquareFromCtBName);
 
-  // Read base square from CT B from file
+  // Read base square from CT B from ncFile_
   // auto squareCt = getPointCtFromFile(baseSquareFromCtBName);
 
   // Take origin_ from base square from CT B
@@ -99,22 +99,22 @@ void demoVideo() {
 
   /// Take cylinder sector from CT A and base square
 
-  // Take CT A base square from file
+  // Take CT A base square from ncFile_
   auto baseCtA = std::make_shared<ScanGrid>();
   vtkPointsCt.setScanGrid(baseCtA);
   vtkPointsCt.loadPointsCtFromFile(baseSquareFromCtAName);
 
   auto cylinderCt = getCylinderSectorFromCtAAndBaseSquare(imageA, baseCtA);
 
-  // Save cylinder sector into file
+  // Save cylinder sector into ncFile_
   vtkPointsCt.setScanGrid(cylinderCt);
   vtkPointsCt.savePointsCtToFile(cylinderSectorFromCtAAndBaseSquareName);
-  // Save nc region of cylinder sector into file
+  // Save nc region of cylinder sector into ncFile_
   // imageA.saveRegion("cylinder.nc");
 
   /// Translation of cylinder sector to CT B and basis_ of base square CT B
 
-  // Take CT B base square from file
+  // Take CT B base square from ncFile_
   auto baseCtB = std::make_shared<ScanGrid>();
   vtkPointsCt.setScanGrid(baseCtB);
   vtkPointsCt.loadPointsCtFromFile(baseSquareFromCtBName);
@@ -125,7 +125,7 @@ void demoVideo() {
   cylinderCt->transform(transformationA.inverse());
   cylinderCt->transform(transformationB);
 
-  // Save cylinder sector into file
+  // Save cylinder sector into ncFile_
   vtkPointsCt.setScanGrid(cylinderCt);
   vtkPointsCt.savePointsCtToFile(cylinderSectorFromCtBAndBaseSquareName);
 

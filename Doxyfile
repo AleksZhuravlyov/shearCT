@@ -1,6 +1,6 @@
 # Doxyfile 1.8.15
 
-# This file describes the settings to be used by the documentation system
+# This ncFile_ describes the settings to be used by the documentation system
 # doxygen (www.doxygen.org) for a project.
 #
 # All text after a double hash (##) is considered a comment and is placed in
@@ -18,7 +18,7 @@
 #---------------------------------------------------------------------------
 
 # This tag specifies the encoding used for all characters in the configuration
-# file that follow. The default is UTF-8 which is also the encoding used for all
+# ncFile_ that follow. The default is UTF-8 which is also the encoding used for all
 # text before the first occurrence of this tag. Doxygen uses libiconv (or the
 # iconv built into libc) for the transcoding. See
 # https://www.gnu.org/software/libiconv/ for the list of possible encodings.
@@ -53,8 +53,8 @@ PROJECT_BRIEF          = Young modulus and Poisson's raotio microCT computation.
 
 PROJECT_LOGO           =
 
-# The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path
-# into which the generated documentation will be written. If a relative path is
+# The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute) path_
+# into which the generated documentation will be written. If a relative path_ is
 # entered, it will be relative to the location where doxygen was started. If
 # left blank the current directory will be used.
 
@@ -65,7 +65,7 @@ OUTPUT_DIRECTORY       = doc
 # will distribute the generated files over these directories. Enabling this
 # option can be useful when feeding doxygen a huge amount of source files, where
 # putting all generated files in the same directory would otherwise causes
-# performance problems for the file system.
+# performance problems for the ncFile_ system.
 # The default value is: NO.
 
 CREATE_SUBDIRS         = NO
@@ -102,7 +102,7 @@ OUTPUT_LANGUAGE        = English
 OUTPUT_TEXT_DIRECTION  = None
 
 # If the BRIEF_MEMBER_DESC tag is set to YES, doxygen will include brief member
-# descriptions after the members that are listed in the file and class
+# descriptions after the members that are listed in the ncFile_ and class
 # documentation (similar to Javadoc). Set to NO to disable this.
 # The default value is: YES.
 
@@ -123,12 +123,12 @@ REPEAT_BRIEF           = YES
 # and the result_, after processing the whole list, is used as the annotated
 # text. Otherwise, the brief description is used as-is. If left blank, the
 # following values are used ($name is automatically replaced with the name of
-# the entity):The $name class, The $name widget, The $name file, is, provides,
+# the entity):The $name class, The $name widget, The $name ncFile_, is, provides,
 # specifies, contains, represents, a, an and the.
 
 ABBREVIATE_BRIEF       = "The $name class" \
                          "The $name widget" \
-                         "The $name file" \
+                         "The $name ncFile_" \
                          is \
                          provides \
                          specifies \
@@ -153,17 +153,17 @@ ALWAYS_DETAILED_SEC    = NO
 
 INLINE_INHERITED_MEMB  = NO
 
-# If the FULL_PATH_NAMES tag is set to YES, doxygen will prepend the full path
-# before files name in the file list and in the header files. If set to NO the
-# shortest path that makes the file name unique will be used
+# If the FULL_PATH_NAMES tag is set to YES, doxygen will prepend the full path_
+# before files name in the ncFile_ list and in the header files. If set to NO the
+# shortest path_ that makes the ncFile_ name unique will be used
 # The default value is: YES.
 
 FULL_PATH_NAMES        = YES
 
-# The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path.
+# The STRIP_FROM_PATH tag can be used to strip a user-defined part of the path_.
 # Stripping is only done if one of the specified strings matches the left-hand
-# part of the path. The tag can be used to show relative paths in the file list.
-# If left blank the directory from which doxygen is run is used as the path to
+# part of the path_. The tag can be used to show relative paths in the ncFile_ list.
+# If left blank the directory from which doxygen is run is used as the path_ to
 # strip.
 #
 # Note that you can specify absolute paths here, but also relative paths, which
@@ -173,16 +173,16 @@ FULL_PATH_NAMES        = YES
 STRIP_FROM_PATH        =
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of the
-# path mentioned in the documentation of a class, which tells the reader which
-# header file to include in order to use a class. If left blank only the name of
-# the header file containing the class definition is used. Otherwise one should
+# path_ mentioned in the documentation of a class, which tells the reader which
+# header ncFile_ to include in order to use a class. If left blank only the name of
+# the header ncFile_ containing the class definition is used. Otherwise one should
 # specify the list of include paths that are normally passed to the compiler
 # using the -I flag.
 
 STRIP_FROM_INC_PATH    =
 
 # If the SHORT_NAMES tag is set to YES, doxygen will generate much shorter (but
-# less readable) file names. This can be useful is your file systems doesn't
+# less readable) ncFile_ names. This can be useful is your ncFile_ systems doesn't
 # support long names like on DOS, Mac, or CD-ROM.
 # The default value is: NO.
 
@@ -225,7 +225,7 @@ INHERIT_DOCS           = YES
 
 # If the SEPARATE_MEMBER_PAGES tag is set to YES then doxygen will produce a new
 # page for each member. If set to NO, the documentation of a member will be part
-# of the file/class/namespace that contains it.
+# of the ncFile_/class/namespace that contains it.
 # The default value is: NO.
 
 SEPARATE_MEMBER_PAGES  = NO
@@ -245,7 +245,7 @@ TAB_SIZE               = 4
 # documentation, which will result_ in a user-defined paragraph with heading
 # "Side Effects:". You can put \n's in the value part of an alias to insert
 # newlines (in the resulting output). You can put ^^ in the value part of an
-# alias to insert a newline as if a physical newline was in the original file.
+# alias to insert a newline as if a physical newline was in the original ncFile_.
 # When you need a literal { or } or , in the value part of an alias you have to
 # escape them by means of a backslash (\), this can lead to conflicts with the
 # commands \{ and \} for these it is advised to use the version @{ and @} or use
@@ -298,7 +298,7 @@ OPTIMIZE_OUTPUT_SLICE  = NO
 # Doxygen selects the parser to use depending on the extension of the files it
 # parses. With this tag you can assign which parser to use for a given
 # extension. Doxygen has a built-in mapping, but you can override or extend it
-# using this tag. The format is ext=language, where ext is a file extension, and
+# using this tag. The format is ext=language, where ext is a ncFile_ extension, and
 # language is one of the parsers supported by doxygen: IDL, Java, Javascript,
 # Csharp (C#), C, C++, D, PHP, md (Markdown), Objective-C, Python, Slice,
 # Fortran (fixed format Fortran: FortranFixed, free formatted Fortran:
@@ -343,7 +343,7 @@ TOC_INCLUDE_HEADINGS   = 0
 AUTOLINK_SUPPORT       = YES
 
 # If you use STL classes (i.e. std::string, std::vector, etc.) but do not want
-# to include (a tag file for) the STL sources as input, then you should set this
+# to include (a tag ncFile_ for) the STL sources as input, then you should set this
 # tag to YES in order to let doxygen match functions declarations and
 # definitions whose arguments contain STL classes (e.g. func(std::string);
 # versus func(std::string) {}). This also make the inheritance and collaboration
@@ -413,7 +413,7 @@ INLINE_GROUPED_CLASSES = NO
 
 # When the INLINE_SIMPLE_STRUCTS tag is set to YES, structs, classes, and unions
 # with only public data fields or simple typedef fields will be shown inline in
-# the documentation of the scope in which they are defined (i.e. file,
+# the documentation of the scope in which they are defined (i.e. ncFile_,
 # namespace, or group documentation), provided this scope is documented. If set
 # to NO, structs, classes, and unions are shown on a separate page (for HTML and
 # Man pages) or section (for LaTeX and RTF).
@@ -424,7 +424,7 @@ INLINE_SIMPLE_STRUCTS  = NO
 # When TYPEDEF_HIDES_STRUCT tag is enabled, a typedef of a struct, union, or
 # enum is documented as struct, union, or enum with the name of the typedef. So
 # typedef struct TypeS {} TypeT, will appear in the documentation as a struct
-# with name TypeT. When disabled the typedef will appear as a member of a file,
+# with name TypeT. When disabled the typedef will appear as a member of a ncFile_,
 # namespace, or class. And the struct will be named TypeS. This can typically be
 # useful for C code in case the coding convention dictates that all compound
 # types are typedef'ed and only the typedef is referenced, never the tag name.
@@ -451,7 +451,7 @@ LOOKUP_CACHE_SIZE      = 0
 
 # If the EXTRACT_ALL tag is set to YES, doxygen will assume all entities in
 # documentation are documented, even if no documentation was available. Private
-# class members and static file members will be hidden unless the
+# class members and static ncFile_ members will be hidden unless the
 # EXTRACT_PRIVATE respectively EXTRACT_STATIC tags are set to YES.
 # Note: This will also disable the warnings about undocumented members that are
 # normally produced when WARNINGS is set to YES.
@@ -471,7 +471,7 @@ EXTRACT_PRIVATE        = NO
 
 EXTRACT_PACKAGE        = NO
 
-# If the EXTRACT_STATIC tag is set to YES, all static members of a file will be
+# If the EXTRACT_STATIC tag is set to YES, all static members of a ncFile_ will be
 # included in the documentation.
 # The default value is: NO.
 
@@ -495,8 +495,8 @@ EXTRACT_LOCAL_METHODS  = NO
 
 # If this flag is set to YES, the members of anonymous namespaces will be
 # extracted and appear in the documentation as a namespace called
-# 'anonymous_namespace{file}', where file will be replaced with the base name of
-# the file that contains the anonymous namespace. By default anonymous namespace
+# 'anonymous_namespace{ncFile_}', where ncFile_ will be replaced with the base name of
+# the ncFile_ that contains the anonymous namespace. By default anonymous namespace
 # are hidden.
 # The default value is: NO.
 
@@ -539,10 +539,10 @@ HIDE_IN_BODY_DOCS      = NO
 
 INTERNAL_DOCS          = NO
 
-# If the CASE_SENSE_NAMES tag is set to NO then doxygen will only generate file
+# If the CASE_SENSE_NAMES tag is set to NO then doxygen will only generate ncFile_
 # names in lower-case letters. If set to YES, upper-case letters are also
 # allowed. This is useful if you have classes or files whose names only differ
-# in case and if your file system supports case sensitive file names. Windows
+# in case and if your ncFile_ system supports case sensitive ncFile_ names. Windows
 # and Mac users are advised to set this option to NO.
 # The default value is: system dependent.
 
@@ -563,14 +563,14 @@ HIDE_SCOPE_NAMES       = NO
 HIDE_COMPOUND_REFERENCE= NO
 
 # If the SHOW_INCLUDE_FILES tag is set to YES then doxygen will put a list of
-# the files that are included by a file in the documentation of that file.
+# the files that are included by a ncFile_ in the documentation of that ncFile_.
 # The default value is: YES.
 
 SHOW_INCLUDE_FILES     = YES
 
 # If the SHOW_GROUPED_MEMB_INC tag is set to YES then Doxygen will add for each
 # grouped member an include statement to the documentation, telling the reader
-# which file to include in order to use the member.
+# which ncFile_ to include in order to use the member.
 # The default value is: NO.
 
 SHOW_GROUPED_MEMB_INC  = NO
@@ -588,14 +588,14 @@ FORCE_LOCAL_INCLUDES   = NO
 INLINE_INFO            = YES
 
 # If the SORT_MEMBER_DOCS tag is set to YES then doxygen will sort the
-# (detailed) documentation of file and class members alphabetically by member
+# (detailed) documentation of ncFile_ and class members alphabetically by member
 # name. If set to NO, the members will appear in declaration order.
 # The default value is: YES.
 
 SORT_MEMBER_DOCS       = YES
 
 # If the SORT_BRIEF_DOCS tag is set to YES then doxygen will sort the brief
-# descriptions of file, namespace and class members alphabetically by member
+# descriptions of ncFile_, namespace and class members alphabetically by member
 # name. If set to NO, the members will appear in declaration order. Note that
 # this will also influence the order of the classes in the class list.
 # The default value is: NO.
@@ -705,23 +705,23 @@ SHOW_FILES             = YES
 SHOW_NAMESPACES        = YES
 
 # The FILE_VERSION_FILTER tag can be used to specify a program or script that
-# doxygen should invoke to get the current version for each file (typically from
+# doxygen should invoke to get the current version for each ncFile_ (typically from
 # the version control system). Doxygen will invoke the program by executing (via
-# popen()) the command command input-file, where command is the value of the
-# FILE_VERSION_FILTER tag, and input-file is the name of an input file provided
-# by doxygen. Whatever the program writes to standard output is used as the file
+# popen()) the command command input-ncFile_, where command is the value of the
+# FILE_VERSION_FILTER tag, and input-ncFile_ is the name of an input ncFile_ provided
+# by doxygen. Whatever the program writes to standard output is used as the ncFile_
 # version. For an example see the documentation.
 
 FILE_VERSION_FILTER    =
 
-# The LAYOUT_FILE tag can be used to specify a layout file which will be parsed
-# by doxygen. The layout file controls the global structure of the generated
-# output files in an output format independent way. To create the layout file
+# The LAYOUT_FILE tag can be used to specify a layout ncFile_ which will be parsed
+# by doxygen. The layout ncFile_ controls the global structure of the generated
+# output files in an output format independent way. To create the layout ncFile_
 # that represents doxygen's defaults, run doxygen with the -l option. You can
-# optionally specify a file name after the option, if omitted DoxygenLayout.xml
-# will be used as the name of the layout file.
+# optionally specify a ncFile_ name after the option, if omitted DoxygenLayout.xml
+# will be used as the name of the layout ncFile_.
 #
-# Note that if you run doxygen from a directory containing a file called
+# Note that if you run doxygen from a directory containing a ncFile_ called
 # DoxygenLayout.xml, doxygen will parse it automatically even if the LAYOUT_FILE
 # tag is left empty.
 
@@ -733,7 +733,7 @@ LAYOUT_FILE            =
 # to be installed. See also https://en.wikipedia.org/wiki/BibTeX for more info.
 # For LaTeX the style of the bibliography can be controlled using
 # LATEX_BIB_STYLE. To use this feature you need bibtex and perl available in the
-# search path. See also \cite for info how to create references.
+# search path_. See also \cite for info how to create references.
 
 CITE_BIB_FILES         =
 
@@ -788,16 +788,16 @@ WARN_NO_PARAMDOC       = NO
 WARN_AS_ERROR          = NO
 
 # The WARN_FORMAT tag determines the format of the warning messages that doxygen
-# can produce. The string should contain the $file, $line, and $text tags, which
-# will be replaced by the file and line number from which the warning originated
+# can produce. The string should contain the $ncFile_, $line, and $text tags, which
+# will be replaced by the ncFile_ and line number from which the warning originated
 # and the warning text. Optionally the format may contain $version, which will
-# be replaced by the version of the file (if it could be obtained via
+# be replaced by the version of the ncFile_ (if it could be obtained via
 # FILE_VERSION_FILTER)
-# The default value is: $file:$line: $text.
+# The default value is: $ncFile_:$line: $text.
 
-WARN_FORMAT            = "$file:$line: $text"
+WARN_FORMAT            = "$ncFile_:$line: $text"
 
-# The WARN_LOGFILE tag can be used to specify a file to which warning and error
+# The WARN_LOGFILE tag can be used to specify a ncFile_ to which warning and error
 # messages should be written. If left blank the output is written to standard
 # error (stderr).
 
@@ -808,7 +808,7 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 
 # The INPUT tag is used to specify the files and/or directories that contain
-# documented source files. You may enter file names like myfile.cpp or
+# documented source files. You may enter ncFile_ names like myfile.cpp or
 # directories like /usr/src/myproject. Separate the files or directories with
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
@@ -900,7 +900,7 @@ RECURSIVE              = NO
 EXCLUDE                =
 
 # The EXCLUDE_SYMLINKS tag can be used to select whether or not files or
-# directories that are symbolic links (a Unix file system feature) are excluded
+# directories that are symbolic links (a Unix ncFile_ system feature) are excluded
 # from the input.
 # The default value is: NO.
 
@@ -910,7 +910,7 @@ EXCLUDE_SYMLINKS       = NO
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude
 # certain files from those directories.
 #
-# Note that the wildcards are matched against the file with absolute path, so to
+# Note that the wildcards are matched against the ncFile_ with absolute path_, so to
 # exclude all test directories for example use the pattern */test/*
 
 EXCLUDE_PATTERNS       =
@@ -921,7 +921,7 @@ EXCLUDE_PATTERNS       =
 # wildcard * is used, a substring. Examples: ANamespace, AClass,
 # AClass::ANamespace, ANamespace::*Test
 #
-# Note that the wildcards are matched against the file with absolute path, so to
+# Note that the wildcards are matched against the ncFile_ with absolute path_, so to
 # exclude all test directories use the pattern */test/*
 
 EXCLUDE_SYMBOLS        =
@@ -953,13 +953,13 @@ EXAMPLE_RECURSIVE      = NO
 IMAGE_PATH             =
 
 # The INPUT_FILTER tag can be used to specify a program that doxygen should
-# invoke to filter for each input file. Doxygen will invoke the filter program
+# invoke to filter for each input ncFile_. Doxygen will invoke the filter program
 # by executing (via popen()) the command:
 #
-# <filter> <input-file>
+# <filter> <input-ncFile_>
 #
-# where <filter> is the value of the INPUT_FILTER tag, and <input-file> is the
-# name of an input file. Doxygen will then use the output that the filter
+# where <filter> is the value of the INPUT_FILTER tag, and <input-ncFile_> is the
+# name of an input ncFile_. Doxygen will then use the output that the filter
 # program writes to standard output. If FILTER_PATTERNS is specified, this tag
 # will be ignored.
 #
@@ -973,12 +973,12 @@ IMAGE_PATH             =
 
 INPUT_FILTER           =
 
-# The FILTER_PATTERNS tag can be used to specify filters on a per file pattern
-# basis_. Doxygen will compare the file name with each pattern and apply the
+# The FILTER_PATTERNS tag can be used to specify filters on a per ncFile_ pattern
+# basis_. Doxygen will compare the ncFile_ name with each pattern and apply the
 # filter if there is a match. The filters are a list of the form: pattern=filter
 # (like *.cpp=my_cpp_filter). See INPUT_FILTER for further information on how
 # filters are used. If the FILTER_PATTERNS tag is empty or if none of the
-# patterns match the file name, INPUT_FILTER is applied.
+# patterns match the ncFile_ name, INPUT_FILTER is applied.
 #
 # Note that for custom extensions or not directly supported extensions you also
 # need to set EXTENSION_MAPPING for the extension otherwise the files are not
@@ -993,7 +993,7 @@ FILTER_PATTERNS        =
 
 FILTER_SOURCE_FILES    = NO
 
-# The FILTER_SOURCE_PATTERNS tag can be used to specify source filters per file
+# The FILTER_SOURCE_PATTERNS tag can be used to specify source filters per ncFile_
 # pattern. A pattern will override the setting for FILTER_PATTERN (if any) and
 # it is also possible to disable source filtering for a specific pattern using
 # *.ext= (so without naming a filter).
@@ -1001,7 +1001,7 @@ FILTER_SOURCE_FILES    = NO
 
 FILTER_SOURCE_PATTERNS =
 
-# If the USE_MDFILE_AS_MAINPAGE tag refers to the name of a markdown file that
+# If the USE_MDFILE_AS_MAINPAGE tag refers to the name of a markdown ncFile_ that
 # is part of the input, its contents will be placed on the main page
 # (index.html). This can be useful if you have a project on for instance GitHub
 # and want to reuse the introduction page also for the doxygen output.
@@ -1057,7 +1057,7 @@ REFERENCES_LINK_SOURCE = YES
 # If SOURCE_TOOLTIPS is enabled (the default) then hovering a hyperlink in the
 # source code will show a tooltip with additional information such as prototype,
 # brief description and links to the definition and documentation. Since this
-# will make the HTML file larger and loading of large files a bit slower, you
+# will make the HTML ncFile_ larger and loading of large files a bit slower, you
 # can opt to disable this feature.
 # The default value is: YES.
 # This tag requires that the tag SOURCE_BROWSER is set to YES.
@@ -1072,12 +1072,12 @@ SOURCE_TOOLTIPS        = YES
 #
 # To use it do the following:
 # - Install the latest version of global
-# - Enable SOURCE_BROWSER and USE_HTAGS in the configuration file
+# - Enable SOURCE_BROWSER and USE_HTAGS in the configuration ncFile_
 # - Make sure the INPUT cgalPoints_ to the root of the source tree
 # - Run doxygen as normal
 #
 # Doxygen will invoke htags (and that will in turn invoke gtags), so these
-# tools must be available from the command line (i.e. in the search path).
+# tools must be available from the command line (i.e. in the search path_).
 #
 # The result_: instead of the source browser generated by doxygen, the links to
 # source code will now point to the output of htags.
@@ -1087,7 +1087,7 @@ SOURCE_TOOLTIPS        = YES
 USE_HTAGS              = NO
 
 # If the VERBATIM_HEADERS tag is set the YES then doxygen will generate a
-# verbatim copy of the header file for each class for which an include is
+# verbatim copy of the header ncFile_ for each class for which an include is
 # specified. Set to NO to disable this.
 # See also: Section \class.
 # The default value is: YES.
@@ -1130,31 +1130,31 @@ IGNORE_PREFIX          =
 GENERATE_HTML          = YES
 
 # The HTML_OUTPUT tag is used to specify where the HTML docs will be put. If a
-# relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
+# relative path_ is entered the value of OUTPUT_DIRECTORY will be put in front of
 # it.
 # The default directory is: html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
 HTML_OUTPUT            = html
 
-# The HTML_FILE_EXTENSION tag can be used to specify the file extension for each
+# The HTML_FILE_EXTENSION tag can be used to specify the ncFile_ extension for each
 # generated HTML page (for example: .htm, .php, .asp).
 # The default value is: .html.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
 HTML_FILE_EXTENSION    = .html
 
-# The HTML_HEADER tag can be used to specify a user-defined HTML header file for
+# The HTML_HEADER tag can be used to specify a user-defined HTML header ncFile_ for
 # each generated HTML page. If the tag is left blank doxygen will generate a
 # standard header.
 #
-# To get valid HTML the header file that includes any scripts and style sheets
+# To get valid HTML the header ncFile_ that includes any scripts and style sheets
 # that doxygen needs, which is dependent on the configuration options used (e.g.
 # the setting GENERATE_TREEVIEW). It is highly recommended to start with a
 # default header using
 # doxygen -w html new_header.html new_footer.html new_stylesheet.css
 # YourConfigFile
-# and then modify the file new_header.html. See also section "Doxygen usage"
+# and then modify the ncFile_ new_header.html. See also section "Doxygen usage"
 # for information on how to generate the default header that doxygen normally
 # uses.
 # Note: The header is subject to change so you typically have to regenerate the
@@ -1203,7 +1203,7 @@ HTML_EXTRA_STYLESHEET  =
 # other source files which should be copied to the HTML output directory. Note
 # that these files will be copied to the base HTML output directory. Use the
 # $relpath^ marker in the HTML_HEADER and/or HTML_FOOTER files to load these
-# files. In the HTML_STYLESHEET file, use the file name only. Also note that the
+# files. In the HTML_STYLESHEET ncFile_, use the ncFile_ name only. Also note that the
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
@@ -1326,12 +1326,12 @@ DOCSET_PUBLISHER_NAME  = Publisher
 
 # If the GENERATE_HTMLHELP tag is set to YES then doxygen generates three
 # additional HTML index files: index.hhp, index.hhc, and index.hhk. The
-# index.hhp is a project file that can be read by Microsoft's HTML Help Workshop
+# index.hhp is a project ncFile_ that can be read by Microsoft's HTML Help Workshop
 # (see: https://www.microsoft.com/en-us/download/details.aspx?id=21138) on
 # Windows.
 #
 # The HTML Help Workshop contains a compiler that can convert all HTML output
-# generated by doxygen into a single compiled HTML file (.chm). Compiled HTML
+# generated by doxygen into a single compiled HTML ncFile_ (.chm). Compiled HTML
 # files are now used as the Windows 98 help format, and will replace the old
 # Windows help format (.hlp) on all Windows platforms in the future. Compressed
 # HTML files also contain an index, a table of contents, and you can search for
@@ -1342,36 +1342,36 @@ DOCSET_PUBLISHER_NAME  = Publisher
 
 GENERATE_HTMLHELP      = NO
 
-# The CHM_FILE tag can be used to specify the file name of the resulting .chm
-# file. You can add a path in front of the file if the result_ should not be
+# The CHM_FILE tag can be used to specify the ncFile_ name of the resulting .chm
+# ncFile_. You can add a path_ in front of the ncFile_ if the result_ should not be
 # written to the html output directory.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
 CHM_FILE               =
 
-# The HHC_LOCATION tag can be used to specify the location (absolute path
-# including file name) of the HTML help compiler (hhc.exe). If non-empty,
+# The HHC_LOCATION tag can be used to specify the location (absolute path_
+# including ncFile_ name) of the HTML help compiler (hhc.exe). If non-empty,
 # doxygen will try to run the HTML help compiler on the generated index.hhp.
-# The file has to be specified with full path.
+# The ncFile_ has to be specified with full path_.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
 HHC_LOCATION           =
 
-# The GENERATE_CHI flag controls if a separate .chi index file is generated
-# (YES) or that it should be included in the master .chm file (NO).
+# The GENERATE_CHI flag controls if a separate .chi index ncFile_ is generated
+# (YES) or that it should be included in the master .chm ncFile_ (NO).
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
 GENERATE_CHI           = NO
 
 # The CHM_INDEX_ENCODING is used to encode HtmlHelp index (hhk), content (hhc)
-# and project file content.
+# and project ncFile_ content.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
 
 CHM_INDEX_ENCODING     =
 
 # The BINARY_TOC flag controls whether a binary table of contents is generated
-# (YES) or a normal table of contents (NO) in the .chm file. Furthermore it
+# (YES) or a normal table of contents (NO) in the .chm ncFile_. Furthermore it
 # enables the Previous and Next buttons.
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTMLHELP is set to YES.
@@ -1386,7 +1386,7 @@ BINARY_TOC             = NO
 TOC_EXPAND             = NO
 
 # If the GENERATE_QHP tag is set to YES and both QHP_NAMESPACE and
-# QHP_VIRTUAL_FOLDER are set, an additional index file will be generated that
+# QHP_VIRTUAL_FOLDER are set, an additional index ncFile_ will be generated that
 # can be used as input for Qt's qhelpgenerator to generate a Qt Compressed Help
 # (.qch) of the generated HTML documentation.
 # The default value is: NO.
@@ -1395,7 +1395,7 @@ TOC_EXPAND             = NO
 GENERATE_QHP           = NO
 
 # If the QHG_LOCATION tag is specified, the QCH_FILE tag can be used to specify
-# the file name of the resulting .qch file. The path specified is relative to
+# the ncFile_ name of the resulting .qch ncFile_. The path_ specified is relative to
 # the HTML output folder.
 # This tag requires that the tag GENERATE_QHP is set to YES.
 
@@ -1443,7 +1443,7 @@ QHP_SECT_FILTER_ATTRS  =
 
 # The QHG_LOCATION tag can be used to specify the location of Qt's
 # qhelpgenerator. If non-empty doxygen will try to run qhelpgenerator on the
-# generated .qhp file.
+# generated .qhp ncFile_.
 # This tag requires that the tag GENERATE_QHP is set to YES.
 
 QHG_LOCATION           =
@@ -1544,7 +1544,7 @@ FORMULA_TRANSPARENT    = YES
 # https://www.mathjax.org) which uses client side Javascript for the rendering
 # instead of using pre-rendered bitmaps. Use this if you do not have LaTeX
 # installed or if you want to formulas look prettier in the HTML output. When
-# enabled you may also need to install MathJax separately and configure the path
+# enabled you may also need to install MathJax separately and configure the path_
 # to it using the MATHJAX_RELPATH option.
 # The default value is: NO.
 # This tag requires that the tag GENERATE_HTML is set to YES.
@@ -1581,7 +1581,7 @@ MATHJAX_RELPATH        = https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/
 
 MATHJAX_EXTENSIONS     =
 
-# The MATHJAX_CODEFILE tag can be used to specify a file with javascript pieces
+# The MATHJAX_CODEFILE tag can be used to specify a ncFile_ with javascript pieces
 # of code that will be used on startup of the MathJax code. See the MathJax site
 # (see: http://docs.mathjax.org/en/latest/output.html) for more details. For an
 # example see the documentation.
@@ -1614,7 +1614,7 @@ SEARCHENGINE           = YES
 # implemented using a web server instead of a web client using Javascript. There
 # are two flavors of web server based searching depending on the EXTERNAL_SEARCH
 # setting. When disabled, doxygen will generate a PHP script for searching and
-# an index file used by the script. When EXTERNAL_SEARCH is enabled the indexing
+# an index ncFile_ used by the script. When EXTERNAL_SEARCH is enabled the indexing
 # and searching needs to be provided by external tools. See the section
 # "External Indexing and Searching" for details.
 # The default value is: NO.
@@ -1623,7 +1623,7 @@ SEARCHENGINE           = YES
 SERVER_BASED_SEARCH    = NO
 
 # When EXTERNAL_SEARCH tag is enabled doxygen will no longer generate the PHP
-# script for searching. Instead the search results are written to an XML file
+# script for searching. Instead the search results are written to an XML ncFile_
 # which needs to be processed by an external indexer. Doxygen will invoke an
 # external search engine pointed to by the SEARCHENGINE_URL option to obtain the
 # search results.
@@ -1650,9 +1650,9 @@ EXTERNAL_SEARCH        = NO
 SEARCHENGINE_URL       =
 
 # When SERVER_BASED_SEARCH and EXTERNAL_SEARCH are both enabled the unindexed
-# search data is written to a file for indexing by an external tool. With the
-# SEARCHDATA_FILE tag the name of this file can be specified.
-# The default file is: searchdata.xml.
+# search data is written to a ncFile_ for indexing by an external tool. With the
+# SEARCHDATA_FILE tag the name of this ncFile_ can be specified.
+# The default ncFile_ is: searchdata.xml.
 # This tag requires that the tag SEARCHENGINE is set to YES.
 
 SEARCHDATA_FILE        = searchdata.xml
@@ -1666,7 +1666,7 @@ SEARCHDATA_FILE        = searchdata.xml
 EXTERNAL_SEARCH_ID     =
 
 # The EXTRA_SEARCH_MAPPINGS tag can be used to enable searching through doxygen
-# projects other than the one defined by this configuration file, but that are
+# projects other than the one defined by this configuration ncFile_, but that are
 # all added to the same external search index. Each project needs to have a
 # unique id set via EXTERNAL_SEARCH_ID. The search mapping then maps the id of
 # to a relative location where the documentation can be found. The format is:
@@ -1685,7 +1685,7 @@ EXTRA_SEARCH_MAPPINGS  =
 GENERATE_LATEX         = YES
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. If a
-# relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
+# relative path_ is entered the value of OUTPUT_DIRECTORY will be put in front of
 # it.
 # The default directory is: latex.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
@@ -1707,9 +1707,9 @@ LATEX_CMD_NAME         =
 # The MAKEINDEX_CMD_NAME tag can be used to specify the command name to generate
 # index for LaTeX.
 # Note: This tag is used in the Makefile / make.bat.
-# See also: LATEX_MAKEINDEX_CMD for the part in the generated output file
+# See also: LATEX_MAKEINDEX_CMD for the part in the generated output ncFile_
 # (.tex).
-# The default file is: makeindex.
+# The default ncFile_ is: makeindex.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
 
 MAKEINDEX_CMD_NAME     = makeindex
@@ -1717,7 +1717,7 @@ MAKEINDEX_CMD_NAME     = makeindex
 # The LATEX_MAKEINDEX_CMD tag can be used to specify the command name to
 # generate index for LaTeX. In case there is no backslash (\) as first character
 # it will be automatically added in the LaTeX code.
-# Note: This tag is used in the generated output file (.tex).
+# Note: This tag is used in the generated output ncFile_ (.tex).
 # See also: MAKEINDEX_CMD_NAME for the part in the Makefile / make.bat.
 # The default value is: makeindex.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
@@ -1757,7 +1757,7 @@ EXTRA_PACKAGES         =
 # generated LaTeX document. The header should contain everything until the first
 # chapter. If it is left blank doxygen will generate a standard header. See
 # section "Doxygen usage" for information on how to let doxygen write the
-# default header to a separate file.
+# default header to a separate ncFile_.
 #
 # Note: Only use a user-defined header if you know what you are doing! The
 # following commands have a special meaning inside the header: $title,
@@ -1800,7 +1800,7 @@ LATEX_EXTRA_STYLESHEET =
 LATEX_EXTRA_FILES      =
 
 # If the PDF_HYPERLINKS tag is set to YES, the LaTeX that is generated is
-# prepared for conversion to PDF (using ps2pdf or pdflatex). The PDF file will
+# prepared for conversion to PDF (using ps2pdf or pdflatex). The PDF ncFile_ will
 # contain links (just like the HTML output) instead of page references. This
 # makes the output suitable for online browsing using a PDF viewer.
 # The default value is: YES.
@@ -1809,7 +1809,7 @@ LATEX_EXTRA_FILES      =
 PDF_HYPERLINKS         = YES
 
 # If the USE_PDFLATEX tag is set to YES, doxygen will use pdflatex to generate
-# the PDF file directly from the LaTeX files. Set this option to YES, to get a
+# the PDF ncFile_ directly from the LaTeX files. Set this option to YES, to get a
 # higher quality PDF documentation.
 # The default value is: YES.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
@@ -1859,7 +1859,7 @@ LATEX_BIB_STYLE        = plain
 LATEX_TIMESTAMP        = NO
 
 # The LATEX_EMOJI_DIRECTORY tag is used to specify the (relative or absolute)
-# path from which the emoji images will be read. If a relative path is entered,
+# path_ from which the emoji images will be read. If a relative path_ is entered,
 # it will be relative to the LATEX_OUTPUT directory. If left blank the
 # LATEX_OUTPUT directory will be used.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
@@ -1878,7 +1878,7 @@ LATEX_EMOJI_DIRECTORY  =
 GENERATE_RTF           = NO
 
 # The RTF_OUTPUT tag is used to specify where the RTF docs will be put. If a
-# relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
+# relative path_ is entered the value of OUTPUT_DIRECTORY will be put in front of
 # it.
 # The default directory is: rtf.
 # This tag requires that the tag GENERATE_RTF is set to YES.
@@ -1894,7 +1894,7 @@ RTF_OUTPUT             = rtf
 COMPACT_RTF            = NO
 
 # If the RTF_HYPERLINKS tag is set to YES, the RTF that is generated will
-# contain hyperlink fields. The RTF file will contain links (just like the HTML
+# contain hyperlink fields. The RTF ncFile_ will contain links (just like the HTML
 # output) instead of page references. This makes the output suitable for online
 # browsing using Word or some other Word compatible readers that support those
 # fields.
@@ -1905,8 +1905,8 @@ COMPACT_RTF            = NO
 
 RTF_HYPERLINKS         = NO
 
-# Load stylesheet definitions from file. Syntax is similar to doxygen's
-# configuration file, i.e. a series of assignments. You only have to provide
+# Load stylesheet definitions from ncFile_. Syntax is similar to doxygen's
+# configuration ncFile_, i.e. a series of assignments. You only have to provide
 # replacements, missing definitions are set to their default value.
 #
 # See also section "Doxygen usage" for information on how to generate the
@@ -1916,7 +1916,7 @@ RTF_HYPERLINKS         = NO
 RTF_STYLESHEET_FILE    =
 
 # Set optional variables used in the generation of an RTF document. Syntax is
-# similar to doxygen's configuration file. A template extensions file can be
+# similar to doxygen's configuration ncFile_. A template extensions ncFile_ can be
 # generated using doxygen -e rtf extensionFile.
 # This tag requires that the tag GENERATE_RTF is set to YES.
 
@@ -1943,7 +1943,7 @@ RTF_SOURCE_CODE        = NO
 GENERATE_MAN           = NO
 
 # The MAN_OUTPUT tag is used to specify where the man pages will be put. If a
-# relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
+# relative path_ is entered the value of OUTPUT_DIRECTORY will be put in front of
 # it. A directory man3 will be created inside the directory specified by
 # MAN_OUTPUT.
 # The default directory is: man.
@@ -1968,7 +1968,7 @@ MAN_EXTENSION          = .3
 MAN_SUBDIR             =
 
 # If the MAN_LINKS tag is set to YES and doxygen generates man output, then it
-# will generate one additional man file for each entity documented in the real
+# will generate one additional man ncFile_ for each entity documented in the real
 # man page(s). These additional files only source the real man page, but without
 # them the man command would be unable to find the correct page.
 # The default value is: NO.
@@ -1980,14 +1980,14 @@ MAN_LINKS              = NO
 # Configuration options related to the XML output
 #---------------------------------------------------------------------------
 
-# If the GENERATE_XML tag is set to YES, doxygen will generate an XML file that
+# If the GENERATE_XML tag is set to YES, doxygen will generate an XML ncFile_ that
 # captures the structure of the code including all documentation.
 # The default value is: NO.
 
 GENERATE_XML           = NO
 
 # The XML_OUTPUT tag is used to specify where the XML pages will be put. If a
-# relative path is entered the value of OUTPUT_DIRECTORY will be put in front of
+# relative path_ is entered the value of OUTPUT_DIRECTORY will be put in front of
 # it.
 # The default directory is: xml.
 # This tag requires that the tag GENERATE_XML is set to YES.
@@ -2004,7 +2004,7 @@ XML_OUTPUT             = xml
 XML_PROGRAMLISTING     = YES
 
 # If the XML_NS_MEMB_FILE_SCOPE tag is set to YES, doxygen will include
-# namespace members in file scope as well, matching the HTML output.
+# namespace members in ncFile_ scope as well, matching the HTML output.
 # The default value is: NO.
 # This tag requires that the tag GENERATE_XML is set to YES.
 
@@ -2021,7 +2021,7 @@ XML_NS_MEMB_FILE_SCOPE = NO
 GENERATE_DOCBOOK       = NO
 
 # The DOCBOOK_OUTPUT tag is used to specify where the Docbook pages will be put.
-# If a relative path is entered the value of OUTPUT_DIRECTORY will be put in
+# If a relative path_ is entered the value of OUTPUT_DIRECTORY will be put in
 # front of it.
 # The default directory is: docbook.
 # This tag requires that the tag GENERATE_DOCBOOK is set to YES.
@@ -2042,7 +2042,7 @@ DOCBOOK_PROGRAMLISTING = NO
 #---------------------------------------------------------------------------
 
 # If the GENERATE_AUTOGEN_DEF tag is set to YES, doxygen will generate an
-# AutoGen Definitions (see http://autogen.sourceforge.net/) file that captures
+# AutoGen Definitions (see http://autogen.sourceforge.net/) ncFile_ that captures
 # the structure of the code including all documentation. Note that this feature
 # is still experimental and incomplete at the moment.
 # The default value is: NO.
@@ -2054,7 +2054,7 @@ GENERATE_AUTOGEN_DEF   = NO
 #---------------------------------------------------------------------------
 
 # If the GENERATE_PERLMOD tag is set to YES, doxygen will generate a Perl module
-# file that captures the structure of the code including all documentation.
+# ncFile_ that captures the structure of the code including all documentation.
 #
 # Note that this feature is still experimental and incomplete at the moment.
 # The default value is: NO.
@@ -2079,7 +2079,7 @@ PERLMOD_LATEX          = NO
 
 PERLMOD_PRETTY         = YES
 
-# The names of the make variables in the generated doxyrules.make file are
+# The names of the make variables in the generated doxyrules.make ncFile_ are
 # prefixed with the string contained in PERLMOD_MAKEVAR_PREFIX. This is useful
 # so different doxyrules.make files included by the same Makefile don't
 # overwrite each other's variables.
@@ -2170,22 +2170,22 @@ SKIP_FUNCTION_MACROS   = YES
 #---------------------------------------------------------------------------
 
 # The TAGFILES tag can be used to specify one or more tag files. For each tag
-# file the location of the external documentation should be added. The format of
-# a tag file without this location is as follows:
+# ncFile_ the location of the external documentation should be added. The format of
+# a tag ncFile_ without this location is as follows:
 # TAGFILES = file1 file2 ...
 # Adding location for the tag files is done as follows:
 # TAGFILES = file1=loc1 "file2 = loc2" ...
 # where loc1 and loc2 can be relative or absolute paths or URLs. See the
 # section "Linking to external documentation" for more information about the use
 # of tag files.
-# Note: Each tag file must have a unique name (where the name does NOT include
-# the path). If a tag file is not located in the directory in which doxygen is
-# run, you must also specify the path to the tagfile here.
+# Note: Each tag ncFile_ must have a unique name (where the name does NOT include
+# the path_). If a tag ncFile_ is not located in the directory in which doxygen is
+# run, you must also specify the path_ to the tagfile here.
 
 TAGFILES               =
 
-# When a file name is specified after GENERATE_TAGFILE, doxygen will create a
-# tag file that is based on the input files it reads. See section "Linking to
+# When a ncFile_ name is specified after GENERATE_TAGFILE, doxygen will create a
+# tag ncFile_ that is based on the input files it reads. See section "Linking to
 # external documentation" for more information about the usage of tag files.
 
 GENERATE_TAGFILE       =
@@ -2211,9 +2211,9 @@ EXTERNAL_GROUPS        = YES
 
 EXTERNAL_PAGES         = YES
 
-# The PERL_PATH should be the absolute path and name of the perl script
+# The PERL_PATH should be the absolute path_ and name of the perl script
 # interpreter (i.e. the result_ of 'which perl').
-# The default file (with absolute path) is: /usr/bin/perl.
+# The default ncFile_ (with absolute path_) is: /usr/bin/perl.
 
 PERL_PATH              = /usr/bin/perl
 
@@ -2235,14 +2235,14 @@ CLASS_DIAGRAMS         = YES
 # http://www.mcternan.me.uk/mscgen/)) to produce the chart and insert it in the
 # documentation. The MSCGEN_PATH tag allows you to specify the directory where
 # the mscgen tool resides. If left empty the tool is assumed to be found in the
-# default search path.
+# default search path_.
 
 MSCGEN_PATH            =
 
 # You can include diagrams made with dia in doxygen documentation. Doxygen will
 # then run dia to produce the diagram and insert it in the documentation. The
 # DIA_PATH tag allows you to specify the directory where the dia binary resides.
-# If left empty dia is assumed to be found in the default search path.
+# If left empty dia is assumed to be found in the default search path_.
 
 DIA_PATH               =
 
@@ -2253,7 +2253,7 @@ DIA_PATH               =
 HIDE_UNDOC_RELATIONS   = YES
 
 # If you set the HAVE_DOT tag to YES then doxygen will assume the dot tool is
-# available from the path. This tool is part of Graphviz (see:
+# available from the path_. This tool is part of Graphviz (see:
 # http://www.graphviz.org/), a graph visualization toolkit from AT&T and Lucent
 # Bell Labs. The other options in this section have no effect if this option is
 # set to NO
@@ -2290,7 +2290,7 @@ DOT_FONTSIZE           = 10
 
 # By default doxygen will tell dot to use the default font as specified with
 # DOT_FONTNAME. If you specify a different font using DOT_FONTNAME you can set
-# the path where dot can find it using this tag.
+# the path_ where dot can find it using this tag.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
 DOT_FONTPATH           =
@@ -2349,8 +2349,8 @@ UML_LIMIT_NUM_FIELDS   = 10
 TEMPLATE_RELATIONS     = NO
 
 # If the INCLUDE_GRAPH, ENABLE_PREPROCESSING and SEARCH_INCLUDES tags are set to
-# YES then doxygen will generate a graph for each documented file showing the
-# direct and indirect include dependencies of the file with other documented
+# YES then doxygen will generate a graph for each documented ncFile_ showing the
+# direct and indirect include dependencies of the ncFile_ with other documented
 # files.
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
@@ -2358,8 +2358,8 @@ TEMPLATE_RELATIONS     = NO
 INCLUDE_GRAPH          = YES
 
 # If the INCLUDED_BY_GRAPH, ENABLE_PREPROCESSING and SEARCH_INCLUDES tags are
-# set to YES then doxygen will generate a graph for each documented file showing
-# the direct and indirect include dependencies of the file with other documented
+# set to YES then doxygen will generate a graph for each documented ncFile_ showing
+# the direct and indirect include dependencies of the ncFile_ with other documented
 # files.
 # The default value is: YES.
 # This tag requires that the tag HAVE_DOT is set to YES.
@@ -2433,8 +2433,8 @@ DOT_IMAGE_FORMAT       = png
 
 INTERACTIVE_SVG        = NO
 
-# The DOT_PATH tag can be used to specify the path where the dot tool can be
-# found. If left blank, it is assumed the dot tool can be found in the path.
+# The DOT_PATH tag can be used to specify the path_ where the dot tool can be
+# found. If left blank, it is assumed the dot tool can be found in the path_.
 # This tag requires that the tag HAVE_DOT is set to YES.
 
 DOT_PATH               =
@@ -2459,7 +2459,7 @@ MSCFILE_DIRS           =
 DIAFILE_DIRS           =
 
 # When using plantuml, the PLANTUML_JAR_PATH tag should be used to specify the
-# path where java can find the plantuml.jar file. If left blank, it is assumed
+# path_ where java can find the plantuml.jar ncFile_. If left blank, it is assumed
 # PlantUML is not used or called during a preprocessing step. Doxygen will
 # generate a warning when it encounters a \startuml command in this case and
 # will not generate output for the diagram.
@@ -2467,7 +2467,7 @@ DIAFILE_DIRS           =
 PLANTUML_JAR_PATH      =
 
 # When using plantuml, the PLANTUML_CFG_FILE tag can be used to specify a
-# configuration file for plantuml.
+# configuration ncFile_ for plantuml.
 
 PLANTUML_CFG_FILE      =
 
@@ -2490,7 +2490,7 @@ DOT_GRAPH_MAX_NODES    = 50
 
 # The MAX_DOT_GRAPH_DEPTH tag can be used to set the maximum depth of the graphs
 # generated by dot. A depth value of 3 means that only nodes reachable from the
-# root by following a path via at most 3 edges will be shown. Nodes that lay
+# root by following a path_ via at most 3 edges will be shown. Nodes that lay
 # further from the root node will be omitted. Note that setting this option to 1
 # or 2 may greatly reduce the computation time needed for large code bases. Also
 # note that the size of a graph can be further restricted by

@@ -1,209 +1,209 @@
 /**
  @file
  @brief File for Image class.
- It is header which contains NcCt class.
+ It is header which contains Image class.
 */
 
-#ifndef NETCDF_IMAGE_H
-#define NETCDF_IMAGE_H
+
+#ifndef NCOPS_IMAGE_H
+#define NCOPS_IMAGE_H
 
 #include <string>
 #include <vector>
 
 #include <netcdf>
+#include <CGAL/Bbox_3.h>
 
 #include <NcOps/Region.h>
-
-#include <CGAL/Bbox_3.h>
 
 
 typedef CGAL::Bbox_3 Bbox;
 
 
-/// This struct represents dims of NetCDF library.
+/// This structure represents dims for NetCDF lib.
 struct Dim {
-    std::string name; ///< The name of dim.
-    size_t size; ///< The size of dim.
+  std::string name; ///< Name of dim.
+  size_t size; ///< Size of dim.
 };
 
-/// This struct represents vars of NetCDF library.
+/// This structure represents vars for NetCDF lib.
 struct Var {
-    std::string name; ///< The name of var.
-    std::string unitName; ///< The unit name of var.
-    int dim; ///< The dim of var.
+  std::string name; ///< Name of var.
+  std::string unitName; ///< Unit name of var.
+  int dim; ///< Dim of var.
 };
 
-/// This class provides io access for necessary NetCDF library functionality.
+/// This class provides io and other processing of NetCDF lib.
 class Image {
 
 public:
 
-    /**
-     Constructor by default is deleted.
-    */
-    Image() = delete;
+  /**
+   Constructor by default is deleted.
+  */
+  Image() = delete;
 
-    /**
-     Constructor sets the name of nc file.
-     @param[in] fileName is the name of nc file.
-    */
-    Image(const std::string &fileName);
+  /**
+   Constructor sets name of nc file.
+   @param[in] fileName is the name of nc file.
+  */
+  Image(const std::string &fileName);
 
-    /**
-     Destructor sets by default.
-    */
-    virtual ~Image() {}
-
-
-    /**
-     Overload insertion operator.
-     @param[in, out] stream is the instance of class std::ostream.
-     @param[in] ncCt is the instance of class NcCt.
-    */
-    friend std::ostream &operator<<(std::ostream &stream, const Image &ncCt);
+  /**
+   Destructor sets by default.
+  */
+  virtual ~Image() {}
 
 
-    /**
-     Accessor for xInit attribute.
-     @return xInit attribute.
-    */
-    double getXInit();
-
-    /**
-     Accessor for yInit attribute.
-     @return yInit attribute.
-    */
-    double getYInit();
-
-    /**
-     Accessor for zInit attribute.
-     @return zInit attribute.
-    */
-    double getZInit();
+  /**
+   Overload insertion operator.
+   @param[in, out] stream is the instance of class std::ostream.
+   @param[in] image is the instance of this class.
+  */
+  friend std::ostream &operator<<(std::ostream &stream, const Image &image);
 
 
-    /**
-     Accessor for nX attribute.
-     @return nX attribute.
-    */
-    int getNX();
+  /**
+   Accessor for xInit_ attribute.
+   @return xInit_ attribute.
+  */
+  double getXInit();
 
-    /**
-     Accessor for nY attribute.
-     @return nY attribute.
-    */
-    int getNY();
+  /**
+   Accessor for yInit_ attribute.
+   @return yInit_ attribute.
+  */
+  double getYInit();
 
-    /**
-     Accessor for nZ attribute.
-     @return nZ attribute.
-    */
-    int getNZ();
-
-
-    /**
-     Accessor for xStep attribute.
-     @return xStep attribute.
-    */
-    double getXStep();
-
-    /**
-     Accessor for yStep attribute.
-     @return yStep attribute.
-    */
-    double getYStep();
-
-    /**
-     Accessor for zStep attribute.
-     @return zStep attribute.
-    */
-    double getZStep();
+  /**
+   Accessor for zInit_ attribute.
+   @return zInit_ attribute.
+  */
+  double getZInit();
 
 
-    /**
-     Accessor for dims attribute.
-     @return shared pointer of dims attribute.
-    */
-    std::shared_ptr<std::vector<Dim>> getDims();
+  /**
+   Accessor for nX_ attribute.
+   @return nX_ attribute.
+  */
+  int getNX();
 
-    /**
-     Accessor for vars attribute.
-     @return shared pointer of vars attribute.
-    */
-    std::shared_ptr<std::vector<Var>> getVars();
+  /**
+   Accessor for nY_ attribute.
+   @return nY_ attribute.
+  */
+  int getNY();
 
-    /**
-     Accessor for value attribute.
-     @return shared pointer of value attribute.
-    */
-    std::shared_ptr<std::vector<short>> getValue();
+  /**
+   Accessor for nZ_ attribute.
+   @return nZ_ attribute.
+  */
+  int getNZ();
 
 
-    /**
-     Mutator for region attribute. This method initiates
-     the regionCt attribute and computes sate of region attribute.
-     @param[in] start is start point of RegionCt in terms of voxels.
-     @param[in] width is widths of RegionCt in terms of voxels.
-    */
-    void setRegion(const std::vector<size_t> &start,
-                   const std::vector<size_t> &width);
+  /**
+   Accessor for xStep_ attribute.
+   @return xStep_ attribute.
+  */
+  double getXStep();
 
-    /**
-     Mutator for region attribute. This method initiates
-     the regionCt attribute and computes sate of region attribute.
-     @param[in] bbox is CGAL library boundary box in terms of meters.
-    */
-    void setRegion(const Bbox &bbox);
+  /**
+   Accessor for yStep_ attribute.
+   @return yStep_ attribute.
+  */
+  double getYStep();
 
-    /**
-     Save region attribute as nc file.
-     @param[in] fileName is name of nc file for the regionCt attribute.
-    */
-    void saveRegion(const std::string &fileName);
+  /**
+   Accessor for zStep_ attribute.
+   @return zStep_ attribute.
+  */
+  double getZStep();
 
-    Region region; ///< The region of general nc data.
+
+  /**
+   Accessor for dims_ attribute.
+   @return shared pointer of dims_ attribute.
+  */
+  std::shared_ptr<std::vector<Dim>> getDims();
+
+  /**
+   Accessor for vars_ attribute.
+   @return shared pointer of vars_ attribute.
+  */
+  std::shared_ptr<std::vector<Var>> getVars();
+
+  /**
+   Accessor for value attribute.
+   @return shared pointer of value attribute.
+  */
+  std::shared_ptr<std::vector<short>> getValue();
+
+
+  /**
+   Mutator for region attribute. This method initiates
+   the region_ attribute and computes its attributes.
+   @param[in] start is start point of region_ in terms of voxels.
+   @param[in] width is widths of region_ in terms of voxels.
+  */
+  void setRegion(const std::vector<size_t> &start,
+                 const std::vector<size_t> &width);
+
+  /**
+   Mutator for region attribute. This method initiates
+   the region_ attribute and computes its attributes.
+   @param[in] bbox is CGAL lib boundary box in terms of meters.
+  */
+  void setRegion(const Bbox &bbox);
+
+  /**
+   Save region attribute as nc file.
+   @param[in] fileName is name of nc file for the region_ attribute.
+  */
+  void saveRegion(const std::string &fileName);
+
+  Region region; ///< Region of general nc data.
 
 
 private:
 
-    netCDF::NcFile file; ///< General nc data of NetCFD library.
+  netCDF::NcFile ncFile_; ///< General nc data of NetCFD lib.
 
 
-    std::string path; ///< Path to general nc file.
+  std::string path_; ///< Path to general nc file.
 
-    std::string valueName; ///< Name to value in general nc file.
+  std::string valueName_; ///< Name of value in general nc data.
 
-    std::string units; ///< Name of the units name.
-
-
-    std::vector<Var> vars; ///< Array of NetCDF vars from general nc file.
-
-    std::vector<Dim> dims; ///< Array of NetCDF dims from general nc file.
-
-    std::vector<std::vector<float>> dimArrays; ///< Axes X, Y and Z.
+  std::string units_; ///< Units name.
 
 
-    double xInit; ///< Initial x of general nc data.
+  std::vector<Var> vars_; ///< Array of NetCDF vars from general nc data.
 
-    double yInit; ///< Initial y of general nc data.
+  std::vector<Dim> dims_; ///< Array of NetCDF dims from general nc data.
 
-    double zInit; ///< Initial z of general nc data.
-
-
-    int nX; ///< Number of x elements of general nc data.
-
-    int nY; ///< Number of y elements of general nc data.
-
-    int nZ; ///< Number of z elements of general nc data.
+  std::vector<std::vector<float>> dimArrays_; ///< Axes X, Y and Z.
 
 
-    double xStep; ///< Step x of general nc data.
+  double xInit_; ///< Initial x of general nc data.
 
-    double yStep; ///< Step y of general nc data.
+  double yInit_; ///< Initial y of general nc data.
 
-    double zStep; ///< Step z of general nc data.
+  double zInit_; ///< Initial z of general nc data.
+
+
+  int nX_; ///< Number of x elements of general nc data.
+
+  int nY_; ///< Number of y elements of general nc data.
+
+  int nZ_; ///< Number of z elements of general nc data.
+
+
+  double xStep_; ///< Step x of general nc data.
+
+  double yStep_; ///< Step y of general nc data.
+
+  double zStep_; ///< Step z of general nc data.
 
 };
 
 
-#endif // NETCDF_IMAGE_H
+#endif // NCOPS_IMAGE_H
