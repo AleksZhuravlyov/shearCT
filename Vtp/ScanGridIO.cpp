@@ -215,7 +215,7 @@ void ScanGridIO::saveFilesCollectionToFile(const std::string &fileName) {
     collection.last_child().append_attribute("timestep").set_value(
         scanGridFileDescriptions_[i].c_str());
 
-    collection.last_child().append_attribute("ncFile_").set_value(
+    collection.last_child().append_attribute("file").set_value(
         scanGridFileNames_[i].c_str());
 
   }

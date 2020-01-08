@@ -24,7 +24,7 @@ public:
 
   /**
    Constructor sets instance of ScanGrid class.
-   @param[in] scanGrid is instance of ScanGrid class for scanGrid attribute.
+   @param[in] scanGrid is instance of ScanGrid class for scanGrid_ attribute.
   */
   ScanGridIO(std::shared_ptr<ScanGrid> scanGrid);
 
@@ -42,57 +42,58 @@ public:
 
   /**
    Accessor for scanGrid_ attribute.
-   @return pointsCt attribute.
+   @return scanGrid_ attribute.
   */
   std::shared_ptr<ScanGrid> getScanGrid();
 
 
   /**
-   Read pointsCt attribute from ncFile_.
-   @param[in] fileName is the name of ncFile_ with pointsCt attribute.
+   Read scanGrid_ attribute from paraview file.
+   @param[in] fileName is the name of paraview file with scanGrid.
   */
   void loadPointsCtFromFile(const std::string &fileName);
 
   /**
-   Mutator for fileIsBinary attribute.
-   @param[in] formatIsBinary is assigned to fileIsBinary attribute.
+   Mutator for fileIsBinary_ attribute.
+   @param[in] formatIsBinary is assigned to fileIsBinary_ attribute.
   */
   void setFormatIsBinary(const bool &formatIsBinary);
 
   /**
-   Accessor for fileIsBinary attribute.
-   @return fileIsBinary attribute.
+   Accessor for fileIsBinary_ attribute.
+   @return fileIsBinary_ attribute.
   */
   bool getFormatIsBinary();
 
   /**
-   Save pointsCt attribute into ncFile_.
-   @param[in] fileName is the name for saving pointsCt attribute.
-   @param[in] fileDescription is description for ncFile_.
+   Save scanGrid_ attribute into paraview file.
+   @param[in] fileName is the name for saving scanGrid_ attribute.
+   @param[in] fileDescription is description for scanGrid file.
   */
   void savePointsCtToFile(const std::string &fileName,
                           const std::string &fileDescription);
 
   /**
-   Save pointsCt attribute into ncFile_. Description for ncFile_ is default.
+   Save scanGrid_ attribute into paraview file. Description for scanGrid
+   is default.
    @param[in] fileName is the name for saving pointsCt attribute.
   */
   void savePointsCtToFile(const std::string &fileName);
 
   /**
-   Clear names and descriptions of saved pointsCt files.
+   Clear names and descriptions of saved scanGrid files.
   */
   void clearFilesCollection();
 
   /**
-   Save ncFile_ for paraview for loading all saved pointsCt files as one.
-   @param[in] fileName is the name for collection ncFile_.
+   Save scanGrid files names for loading all saved scanGrid files as one.
+   @param[in] fileName is the name for collection of scanGrid files.
   */
   void saveFilesCollectionToFile(const std::string &fileName);
 
 
 private:
-  /// Set of points_ of ScanGrid type.
+  /// Set of points of ScanGrid type.
   std::shared_ptr<ScanGrid> scanGrid_;
 
   /// Binarity flag for scanGrid files.
