@@ -205,12 +205,12 @@ Bbox ScanGrid::generateBbox() {
 }
 
 
-void ScanGrid::computeResult() {
+void ScanGrid::computeDifferenceAB() {
   for (int i = 0; i < result_->size(); i++)
     (*result_)[i] = (*tomoA_)[i] - (*tomoB_)[i];
 }
 
-double ScanGrid::computePearsonCorrelation() {
+double ScanGrid::computePearsonCorrelationAB() {
 
   auto n = cgalPoints_->size();
 

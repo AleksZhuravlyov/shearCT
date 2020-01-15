@@ -88,7 +88,7 @@ void getBaseSquareFromCtB(Image &image, std::shared_ptr<ScanGrid> &scanGrid,
   //                  false);
 
 
-  auto transformations = generateTranslationAnaRotationXYZ();
+  auto transformations = generateLinearTransformation();
   auto constraintsMin = std::vector<double>{
           -20e-5, -20e-5, -20e-5,
           -M_PI / 180., -M_PI / 180., -M_PI / 180.};
@@ -158,7 +158,7 @@ void getTopSquareFromCtB(Image &image, const double &shiftZ,
   //                  .7e-5, 61, "top2", false);
 
 
-  auto transformations = generateTranslationAnaRotationXYZ();
+  auto transformations = generateLinearTransformation();
   auto constraintsMin = std::vector<double>{
           -25e-5, -25e-5, -25e-5,
           -M_PI / 100., -M_PI / 100., -M_PI / 100.};

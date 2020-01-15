@@ -3,71 +3,70 @@
 
 #include <vector>
 #include <string>
-#include <iomanip>
 #include <ScanGrid/ScanGrid.h>
 #include <NcOps/Image.h>
 #include <Geometry/TransformationFunctor.h>
 #include <Vtp/ScanGridIO.h>
+
 #include <dlib/optimization.h>
-#include <dlib/global_optimization.h>
 
-
-#include <StringAndNumber.h>
 
 typedef dlib::matrix<double, 0, 1> ColumnVector;
 
-typedef std::vector<std::shared_ptr<TransformationFunctor>> Transformations;
+typedef std::vector<std::shared_ptr<TransformationFunctor>>
+    TransformationFunctors;
 
-Transformations generateTranslationAnaRotationXYZ();
+TransformationFunctors generateLinearTransformation();
 
-Transformations generateStretchingXY();
+TransformationFunctors generateStretchingXY();
 
 std::vector<double> makeRegistration(
-        Image &ncCt, std::shared_ptr<ScanGrid> &pointsCt,
-        Transformations &transformations,
-        const double &accuracy,
-        const std::vector<double> &constraintsMin,
-        const std::vector<double> &constraintsMax,
-        const std::string &fileNamesPrefix,
-        const bool &isFilesSaved);
+    Image &image, std::shared_ptr<ScanGrid> &scanGrid,
+    TransformationFunctors &transformationFunctors,
+    const double &accuracy,
+    const std::vector<double> &constraintsMin,
+    const std::vector<double> &constraintsMax,
+    const std::string &fileNamesPrefix,
+    const bool &isFilesSaved);
 
-Bbox calculateGeneralBbox(std::shared_ptr<ScanGrid> &pointsCt,
-                          const Transformations &transformations,
-                          const std::vector<double> &constraintsMin,
-                          const std::vector<double> &constraintsMax);
+Bbox calculateTransformationBbox(
+    std::shared_ptr<ScanGrid> &scanGrid,
+    const TransformationFunctors &transformationFunctors,
+    const std::vector<double> &constraintsMin,
+    const std::vector<double> &constraintsMax);
 
-class InvCorrelation {
+class NegativePearsonCorrelation {
 
 public:
 
-    InvCorrelation(Transformations &_transformations,
-                   ScanGrid &_pointsCt,
-                   Region &_regionCt,
-                   const std::string &_fileNamesPrefix,
-                   const bool &_isFilesSaved,
-                   int &_iteration,
-                   ScanGridIO &_vtpCt);
+  NegativePearsonCorrelation(TransformationFunctors &transformationFunctors_,
+                             ScanGrid &scanGrid_,
+                             Region &region_,
+                             const std::string &fileNamesPrefix_,
+                             const bool &isFilesSaved_,
+                             int &iteration_,
+                             ScanGridIO &scanGridIo_);
 
-    virtual ~InvCorrelation() = default;
+  virtual ~NegativePearsonCorrelation() = default;
 
-    double operator()(const ColumnVector &x) const;
+  double operator()(const ColumnVector &searchVector) const;
 
-    Transformations &transformations;
+  TransformationFunctors &transformationFunctors;
 
-    ScanGrid &pointsCt;
+  ScanGrid &scanGrid;
 
-    Region &regionCt;
+  Region &region;
 
-    std::string fileNamesPrefix;
+  std::string fileNamesPrefix;
 
-    bool isFilesSaved;
+  bool isFilesSaved;
 
-    int &iteration;
+  int &iteration;
 
-    ScanGridIO &vtpCt;
+  ScanGridIO &scanGridIo;
 
 
-    void implementResult(const ColumnVector &x);
+  void implementSearchVector(const ColumnVector &searchVector);
 
 
 };

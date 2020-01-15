@@ -76,7 +76,7 @@ public:
   /**
    Save scanGrid_ attribute into paraview file. Description for scanGrid
    is default.
-   @param[in] fileName is the name for saving pointsCt attribute.
+   @param[in] fileName is the name for saving scanGrid attribute.
   */
   void savePointsCtToFile(const std::string &fileName);
 

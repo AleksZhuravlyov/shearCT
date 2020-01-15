@@ -29,8 +29,8 @@ double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
 
         pointsCt->transform((*transformationFunctor)(valuesRelative[i]));
         regionCt.computePointsValue();
-        pointsCt->computeResult();
-        correlations.push_back(pointsCt->computePearsonCorrelation());
+      pointsCt->computeDifferenceAB();
+        correlations.push_back(pointsCt->computePearsonCorrelationAB());
 
         if (isFilesSaved)
             vtpCt.savePointsCtToFile(
@@ -59,7 +59,7 @@ double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
     pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
     pointsCt->transform((*transformationFunctor)(valuesAbsolute[indMaxCorrelation]));
     regionCt.computePointsValue();
-    pointsCt->computeResult();
+  pointsCt->computeDifferenceAB();
 
 
     std::string plotLine =

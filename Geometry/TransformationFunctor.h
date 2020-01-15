@@ -15,7 +15,7 @@ typedef CGAL::Simple_cartesian<double> Kernel;
 typedef CGAL::Aff_transformation_3<Kernel> Transformation;
 
 
-/// This class is interface for translations functor.
+/// This class is interface for transformation functor.
 class TransformationFunctor {
 
 public:

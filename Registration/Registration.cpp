@@ -6,209 +6,221 @@
 #include <Geometry/Rotation.h>
 #include <Geometry/Stretch.h>
 
-Transformations generateTranslationAnaRotationXYZ() {
-    Transformations transformations;
-    transformations.push_back(std::make_shared<TranslationX>());
-    transformations.push_back(std::make_shared<TranslationY>());
-    transformations.push_back(std::make_shared<TranslationZ>());
-    transformations.push_back(std::make_shared<RotationX>());
-    transformations.push_back(std::make_shared<RotationY>());
-    transformations.push_back(std::make_shared<RotationZ>());
-    return transformations;
+#include <dlib/global_optimization.h>
+
+#include <StringAndNumber.h>
+
+
+typedef std::vector<Transformation> Transformations;
+
+
+TransformationFunctors generateLinearTransformation() {
+  TransformationFunctors transformationFunctors;
+  transformationFunctors.push_back(std::make_shared<TranslationX>());
+  transformationFunctors.push_back(std::make_shared<TranslationY>());
+  transformationFunctors.push_back(std::make_shared<TranslationZ>());
+  transformationFunctors.push_back(std::make_shared<RotationX>());
+  transformationFunctors.push_back(std::make_shared<RotationY>());
+  transformationFunctors.push_back(std::make_shared<RotationZ>());
+  return transformationFunctors;
 }
 
-Transformations generateStretchingXY() {
-    Transformations transformations;
-    transformations.push_back(std::make_shared<StretchXY>());
-    return transformations;
+TransformationFunctors generateStretchingXY() {
+  TransformationFunctors transformationFunctors;
+  transformationFunctors.push_back(std::make_shared<StretchXY>());
+  return transformationFunctors;
 }
 
 
 std::vector<double> makeRegistration(
-        Image &ncCt, std::shared_ptr<ScanGrid> &pointsCt,
-        Transformations &transformations,
-        const double &accuracy,
-        const std::vector<double> &constraintsMin,
-        const std::vector<double> &constraintsMax,
-        const std::string &fileNamesPrefix,
-        const bool &isFilesSaved) {
+    Image &image, std::shared_ptr<ScanGrid> &scanGrid,
+    TransformationFunctors &transformationFunctors,
+    const double &accuracy,
+    const std::vector<double> &constraintsMin,
+    const std::vector<double> &constraintsMax,
+    const std::string &fileNamesPrefix,
+    const bool &isFilesSaved) {
 
-    auto bBoxGeneral = calculateGeneralBbox(pointsCt, transformations,
-                                            constraintsMin, constraintsMax);
+  auto transformationBbox = calculateTransformationBbox(scanGrid,
+                                                        transformationFunctors,
+                                                        constraintsMin,
+                                                        constraintsMax);
 
-    ncCt.setRegion(bBoxGeneral);
-    int iteration = -1;
-    ScanGridIO vtpCt;
-
-
-    InvCorrelation invCorrelation(
-            transformations, *pointsCt,
-            ncCt.region,
-            fileNamesPrefix, isFilesSaved,
-            iteration, vtpCt);
-
-    int iterationForDerivative = -1;
-    InvCorrelation invCorrelationForDerivative(
-            transformations, *pointsCt,
-            ncCt.region,
-            fileNamesPrefix, false,
-            iterationForDerivative, vtpCt);
+  image.setRegion(transformationBbox);
+  int iterationForValue = -1;
+  ScanGridIO scanGridIo;
 
 
-    ColumnVector searchVector(transformations.size());
-    ColumnVector lowerConstraint(transformations.size());
-    ColumnVector upperConstraint(transformations.size());
-    for (int i = 0; i < transformations.size(); i++) {
+  NegativePearsonCorrelation functionForValue(
+      transformationFunctors, *scanGrid, image.region,
+      fileNamesPrefix, isFilesSaved,
+      iterationForValue, scanGridIo);
 
-        if (typeid(*transformations[i]).name() == typeid(StretchXY).name())
-            searchVector(i) = 1;
-        else
-            searchVector(i) = 0;
+  int iterationForDerivative = -1;
+  NegativePearsonCorrelation functionForDerivative(
+      transformationFunctors, *scanGrid, image.region,
+      fileNamesPrefix, false,
+      iterationForDerivative, scanGridIo);
 
-        lowerConstraint(i) = constraintsMin[i];
-        upperConstraint(i) = constraintsMax[i];
+
+  unsigned int vectorSize = transformationFunctors.size();
+  ColumnVector searchVector(vectorSize);
+  ColumnVector lowerConstraint(vectorSize);
+  ColumnVector upperConstraint(vectorSize);
+  for (int i = 0; i < vectorSize; i++) {
+
+    if (typeid(*transformationFunctors[i]).name() == typeid(StretchXY).name())
+      searchVector(i) = 1;
+    else
+      searchVector(i) = 0;
+
+    lowerConstraint(i) = constraintsMin[i];
+    upperConstraint(i) = constraintsMax[i];
+
+  }
+
+
+  std::cout << std::endl;
+  auto pearsonCorrelation = -find_min_box_constrained(
+      dlib::lbfgs_search_strategy(10),
+      dlib::objective_delta_stop_strategy(accuracy).be_verbose(),
+      functionForValue, dlib::derivative(functionForDerivative),
+      searchVector, lowerConstraint, upperConstraint);
+
+
+  functionForValue.implementSearchVector(searchVector);
+
+  std::cout << std::endl;
+  std::cout << "pearsonCorrelation " << pearsonCorrelation << std::endl;
+  std::cout << "searchVector:\n" << searchVector << std::endl;
+
+  std::vector<double> answerVector;
+  for (int i = 0; i < transformationFunctors.size(); i++)
+    answerVector.push_back(searchVector(i));
+
+  return answerVector;
+
+}
+
+
+Bbox calculateTransformationBbox(
+    std::shared_ptr<ScanGrid> &scanGrid,
+    const TransformationFunctors &transformationFunctors,
+    const std::vector<double> &constraintsMin,
+    const std::vector<double> &constraintsMax) {
+
+  auto bboxIni = scanGrid->generateBbox();
+  std::vector<Bbox> rotationBboxes;
+  auto bboxIniScanGrid = ScanGrid(bboxIni);
+
+  for (int i = 0; i < transformationFunctors.size(); i++)
+
+    if (typeid(*transformationFunctors[i]).name() == typeid(RotationX).name() ||
+        typeid(*transformationFunctors[i]).name() == typeid(RotationY).name() ||
+        typeid(*transformationFunctors[i]).name() == typeid(RotationZ).name()) {
+
+      auto scanGridMin = bboxIniScanGrid;
+      scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
+      rotationBboxes.push_back(scanGridMin.generateBbox());
+
+      auto scanGridMax = bboxIniScanGrid;
+      scanGridMax.transform((*transformationFunctors[i])(constraintsMax[i]));
+      rotationBboxes.push_back(scanGridMax.generateBbox());
 
     }
 
-
-    std::cout << std::endl;
-    auto result = find_min_box_constrained(
-            dlib::lbfgs_search_strategy(10),
-            dlib::objective_delta_stop_strategy(accuracy).be_verbose(),
-            invCorrelation, dlib::derivative(invCorrelationForDerivative),
-            searchVector, lowerConstraint, upperConstraint);
+  auto generalRotationBbox = bboxIni;
+  for (auto &bbox : rotationBboxes)
+    generalRotationBbox += bbox;
 
 
-    invCorrelation.implementResult(searchVector);
+  std::vector<Bbox> translationBboxes;
+  auto bboxRotationScanGrid = ScanGrid(generalRotationBbox);
 
-    std::cout << std::endl;
-    std::cout << "correlation " << 1. - result << std::endl;
-    std::cout << "searchVector:\n" << searchVector << std::endl;
+  for (int i = 0; i < transformationFunctors.size(); i++)
 
-    std::vector<double> answerVector;
-    for (int i = 0; i < transformations.size(); i++)
-        answerVector.push_back(searchVector(i));
+    if (typeid(*transformationFunctors[i]).name() != typeid(RotationX).name() &&
+        typeid(*transformationFunctors[i]).name() != typeid(RotationY).name() &&
+        typeid(*transformationFunctors[i]).name() != typeid(RotationZ).name()) {
 
-    return answerVector;
+      auto scanGridMin = bboxRotationScanGrid;
+      scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
+      translationBboxes.push_back(scanGridMin.generateBbox());
 
-}
+      auto scanGridMax = bboxRotationScanGrid;
+      scanGridMax.transform((*transformationFunctors[i])(constraintsMax[i]));
+      translationBboxes.push_back(scanGridMax.generateBbox());
 
-
-Bbox calculateGeneralBbox(std::shared_ptr<ScanGrid> &pointsCt,
-                          const Transformations &transformations,
-                          const std::vector<double> &constraintsMin,
-                          const std::vector<double> &constraintsMax) {
-
-    auto bBoxIni = pointsCt->generateBbox();
-    std::vector<Bbox> bBoxesRotation;
-    auto pointsCtBboxIni = ScanGrid(bBoxIni);
-
-    for (int i = 0; i < transformations.size(); i++)
-
-        if (typeid(*transformations[i]).name() == typeid(RotationX).name() ||
-            typeid(*transformations[i]).name() == typeid(RotationY).name() ||
-            typeid(*transformations[i]).name() == typeid(RotationZ).name()) {
-
-            auto pointsCtMin = pointsCtBboxIni;
-            pointsCtMin.transform((*transformations[i])(constraintsMin[i]));
-            bBoxesRotation.push_back(pointsCtMin.generateBbox());
-
-            auto pointsCtMax = pointsCtBboxIni;
-            pointsCtMax.transform((*transformations[i])(constraintsMax[i]));
-            bBoxesRotation.push_back(pointsCtMax.generateBbox());
-
-        }
-
-    auto bBoxRotation = bBoxIni;
-    for (auto &bBox : bBoxesRotation)
-        bBoxRotation += bBox;
-
-
-    std::vector<Bbox> bBoxesTranslation;
-    auto pointsCtBboxRotation = ScanGrid(bBoxRotation);
-
-    for (int i = 0; i < transformations.size(); i++)
-
-        if (typeid(*transformations[i]).name() != typeid(RotationX).name() &&
-            typeid(*transformations[i]).name() != typeid(RotationY).name() &&
-            typeid(*transformations[i]).name() != typeid(RotationZ).name()) {
-
-            auto pointsCtMin = pointsCtBboxRotation;
-            pointsCtMin.transform((*transformations[i])(constraintsMin[i]));
-            bBoxesTranslation.push_back(pointsCtMin.generateBbox());
-
-            auto pointsCtMax = pointsCtBboxRotation;
-            pointsCtMax.transform((*transformations[i])(constraintsMax[i]));
-            bBoxesTranslation.push_back(pointsCtMax.generateBbox());
-
-        }
-
-    auto bBoxGeneral = bBoxRotation;
-    for (auto &bBox : bBoxesTranslation)
-        bBoxGeneral += bBox;
-
-    return bBoxGeneral;
-
-}
-
-
-double InvCorrelation::operator()(const ColumnVector &x) const {
-
-    ++iteration;
-
-    auto pointsCtCurr = pointsCt;
-    regionCt.setPoints(pointsCtCurr.getPoints(), pointsCtCurr.getTomoB());
-
-    std::vector<Transformation> aff_transformations;
-    for (int i = 0; i < transformations.size(); i++)
-        aff_transformations.push_back((*transformations[i])(x(i)));
-
-    pointsCtCurr.transform(aff_transformations);
-    regionCt.computePointsValue();
-    pointsCtCurr.computeResult();
-
-    if (isFilesSaved) {
-        vtpCt.setScanGrid(std::make_shared<ScanGrid>(pointsCtCurr));
-        vtpCt.savePointsCtToFile(fileNamesPrefix + "_" + toString(iteration) +
-                                 ".vtp", toString(iteration));
     }
 
-    return 1. - pointsCtCurr.computePearsonCorrelation();
-}
+  auto transformationBbox = generalRotationBbox;
+  for (auto &bbox : translationBboxes)
+    transformationBbox += bbox;
 
-
-void InvCorrelation::implementResult(const ColumnVector &x) {
-
-    if (isFilesSaved)
-        vtpCt.saveFilesCollectionToFile(fileNamesPrefix + ".pvd");
-
-    regionCt.setPoints(pointsCt.getPoints(), pointsCt.getTomoB());
-
-    std::vector<Transformation> aff_transformations;
-    for (int i = 0; i < transformations.size(); i++)
-        aff_transformations.push_back((*transformations[i])(x(i)));
-
-    pointsCt.transform(aff_transformations);
-
-    regionCt.computePointsValue();
-    pointsCt.computeResult();
+  return transformationBbox;
 
 }
 
 
-InvCorrelation::InvCorrelation(Transformations &_transformations,
-                               ScanGrid &_pointsCt,
-                               Region &_regionCt,
-                               const std::string &_fileNamesPrefix,
-                               const bool &_isFilesSaved,
-                               int &_iteration,
-                               ScanGridIO &_vtpCt) :
-        transformations(_transformations),
-        pointsCt(_pointsCt),
-        regionCt(_regionCt),
-        fileNamesPrefix(_fileNamesPrefix),
-        isFilesSaved(_isFilesSaved),
-        iteration(_iteration),
-        vtpCt(_vtpCt) {}
+double NegativePearsonCorrelation::operator()(
+    const ColumnVector &searchVector) const {
+
+  ++iteration;
+
+  auto scanGridCurr = scanGrid;
+  region.setPoints(scanGridCurr.getPoints(), scanGridCurr.getTomoB());
+
+  Transformations transformations;
+  for (int i = 0; i < transformationFunctors.size(); i++)
+    transformations.push_back(
+        (*transformationFunctors[i])(searchVector(i)));
+
+  scanGridCurr.transform(transformations);
+  region.computePointsValue();
+  scanGridCurr.computeDifferenceAB();
+
+  if (isFilesSaved) {
+    scanGridIo.setScanGrid(std::make_shared<ScanGrid>(scanGridCurr));
+    scanGridIo.savePointsCtToFile(
+        fileNamesPrefix + "_" + toString(iteration) + ".vtp",
+        toString(iteration));
+  }
+
+  return -scanGridCurr.computePearsonCorrelationAB();
+}
 
 
+void NegativePearsonCorrelation::implementSearchVector(
+    const ColumnVector &searchVector) {
+
+  if (isFilesSaved)
+    scanGridIo.saveFilesCollectionToFile(fileNamesPrefix + ".pvd");
+
+  region.setPoints(scanGrid.getPoints(), scanGrid.getTomoB());
+
+  Transformations transformations;
+  for (int i = 0; i < transformationFunctors.size(); i++)
+    transformations.push_back((*transformationFunctors[i])(searchVector(i)));
+
+  scanGrid.transform(transformations);
+
+  region.computePointsValue();
+  scanGrid.computeDifferenceAB();
+
+}
+
+
+NegativePearsonCorrelation::NegativePearsonCorrelation(
+    TransformationFunctors &transformationFunctors_,
+    ScanGrid &scanGrid_,
+    Region &region_,
+    const std::string &fileNamesPrefix_,
+    const bool &isFilesSaved_,
+    int &iteration_,
+    ScanGridIO &scanGridIo_) : transformationFunctors(transformationFunctors_),
+                               scanGrid(scanGrid_),
+                               region(region_),
+                               fileNamesPrefix(fileNamesPrefix_),
+                               isFilesSaved(isFilesSaved_),
+                               iteration(iteration_),
+                               scanGridIo(scanGridIo_) {}

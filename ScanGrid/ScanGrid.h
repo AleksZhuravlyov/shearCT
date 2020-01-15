@@ -82,7 +82,7 @@ public:
 
 
     /**
-     Make transformations for this ScanGrid class.
+     Make transformationFunctors for this ScanGrid class.
      @param[in] transformations acts on this ScanGrid class.
     */
     void transform(const std::vector<Transformation> &transformations);
@@ -195,13 +195,13 @@ public:
     /**
      Assign subtraction tomoA_ and TomoB attributes to result_ attribute.
     */
-    void computeResult();
+    void computeDifferenceAB();
 
     /**
      Compute Pearson correlation between tomoA_ and TomoB attributes.
      @return Pearson correlation between tomoA_ and TomoB attributes.
     */
-    double computePearsonCorrelation();
+    double computePearsonCorrelationAB();
 
     /**
      Generate square in XY plane inside this class ScanGrid.
