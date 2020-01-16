@@ -22,9 +22,9 @@ void demoVideo() {
   std::string baseSquareFromCtBName = "baseSquareFromCtB.vtp";
 
   std::string cylinderSectorFromCtAAndBaseSquareName =
-          "cylinderSectorFromCtAAndBaseSquare.vtp";
+      "cylinderSectorFromCtAAndBaseSquare.vtp";
   std::string cylinderSectorFromCtBAndBaseSquareName =
-          "cylinderSectorFromCtBAndBaseSquare.vtp";
+      "cylinderSectorFromCtBAndBaseSquare.vtp";
 
   double stretchZ = 0.000979212;
 

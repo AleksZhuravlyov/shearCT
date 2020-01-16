@@ -88,17 +88,18 @@ void getBaseSquareFromCtB(Image &image, std::shared_ptr<ScanGrid> &scanGrid,
   //                  false);
 
 
-  auto transformations = generateLinearTransformation();
-  auto constraintsMin = std::vector<double>{
-          -20e-5, -20e-5, -20e-5,
-          -M_PI / 180., -M_PI / 180., -M_PI / 180.};
-  auto constraintsMax = std::vector<double>{
-          20e-5, 20e-5, 20e-5,
-          M_PI / 180., M_PI / 180., M_PI / 180.};
 
-  std::string registrationType = "XYZTAndRTop";
-  std::cout << registrationType << std::endl;
-  makeRegistration(image, scanGrid, transformations, accuracy,
+  auto constraintsMin = std::vector<double>{
+      -20e-5, -20e-5, -20e-5,
+      -M_PI / 180., -M_PI / 180., -M_PI / 180.};
+  auto constraintsMax = std::vector<double>{
+      20e-5, 20e-5, 20e-5,
+      M_PI / 180., M_PI / 180., M_PI / 180.};
+
+  std::string transformationType = "linear";
+  std::string registrationType = "bottom";
+  std::cout << transformationType << " " << registrationType << std::endl;
+  makeRegistration(image, scanGrid, transformationType, accuracy,
                    constraintsMin, constraintsMax,
                    registrationType, true);
 
@@ -158,20 +159,20 @@ void getTopSquareFromCtB(Image &image, const double &shiftZ,
   //                  .7e-5, 61, "top2", false);
 
 
-  auto transformations = generateLinearTransformation();
-  auto constraintsMin = std::vector<double>{
-          -25e-5, -25e-5, -25e-5,
-          -M_PI / 100., -M_PI / 100., -M_PI / 100.};
-  auto constraintsMax = std::vector<double>{
-          25e-5, 25e-5, 25e-5,
-          M_PI / 100., M_PI / 100., M_PI / 100.};
 
-  std::string registrationType = "XYZTAndRBot";
-  std::cout << registrationType << std::endl;
-  makeRegistration(image, scanGrid, transformations, accuracy,
+  auto constraintsMin = std::vector<double>{
+      -25e-5, -25e-5, -25e-5,
+      -M_PI / 100., -M_PI / 100., -M_PI / 100.};
+  auto constraintsMax = std::vector<double>{
+      25e-5, 25e-5, 25e-5,
+      M_PI / 100., M_PI / 100., M_PI / 100.};
+
+  std::string transformationType = "linear";
+  std::string registrationType = "top";
+  std::cout << transformationType << " " << registrationType << std::endl;
+  makeRegistration(image, scanGrid, "linear", accuracy,
                    constraintsMin, constraintsMax,
                    registrationType, false);
-
 
 }
 
@@ -220,14 +221,16 @@ double getCylinderSectorFromCtB(Image &image,
 
   // return mult1 * mult2 * mult3 * mult4 - 1;
 
-  auto transformations = generateStretchingXY();
+
   auto constraintsMin = std::vector<double>{0.98};
   auto constraintsMax = std::vector<double>{1.02};
 
-  std::string registrationType = "XYStretching";
-  std::cout << registrationType << std::endl;
+
+  std::string transformationType = "XYStretching";
+  std::string registrationType = "side";
+  std::cout << transformationType << " " << registrationType << std::endl;
   auto answerVector = makeRegistration(image, scanGrid,
-                                       transformations, 1.e-12,
+                                       transformationType, 1.e-12,
                                        constraintsMin, constraintsMax,
                                        registrationType,
                                        false);

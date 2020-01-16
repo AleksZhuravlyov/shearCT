@@ -22,7 +22,7 @@ TransformationFunctors generateStretchingXY();
 
 std::vector<double> makeRegistration(
     Image &image, std::shared_ptr<ScanGrid> &scanGrid,
-    TransformationFunctors &transformationFunctors,
+    const std::string &transformationType,
     const double &accuracy,
     const std::vector<double> &constraintsMin,
     const std::vector<double> &constraintsMax,

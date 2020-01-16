@@ -14,6 +14,7 @@ void demoSchema() {
   /// General stuff
   /// =======================================================================
 
+
   Image imageA("/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc");
   Image imageB("/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc");
   ScanGridIO vtkPointsCt;

@@ -34,12 +34,19 @@ TransformationFunctors generateStretchingXY() {
 
 std::vector<double> makeRegistration(
     Image &image, std::shared_ptr<ScanGrid> &scanGrid,
-    TransformationFunctors &transformationFunctors,
+    const std::string &transformationType,
     const double &accuracy,
     const std::vector<double> &constraintsMin,
     const std::vector<double> &constraintsMax,
     const std::string &fileNamesPrefix,
     const bool &isFilesSaved) {
+
+  TransformationFunctors transformationFunctors;
+  if (transformationType == "linear")
+    transformationFunctors = generateLinearTransformation();
+  else if (transformationType == "XYStretching")
+    transformationFunctors = generateStretchingXY();
+
 
   auto transformationBbox = calculateTransformationBbox(scanGrid,
                                                         transformationFunctors,
@@ -64,12 +71,13 @@ std::vector<double> makeRegistration(
 
 
   unsigned int vectorSize = transformationFunctors.size();
+
   ColumnVector searchVector(vectorSize);
   ColumnVector lowerConstraint(vectorSize);
   ColumnVector upperConstraint(vectorSize);
   for (int i = 0; i < vectorSize; i++) {
 
-    if (typeid(*transformationFunctors[i]).name() == typeid(StretchXY).name())
+    if (typeid(*transformationFunctors[i]) == typeid(StretchXY))
       searchVector(i) = 1;
     else
       searchVector(i) = 0;
@@ -95,7 +103,7 @@ std::vector<double> makeRegistration(
   std::cout << "searchVector:\n" << searchVector << std::endl;
 
   std::vector<double> answerVector;
-  for (int i = 0; i < transformationFunctors.size(); i++)
+  for (int i = 0; i < searchVector.size(); i++)
     answerVector.push_back(searchVector(i));
 
   return answerVector;
@@ -115,9 +123,9 @@ Bbox calculateTransformationBbox(
 
   for (int i = 0; i < transformationFunctors.size(); i++)
 
-    if (typeid(*transformationFunctors[i]).name() == typeid(RotationX).name() ||
-        typeid(*transformationFunctors[i]).name() == typeid(RotationY).name() ||
-        typeid(*transformationFunctors[i]).name() == typeid(RotationZ).name()) {
+    if (typeid(*transformationFunctors[i]) == typeid(RotationX) ||
+        typeid(*transformationFunctors[i]) == typeid(RotationY) ||
+        typeid(*transformationFunctors[i]) == typeid(RotationZ)) {
 
       auto scanGridMin = bboxIniScanGrid;
       scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
@@ -139,9 +147,9 @@ Bbox calculateTransformationBbox(
 
   for (int i = 0; i < transformationFunctors.size(); i++)
 
-    if (typeid(*transformationFunctors[i]).name() != typeid(RotationX).name() &&
-        typeid(*transformationFunctors[i]).name() != typeid(RotationY).name() &&
-        typeid(*transformationFunctors[i]).name() != typeid(RotationZ).name()) {
+    if (typeid(*transformationFunctors[i]) != typeid(RotationX) &&
+        typeid(*transformationFunctors[i]) != typeid(RotationY) &&
+        typeid(*transformationFunctors[i]) != typeid(RotationZ)) {
 
       auto scanGridMin = bboxRotationScanGrid;
       scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
