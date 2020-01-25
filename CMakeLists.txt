@@ -29,13 +29,13 @@ set(SOURCE_CODE main.cpp
 
         Registration/Registration.cpp
 
-        Procedures/variation.cpp
+        Procedures/UniformSearch.cpp
         Procedures/ScanGridUtilities.cpp
 
-        Procedures/demoSchema.cpp
-        Procedures/demoVideo.cpp
+        Procedures/DemoSchema.cpp
+        Procedures/DemoVideo.cpp
         Procedures/DemoStretchZvsShift.cpp
-        Procedures/stretchZvsShift.cpp)
+        Procedures/StretchZvsShift.cpp)
 
 include_directories(Registration)
 include_directories(Procedures)

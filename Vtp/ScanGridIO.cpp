@@ -35,7 +35,7 @@ std::shared_ptr<ScanGrid> ScanGridIO::getScanGrid() {
 }
 
 
-void ScanGridIO::loadPointsCtFromFile(const std::string &fileName) {
+void ScanGridIO::loadScanGridFromFile(const std::string &fileName) {
 
   auto polyDataReaderVtk = vtkSmartPointer<vtkXMLPolyDataReader>::New();
   polyDataReaderVtk->SetFileName(fileName.c_str());
@@ -99,7 +99,7 @@ bool ScanGridIO::getFormatIsBinary() {
   return formatIsBinary_;
 }
 
-void ScanGridIO::savePointsCtToFile(const std::string &fileName,
+void ScanGridIO::saveScanGridToFile(const std::string &fileName,
                                     const std::string &fileDescription) {
 
   auto pointsVtk = vtkSmartPointer<vtkPoints>::New();
@@ -185,8 +185,8 @@ void ScanGridIO::savePointsCtToFile(const std::string &fileName,
 
 }
 
-void ScanGridIO::savePointsCtToFile(const std::string &fileName) {
-  savePointsCtToFile(fileName, "0");
+void ScanGridIO::saveScanGridToFile(const std::string &fileName) {
+  saveScanGridToFile(fileName, "0");
 }
 
 

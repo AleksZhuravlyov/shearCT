@@ -14,8 +14,8 @@
 #include <Geometry/TransformationFunctor.h>
 
 
-// creating cgalPoints_ taking snapshot form CT image
-std::shared_ptr<ScanGrid> extractSquarePointsCt(Image &image,
+// creating points_ taking snapshot form CT image
+std::shared_ptr<ScanGrid> extractScanGridSquare(Image &image,
                                                 const double &xCenterFactor,
                                                 const double &yCenterFactor,
                                                 const double &zCenterMeter,
@@ -23,38 +23,34 @@ std::shared_ptr<ScanGrid> extractSquarePointsCt(Image &image,
                                                 const double &yWidthVoxel,
                                                 const int &nX, const int &nY);
 
-// writing values form shifted cgalPoints_ into buffer
-void getBaseSquareFromCtAWithTop(Image &image, const double &shiftZ,
-                                 std::shared_ptr<ScanGrid> &scanGrid);
+// writing values form shifted points_ into buffer
+void getBaseSquareFromAWithTop(Image &image, const double &shiftZ,
+                               std::shared_ptr<ScanGrid> &scanGrid);
 
-// writing values form shifted cgalPoints_ into buffer
-std::shared_ptr<ScanGrid> getBaseSquareFromCtAWithTop(
+// writing values form shifted points_ into buffer
+std::shared_ptr<ScanGrid> getBaseSquareFromAWithTop(
     Image &image, const double &shiftZ, const std::string &fileName);
 
-// search of base cgalPoints_ in B CT image employing registration
+// search of base points_ in B CT image employing registration
 std::shared_ptr<ScanGrid> getBaseSquareFromCtB(Image &image,
                                                const std::string &fileName);
 
-// search of base cgalPoints_ in B CT image employing registration
-void getBaseSquareFromCtB(Image &image, std::shared_ptr<ScanGrid> &scanGrid,
-                          const double &accuracy);
+// search of base points_ in B CT image employing registration
+void getBaseSquareFromB(Image &image, std::shared_ptr<ScanGrid> &scanGrid,
+                        const double &accuracy);
 
-// search of top cgalPoints_ in B CT image employing registration
-void getTopSquareFromCtB(Image &image, const double &shiftZ,
-                         std::shared_ptr<ScanGrid> &scanGrid,
-                         const double &accuracy);
+// search of top points_ in B CT image employing registration
+void getTopSquareFromB(Image &image, const double &shiftZ,
+                       std::shared_ptr<ScanGrid> &scanGrid,
+                       const double &accuracy);
 
-// search of top cgalPoints_ in B CT image employing registration
-std::shared_ptr<ScanGrid> getTopSquareFromCtB(Image &image, const double &shiftZ,
-                                              const std::string &fileName);
-
-// getting cylinder from A CT image and base cgalPoints_
+// getting cylinder from A CT image and base points_
 std::shared_ptr<ScanGrid> getCylinderSectorFromCtAAndBaseSquare(
     Image &image, std::shared_ptr<ScanGrid> &baseSquare);
 
 // search of cylinder in B CT image
-double getCylinderSectorFromCtB(Image &image,
-                                std::shared_ptr<ScanGrid> &scanGrid);
+double getCylinderSectorFromB(Image &image,
+                              std::shared_ptr<ScanGrid> &scanGrid);
 
 
 #endif // PROCEDURES_SCANGRIDUTILITIES_H

@@ -51,7 +51,7 @@ public:
    Read scanGrid_ attribute from paraview file.
    @param[in] fileName is the name of paraview file with scanGrid.
   */
-  void loadPointsCtFromFile(const std::string &fileName);
+  void loadScanGridFromFile(const std::string &fileName);
 
   /**
    Mutator for fileIsBinary_ attribute.
@@ -70,7 +70,7 @@ public:
    @param[in] fileName is the name for saving scanGrid_ attribute.
    @param[in] fileDescription is description for scanGrid file.
   */
-  void savePointsCtToFile(const std::string &fileName,
+  void saveScanGridToFile(const std::string &fileName,
                           const std::string &fileDescription);
 
   /**
@@ -78,7 +78,7 @@ public:
    is default.
    @param[in] fileName is the name for saving scanGrid attribute.
   */
-  void savePointsCtToFile(const std::string &fileName);
+  void saveScanGridToFile(const std::string &fileName);
 
   /**
    Clear names and descriptions of saved scanGrid files.

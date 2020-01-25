@@ -1,4 +1,4 @@
-#include <variation.h>
+#include <UniformSearch.h>
 
 #include <string>
 #include <vector>
@@ -13,27 +13,28 @@
 #include <Geometry/Stretch.h>
 
 
-double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
-                     std::shared_ptr<TransformationFunctor> transformationFunctor,
-                     const std::vector<double> &valuesRelative,
-                     const std::vector<double> &valuesAbsolute,
-                     const std::vector<double> &valuesAbsoluteReverse,
-                     const std::string &fileNamesPrefix,
-                     const bool &isFilesSaved) {
+double computeBlindSearch(
+    std::shared_ptr<ScanGrid> scanGrid, Region &region,
+    std::shared_ptr<TransformationFunctor> transformationFunctor,
+    const std::vector<double> &valuesRelative,
+    const std::vector<double> &valuesAbsolute,
+    const std::vector<double> &valuesAbsoluteReverse,
+    const std::string &fileNamesPrefix,
+    const bool &isFilesSaved) {
 
   std::vector<double> correlations;
 
-  auto vtpCt = ScanGridIO(pointsCt);
+  auto scanGridIo = ScanGridIO(scanGrid);
 
   for (int i = 0; i < valuesRelative.size(); i++) {
 
-    pointsCt->transform((*transformationFunctor)(valuesRelative[i]));
-    regionCt.computePointsValue();
-    pointsCt->computeDifferenceAB();
-    correlations.push_back(pointsCt->computePearsonCorrelationAB());
+    scanGrid->transform((*transformationFunctor)(valuesRelative[i]));
+    region.computePointsValue();
+    scanGrid->computeDifferenceAB();
+    correlations.push_back(scanGrid->computePearsonCorrelationAB());
 
     if (isFilesSaved)
-      vtpCt.savePointsCtToFile(
+      scanGridIo.saveScanGridToFile(
           fileNamesPrefix + "_" +
           typeid(*transformationFunctor).name() +
           toString(valuesAbsolute[i]) + ".vtp",
@@ -42,7 +43,7 @@ double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
   }
 
   if (isFilesSaved)
-    vtpCt.saveFilesCollectionToFile(
+    scanGridIo.saveFilesCollectionToFile(
         fileNamesPrefix + "_" +
         typeid(*transformationFunctor).name() + ".pvd");
 
@@ -56,15 +57,15 @@ double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
       indMaxCorrelation = i;
     }
 
-  pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
-  pointsCt->transform(
+  scanGrid->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
+  scanGrid->transform(
       (*transformationFunctor)(valuesAbsolute[indMaxCorrelation]));
-  regionCt.computePointsValue();
-  pointsCt->computeDifferenceAB();
+  region.computePointsValue();
+  scanGrid->computeDifferenceAB();
 
 
   std::string plotLine =
-      "plot \"-\" using 1:2 with cgalPoints_ pt \"*\" notitle";
+      "plot \"-\" using 1:2 with points_ pt \"*\" notitle";
   /*std::string plotLine =
           "plot \"-\" using 1:2 with linespoint lw 2 pt 8 notitle";*/
 
@@ -89,11 +90,12 @@ double variatePoints(std::shared_ptr<ScanGrid> pointsCt, Region &regionCt,
 }
 
 
-double processVariation(std::shared_ptr<ScanGrid> pointsCt, Image &ncCt,
-                        std::shared_ptr<TransformationFunctor> transformationFunctor,
-                        const double &valueWidth, const int &nValues,
-                        const std::string &fileNamesPrefix,
-                        const bool &isFilesSaved) {
+double computeUniformSearch(
+    std::shared_ptr<ScanGrid> scanGrid, Image &image,
+    std::shared_ptr<TransformationFunctor> transformationFunctor,
+    const double &valueWidth, const int &nValues,
+    const std::string &fileNamesPrefix,
+    const bool &isFilesSaved) {
 
   std::vector<double> valuesRelative;
   std::vector<double> valuesAbsolute;
@@ -137,24 +139,24 @@ double processVariation(std::shared_ptr<ScanGrid> pointsCt, Image &ncCt,
   }
 
 
-  pointsCt->transform((*transformationFunctor)(valuesAbsolute.front()));
-  auto bBoxFront = pointsCt->generateBbox();
-  pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.front()));
+  scanGrid->transform((*transformationFunctor)(valuesAbsolute.front()));
+  auto bBoxFront = scanGrid->generateBbox();
+  scanGrid->transform((*transformationFunctor)(valuesAbsoluteReverse.front()));
 
-  pointsCt->transform((*transformationFunctor)(valuesAbsolute.back()));
-  auto bBoxBack = pointsCt->generateBbox();
-  pointsCt->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
+  scanGrid->transform((*transformationFunctor)(valuesAbsolute.back()));
+  auto bBoxBack = scanGrid->generateBbox();
+  scanGrid->transform((*transformationFunctor)(valuesAbsoluteReverse.back()));
 
-  ncCt.setRegion(bBoxFront + bBoxBack);
-  ncCt.region.setPoints(pointsCt->getPoints(), pointsCt->getTomoB());
+  image.setRegion(bBoxFront + bBoxBack);
+  image.region.setPoints(scanGrid->getPoints(), scanGrid->getTomoB());
 
-  auto value = variatePoints(pointsCt, ncCt.region,
-                             transformationFunctor,
-                             valuesRelative,
-                             valuesAbsolute,
-                             valuesAbsoluteReverse,
-                             fileNamesPrefix,
-                             isFilesSaved);
+  auto value = computeBlindSearch(scanGrid, image.region,
+                                  transformationFunctor,
+                                  valuesRelative,
+                                  valuesAbsolute,
+                                  valuesAbsoluteReverse,
+                                  fileNamesPrefix,
+                                  isFilesSaved);
 
 
   return value;

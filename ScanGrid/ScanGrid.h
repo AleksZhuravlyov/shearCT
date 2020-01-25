@@ -19,7 +19,7 @@ typedef std::vector<Point> Points;
 typedef CGAL::Bbox_3 Bbox;
 
 
-/// This class is set of CGAL cgalPoints_ with convenient methods and attributes.
+/// This class is set of CGAL points_ with convenient methods and attributes.
 class ScanGrid {
 
 public:
@@ -30,20 +30,20 @@ public:
     ScanGrid();
 
     /**
-     Constructor sets CGAL cgalPoints_.
-     @param[in] points is CGAL cgalPoints_ for cgalPoints_ attribute.
+     Constructor sets CGAL points_.
+     @param[in] points is CGAL points_ for points_ attribute.
     */
     ScanGrid(std::shared_ptr<Points> points);
 
     /**
      Constructor sets CGAL Bbox.
-     @param[in] bbox is CGAL Bbox for cgalPoints_ settings.
+     @param[in] bbox is CGAL Bbox for points_ settings.
     */
     ScanGrid(const Bbox &bbox);
 
     /**
-     Constructor sets CGAL cgalPoints_ and basis_.
-     @param[in] points is CGAL cgalPoints_ for cgalPoints_ attribute.
+     Constructor sets CGAL points_ and basis_.
+     @param[in] points is CGAL points_ for points_ attribute.
      @param[in] basis is CGAL based basis_ for basis_ attribute.
     */
     ScanGrid(std::shared_ptr<Points> points,
@@ -95,20 +95,20 @@ public:
     void translateBasis(const Point &point);
 
     /**
-     Move basis_ attribute to the center of cgalPoints_ attribute.
+     Move basis_ attribute to the center of points_ attribute.
     */
     void translateBasisToCenter();
 
 
     /**
-     Accessor for cgalPoints_ number in cgalPoints_ attribute.
-     @return number of cgalPoints_ in cgalPoints_ attribute.
+     Accessor for points_ number in points_ attribute.
+     @return number of points_ in points_ attribute.
     */
     int size();
 
     /**
-     Mutator for cgalPoints_ attribute.
-     @param[in] points is assigned to cgalPoints_ attribute.
+     Mutator for points_ attribute.
+     @param[in] points is assigned to points_ attribute.
     */
     void setPoints(std::shared_ptr<Points> points);
 
@@ -146,12 +146,12 @@ public:
     /**
      Swap tomoA_ and buffer_ attributes.
     */
-    void swapTomoAAndTomoBuffer();
+    void swapTomoAAndBuffer();
 
 
     /**
-     Accessor for cgalPoints_ attribute.
-     @return cgalPoints_ attribute.
+     Accessor for points_ attribute.
+     @return points_ attribute.
     */
     std::shared_ptr<Points> getPoints();
 
@@ -188,7 +188,7 @@ public:
 
 
     /**
-     Generate CGAL boundary box from cgalPoints_ attribute.
+     Generate CGAL boundary box from points_ attribute.
     */
     Bbox generateBbox();
 
@@ -210,8 +210,8 @@ public:
      @param[in] zCenter is the Z center of square.
      @param[in] xWidth is the X width of square.
      @param[in] yWidth is the Y width of square.
-     @param[in] nX is the number of cgalPoints_ on X axis.
-     @param[in] nY is the number of cgalPoints_ on Y axis.
+     @param[in] nX is the number of points_ on X axis.
+     @param[in] nY is the number of points_ on Y axis.
     */
     void createXYSquare(const double &xCenter,
                         const double &yCenter,
@@ -228,8 +228,8 @@ public:
      @param[in] angleCenter is the orientation of cylinder segment.
      @param[in] zWidth is height of cylinder segment.
      @param[in] angleWidth is the angle width of cylinder segment.
-     @param[in] nZ is the number of cgalPoints_ on Z axis.
-     @param[in] nAngle is the number of cgalPoints_ on nAngle axis.
+     @param[in] nZ is the number of points_ on Z axis.
+     @param[in] nAngle is the number of points_ on nAngle axis.
     */
     void createZCylinderSegment(const double &xCylinderBaseCenter,
                                 const double &yCylinderBaseCenter,
@@ -243,18 +243,18 @@ public:
 
 private:
 
-    std::shared_ptr<Points> cgalPoints_; ///< CGAL cgalPoints_.
+    std::shared_ptr<Points> points_; ///< CGAL points_.
 
     std::shared_ptr<Basis> basis_; ///< Basis based on CGAL.
 
 
-    std::shared_ptr<std::vector<double>> tomoA_; ///< Value connected to cgalPoints_.
+    std::shared_ptr<std::vector<double>> tomoA_; ///< Value connected to points_.
 
-    std::shared_ptr<std::vector<double>> tomoB_; ///< Value connected to cgalPoints_.
+    std::shared_ptr<std::vector<double>> tomoB_; ///< Value connected to points_.
 
-    std::shared_ptr<std::vector<double>> buffer_; ///< Value connected to cgalPoints_.
+    std::shared_ptr<std::vector<double>> buffer_; ///< Value connected to points_.
 
-    std::shared_ptr<std::vector<double>> result_; ///< Value connected to cgalPoints_.
+    std::shared_ptr<std::vector<double>> result_; ///< Value connected to points_.
 
 };
 

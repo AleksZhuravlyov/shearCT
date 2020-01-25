@@ -1,4 +1,4 @@
-#include <stretchZvsShift.h>
+#include <StretchZvsShift.h>
 
 #include <iostream>
 #include <string>
@@ -27,7 +27,7 @@ double stretchZVsShift(const double &accuracy,
 
 
     // Generate base square from CT A
-    auto squareCt = extractSquarePointsCt(ncCtA,
+    auto squareCt = extractScanGridSquare(ncCtA,
                                           xCenterFactor,
                                           yCenterFactor,
                                           zCenterMeter,
@@ -37,16 +37,16 @@ double stretchZVsShift(const double &accuracy,
     vtpCt.setScanGrid(squareCt);
 
     // Write CT A value from top square into buffer_ of squareCt
-    getBaseSquareFromCtAWithTop(ncCtA, shiftZ, squareCt);
+  getBaseSquareFromAWithTop(ncCtA, shiftZ, squareCt);
 
     // Find base square from CT B
-    getBaseSquareFromCtB(ncCtB, squareCt, accuracy);
+  getBaseSquareFromB(ncCtB, squareCt, accuracy);
 
     // Take origin_ from base square from CT B
     auto bottomOrigin = *(squareCt->getBasis()->getOrigin());
 
     // Find top square from CT B
-    getTopSquareFromCtB(ncCtB, shiftZ, squareCt, accuracy);
+  getTopSquareFromB(ncCtB, shiftZ, squareCt, accuracy);
 
     // Take origin_ from top square from CT B
     auto topOrigin = *(squareCt->getBasis()->getOrigin());

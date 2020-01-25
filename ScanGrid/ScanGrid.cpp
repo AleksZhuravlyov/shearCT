@@ -28,7 +28,7 @@ ScanGrid::ScanGrid(const Bbox &bbox) :
 
 ScanGrid::ScanGrid(std::shared_ptr<Points> points,
                    std::shared_ptr<Basis> basis) :
-    cgalPoints_(points),
+    points_(points),
     basis_(basis),
     tomoA_(std::make_shared<std::vector<double>>(points->size(), 0)),
     tomoB_(std::make_shared<std::vector<double>>(points->size(), 0)),
@@ -37,14 +37,14 @@ ScanGrid::ScanGrid(std::shared_ptr<Points> points,
 
 
 ScanGrid::ScanGrid(const ScanGrid &scanGrid) :
-    cgalPoints_(std::make_shared<Points>(*(scanGrid.cgalPoints_))),
+    points_(std::make_shared<Points>(*(scanGrid.points_))),
     basis_(std::make_shared<Basis>(*(scanGrid.basis_))),
     tomoA_(std::make_shared<std::vector<double>>(*(scanGrid.tomoA_))),
     tomoB_(std::make_shared<std::vector<double>>(*(scanGrid.tomoB_))),
     buffer_(std::make_shared<std::vector<double>>(*(scanGrid.buffer_))),
     result_(std::make_shared<std::vector<double>>(*(scanGrid.result_))) {}
 
-ScanGrid::ScanGrid(ScanGrid &&scanGrid) : cgalPoints_(scanGrid.cgalPoints_),
+ScanGrid::ScanGrid(ScanGrid &&scanGrid) : points_(scanGrid.points_),
                                           basis_(scanGrid.basis_),
                                           tomoA_(scanGrid.tomoA_),
                                           tomoB_(scanGrid.tomoB_),
@@ -57,7 +57,7 @@ ScanGrid &ScanGrid::operator=(ScanGrid &&scanGrid) {
   if (&scanGrid == this)
     return *this;
 
-  cgalPoints_ = std::make_shared<Points>(*(scanGrid.cgalPoints_));
+  points_ = std::make_shared<Points>(*(scanGrid.points_));
   basis_ = std::make_shared<Basis>(*(scanGrid.basis_));
   tomoA_ = std::make_shared<std::vector<double>>(*(scanGrid.tomoA_));
   tomoB_ = std::make_shared<std::vector<double>>(*(scanGrid.tomoB_));
@@ -75,15 +75,15 @@ void ScanGrid::transform(const Transformation &transformation) {
   auto basisInverseTransformation = basisTransformation.inverse();
 
 
-  for (auto &&point : *cgalPoints_)
+  for (auto &&point : *points_)
     point = basisInverseTransformation(point);
   basis_->transform(basisInverseTransformation);
 
-  for (auto &&point : *cgalPoints_)
+  for (auto &&point : *points_)
     point = transformation(point);
   basis_->transform(transformation);
 
-  for (auto &&point : *cgalPoints_)
+  for (auto &&point : *points_)
     point = basisTransformation(point);
   basis_->transform(basisTransformation);
 
@@ -96,17 +96,17 @@ void ScanGrid::transform(
   auto basisInverseTransformation = basisTransformation.inverse();
 
 
-  for (auto &&point : *cgalPoints_)
+  for (auto &&point : *points_)
     point = basisInverseTransformation(point);
   basis_->transform(basisInverseTransformation);
 
   for (auto &&transformation : transformations) {
-    for (auto &&point : *cgalPoints_)
+    for (auto &&point : *points_)
       point = transformation(point);
     basis_->transform(transformation);
   }
 
-  for (auto &&point : *cgalPoints_)
+  for (auto &&point : *points_)
     point = basisTransformation(point);
   basis_->transform(basisTransformation);
 
@@ -119,7 +119,7 @@ void ScanGrid::translateBasis(const Point &point) {
 
 void ScanGrid::translateBasisToCenter() {
 
-  auto bbox = CGAL::bbox_3(cgalPoints_->begin(), cgalPoints_->end());
+  auto bbox = CGAL::bbox_3(points_->begin(), points_->end());
 
   auto center = Point((bbox.xmax() + bbox.xmin()) / 2,
                           (bbox.ymax() + bbox.ymin()) / 2,
@@ -131,20 +131,20 @@ void ScanGrid::translateBasisToCenter() {
 
 
 int ScanGrid::size() {
-  return cgalPoints_->size();
+  return points_->size();
 }
 
 
 void ScanGrid::setPoints(std::shared_ptr<Points> points) {
 
-  if (cgalPoints_->size() != points->size()) {
+  if (points_->size() != points->size()) {
     tomoA_->resize(points->size(), 0);
     tomoB_->resize(points->size(), 0);
     buffer_->resize(points->size(), 0);
     result_->resize(points->size(), 0);
   }
 
-  cgalPoints_ = points;
+  points_ = points;
 
 }
 
@@ -169,13 +169,13 @@ void ScanGrid::setResult(std::shared_ptr<std::vector<double>> result) {
   result_ = result;
 }
 
-void ScanGrid::swapTomoAAndTomoBuffer() {
+void ScanGrid::swapTomoAAndBuffer() {
   swap(tomoA_, buffer_);
 }
 
 
 std::shared_ptr<Points> ScanGrid::getPoints() {
-  return cgalPoints_;
+  return points_;
 }
 
 std::shared_ptr<Basis> ScanGrid::getBasis() {
@@ -201,7 +201,7 @@ std::shared_ptr<std::vector<double>> ScanGrid::getResult() {
 
 
 Bbox ScanGrid::generateBbox() {
-  return CGAL::bbox_3(cgalPoints_->begin(), cgalPoints_->end());
+  return CGAL::bbox_3(points_->begin(), points_->end());
 }
 
 
@@ -212,7 +212,7 @@ void ScanGrid::computeDifferenceAB() {
 
 double ScanGrid::computePearsonCorrelationAB() {
 
-  auto n = cgalPoints_->size();
+  auto n = points_->size();
 
   double A = 0;
   double B = 0;
@@ -284,15 +284,15 @@ void ScanGrid::createZCylinderSegment(const double &xCylinderBaseCenter,
   auto yInit = yCylinderBaseCenter;
   auto zInit = zCylinderBaseCenter;
 
-  auto _points = std::make_shared<Points>(Points());
+  auto points = std::make_shared<Points>(Points());
   for (int i = 0; i < nAngle; i++)
     for (int j = 0; j < nZ; j++)
-      _points->push_back(
+      points->push_back(
           Point(xInit + R * cos(angleInit + angleStep * i),
                     yInit + R * sin(angleInit + angleStep * i),
                     zInit + zStep * j));
 
-  setPoints(_points);
+  setPoints(points);
 
   translateBasis(Point(xCylinderBaseCenter,
                        yCylinderBaseCenter,

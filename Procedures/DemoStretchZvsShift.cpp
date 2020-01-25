@@ -4,7 +4,7 @@
 #include <fstream>
 
 #include <DemoStretchZvsShift.h>
-#include <stretchZvsShift.h>
+#include <StretchZvsShift.h>
 #include <StringAndNumber.h>
 
 
@@ -50,8 +50,8 @@ void demoStretchZvsShift() {
                                      20,
                                      20,
                                      200, 200,
-                                     "/Volumes/ElkData/CT/samples/5.nc",
-                                     "/Volumes/ElkData/CT/samples/10.nc");
+                                     "/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc",
+                                     "/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc");
 
 
       stretchesZ[i].push_back(stretchZCurr);

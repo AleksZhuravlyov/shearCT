@@ -1,5 +1,5 @@
-#ifndef STRETCHZVSSHIFT_H
-#define STRETCHZVSSHIFT_H
+#ifndef POCEDURES_STRETCHZVSSHIFT_H
+#define POCEDURES_STRETCHZVSSHIFT_H
 
 #include <string>
 
@@ -16,4 +16,4 @@ double stretchZVsShift(const double &accuracy,
                        const std::string &ncBFileName);
 
 
-#endif //STRETCHZVSSHIFT_H
+#endif // POCEDURES_STRETCHZVSSHIFT_H

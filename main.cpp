@@ -1,8 +1,8 @@
 #include <string>
 
 #include <DemoStretchZvsShift.h>
-#include <demoSchema.h>
-#include <demoVideo.h>
+#include <DemoSchema.h>
+#include <DemoVideo.h>
 
 
 int main(int nArg, char** args) {

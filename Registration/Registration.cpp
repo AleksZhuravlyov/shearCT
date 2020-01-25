@@ -189,7 +189,7 @@ double NegativePearsonCorrelation::operator()(
 
   if (isFilesSaved) {
     scanGridIo.setScanGrid(std::make_shared<ScanGrid>(scanGridCurr));
-    scanGridIo.savePointsCtToFile(
+    scanGridIo.saveScanGridToFile(
         fileNamesPrefix + "_" + toString(iteration) + ".vtp",
         toString(iteration));
   }

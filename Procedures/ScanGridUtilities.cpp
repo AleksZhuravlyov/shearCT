@@ -7,7 +7,7 @@
 #include <Geometry/Translation.h>
 
 
-std::shared_ptr<ScanGrid> extractSquarePointsCt(Image &image,
+std::shared_ptr<ScanGrid> extractScanGridSquare(Image &image,
                                                 const double &xCenterFactor,
                                                 const double &yCenterFactor,
                                                 const double &zCenterMeter,
@@ -38,8 +38,8 @@ std::shared_ptr<ScanGrid> extractSquarePointsCt(Image &image,
 }
 
 
-void getBaseSquareFromCtAWithTop(Image &image, const double &shiftZ,
-                                 std::shared_ptr<ScanGrid> &scanGrid) {
+void getBaseSquareFromAWithTop(Image &image, const double &shiftZ,
+                               std::shared_ptr<ScanGrid> &scanGrid) {
 
   scanGrid->transform(TranslationZ()(shiftZ));
   image.setRegion(scanGrid->generateBbox());
@@ -49,45 +49,24 @@ void getBaseSquareFromCtAWithTop(Image &image, const double &shiftZ,
 
 }
 
-std::shared_ptr<ScanGrid> getBaseSquareFromCtAWithTop(
+std::shared_ptr<ScanGrid> getBaseSquareFromAWithTop(
     Image &image, const double &shiftZ, const std::string &fileName) {
 
   auto scanGrid = std::make_shared<ScanGrid>();
 
   auto vtkPointsCt = ScanGridIO();
   vtkPointsCt.setScanGrid(scanGrid);
-  vtkPointsCt.loadPointsCtFromFile(fileName);
+  vtkPointsCt.loadScanGridFromFile(fileName);
 
-  getBaseSquareFromCtAWithTop(image, shiftZ, scanGrid);
+  getBaseSquareFromAWithTop(image, shiftZ, scanGrid);
 
   return scanGrid;
 
 }
 
 
-void getBaseSquareFromCtB(Image &image, std::shared_ptr<ScanGrid> &scanGrid,
-                          const double &accuracy) {
-
-  // processVariation(scanGrid, image, std::make_shared<TranslationZ>(),
-  //                  20e-5, 11, "bottom",
-  //                  false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationX>(),
-  //                  10e-5, 21, "bottom",
-  //                  false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationY>(),
-  //                  10e-5, 21, "bottom",
-  //                  false);
-  // processVariation(scanGrid, image, std::make_shared<RotationX>(),
-  //                  M_PI / 140, 31, "bottom",
-  //                  false);
-  // processVariation(scanGrid, image, std::make_shared<RotationY>(),
-  //                  M_PI / 200, 21, "bottom",
-  //                  false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationZ>(),
-  //                  1e-5, 21, "bottom",
-  //                  false);
-
-
+void getBaseSquareFromB(Image &image, std::shared_ptr<ScanGrid> &scanGrid,
+                        const double &accuracy) {
 
   auto constraintsMin = std::vector<double>{
       -20e-5, -20e-5, -20e-5,
@@ -113,52 +92,22 @@ std::shared_ptr<ScanGrid> getBaseSquareFromCtB(Image &ncCt,
 
   auto vtkPointsCt = ScanGridIO();
   vtkPointsCt.setScanGrid(scanGrid);
-  vtkPointsCt.loadPointsCtFromFile(fileName);
+  vtkPointsCt.loadScanGridFromFile(fileName);
 
 
-  getBaseSquareFromCtB(ncCt, scanGrid, accuracy);
+  getBaseSquareFromB(ncCt, scanGrid, accuracy);
 
   return scanGrid;
 
 }
 
 
-void getTopSquareFromCtB(Image &image, const double &shiftZ,
-                         std::shared_ptr<ScanGrid> &scanGrid,
-                         const double &accuracy) {
+void getTopSquareFromB(Image &image, const double &shiftZ,
+                       std::shared_ptr<ScanGrid> &scanGrid,
+                       const double &accuracy) {
 
-  scanGrid->swapTomoAAndTomoBuffer();
+  scanGrid->swapTomoAAndBuffer();
   scanGrid->transform(TranslationZ()(shiftZ));
-
-
-  // processVariation(scanGrid, image, std::make_shared<TranslationY>(),
-  //                  40e-5, 41, "top1", false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationX>(),
-  //                  35e-5, 31, "top1", false);
-  // processVariation(scanGrid, image, std::make_shared<RotationX>(),
-  //                  M_PI / 30, 41, "top1", false);
-  // processVariation(scanGrid, image, std::make_shared<RotationY>(),
-  //                  M_PI / 50, 41, "top1", false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationZ>(),
-  //                  19e-5, 51, "top1", false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationZ>(),
-  //                  1.5e-5, 41, "top1", false);
-  //
-  //
-  // processVariation(scanGrid, image, std::make_shared<TranslationY>(),
-  //                  15e-5, 41, "top2", false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationX>(),
-  //                  5e-5, 31, "top2", false);
-  // processVariation(scanGrid, image, std::make_shared<RotationX>(),
-  //                  M_PI / 70, 100, "top2", false);
-  // processVariation(scanGrid, image, std::make_shared<RotationY>(),
-  //                  M_PI / 150, 41, "top2", false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationZ>(),
-  //                  9e-5, 61, "top2", false);
-  // processVariation(scanGrid, image, std::make_shared<TranslationZ>(),
-  //                  .7e-5, 61, "top2", false);
-
-
 
   auto constraintsMin = std::vector<double>{
       -25e-5, -25e-5, -25e-5,
@@ -203,24 +152,8 @@ std::shared_ptr<ScanGrid> getCylinderSectorFromCtAAndBaseSquare(
 }
 
 
-double getCylinderSectorFromCtB(Image &image,
-                                std::shared_ptr<ScanGrid> &scanGrid) {
-
-  // processVariation(scanGrid, image,
-  //                  std::make_shared<StretchXY>(),
-  //                  0.007, 21, "cylinder1", false);
-  // processVariation(scanGrid, image,
-  //                  std::make_shared<StretchXY>(),
-  //                  0.0007, 21, "cylinder2", false);
-  // processVariation(scanGrid, image,
-  //                  std::make_shared<StretchXY>(),
-  //                  0.0002, 21, "cylinder3", false);
-  // processVariation(scanGrid, image,
-  //                  std::make_shared<StretchXY>(),
-  //                               0.00015, 21, "cylinder4", false);
-
-  // return mult1 * mult2 * mult3 * mult4 - 1;
-
+double getCylinderSectorFromB(Image &image,
+                              std::shared_ptr<ScanGrid> &scanGrid) {
 
   auto constraintsMin = std::vector<double>{0.98};
   auto constraintsMax = std::vector<double>{1.02};
