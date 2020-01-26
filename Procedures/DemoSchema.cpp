@@ -1,4 +1,4 @@
-#include <DemoSchema.h>
+#include <Procedures/DemoSchema.h>
 
 #include <iostream>
 #include <string>
@@ -7,7 +7,7 @@
 #include <Vtp/ScanGridIO.h>
 #include <Geometry/Basis.h>
 
-#include <ScanGridUtilities.h>
+#include <Procedures/ScanGridUtilities.h>
 
 void demoSchema() {
 
@@ -60,11 +60,11 @@ void demoSchema() {
 
   /// Write CT A value from top square into buffer of scanGridSquare
 
-  getBaseSquareFromAWithTop(imageA, shiftZ, scanGridSquare);
+  writeShiftedZScanGridToBuffer(imageA, shiftZ, scanGridSquare);
 
   /// Find base square from CT B
 
-  getBaseSquareFromB(imageB, scanGridSquare, 1.e-7);
+  searchScanGridBase(imageB, scanGridSquare, 1.e-7);
   scanGridIo.setScanGrid(scanGridSquare);
   scanGridIo.saveScanGridToFile(baseSquareFromBName);
 
@@ -78,7 +78,7 @@ void demoSchema() {
 
   /// Find top square from CT B
 
-  getTopSquareFromB(imageB, shiftZ, scanGridSquare, 1.e-8);
+  searchScanGridTop(imageB, shiftZ, scanGridSquare, 1.e-8);
   // Take origin from top square from CT B
   auto topOrigin = *(scanGridSquare->getBasis()->getOrigin());
 
@@ -109,7 +109,7 @@ void demoSchema() {
   scanGridIo.setScanGrid(scanGridBaseA);
   scanGridIo.loadScanGridFromFile(baseSquareFromAName);
 
-  auto scanGridCylinder = getCylinderSectorFromCtAAndBaseSquare(
+  auto scanGridCylinder = extractScanGridCylinder(
       imageA, scanGridBaseA);
 
   // Save cylinder sector into vtk file
@@ -145,7 +145,7 @@ void demoSchema() {
 
   /// Find cylinder sector from CT B
 
-  auto stretchWidth = getCylinderSectorFromB(imageB, scanGridCylinder);
+  auto stretchWidth = searchScanGridCylinder(imageB, scanGridCylinder);
 
   /// Final Poisson's ratio calculation
 

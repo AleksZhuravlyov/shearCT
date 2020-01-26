@@ -1,10 +1,10 @@
-#include <UniformSearch.h>
+#include <Procedures/UniformSearch.h>
 
 #include <string>
 #include <vector>
 
-#include <StringAndNumber.h>
-#include <gnuplot.h>
+#include <ThirdParty/StringAndNumber.h>
+#include <ThirdParty/gnuplot.h>
 
 #include <Vtp/ScanGridIO.h>
 #include <NcOps/Image.h>

@@ -1,5 +1,5 @@
-#ifndef SHEARCT_REGISTRATION_H
-#define SHEARCT_REGISTRATION_H
+#ifndef REGISTRATION_REGISTRATION_H
+#define REGISTRATION_REGISTRATION_H
 
 #include <vector>
 #include <string>
@@ -72,4 +72,4 @@ public:
 };
 
 
-#endif //SHEARCT_REGISTRATION_H
+#endif // REGISTRATION_REGISTRATION_H

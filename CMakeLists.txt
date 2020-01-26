@@ -33,13 +33,11 @@ set(SOURCE_CODE main.cpp
         Procedures/ScanGridUtilities.cpp
 
         Procedures/DemoSchema.cpp
-        Procedures/DemoVideo.cpp
-        Procedures/DemoStretchZvsShift.cpp
-        Procedures/StretchZvsShift.cpp)
+        )
 
-include_directories(Registration)
-include_directories(Procedures)
-include_directories(ThirdParty)
+# include_directories(Registration)
+# include_directories(Procedures)
+# include_directories(ThirdParty)
 include_directories(.)
 
 set(CMAKE_BUILD_TYPE Release)

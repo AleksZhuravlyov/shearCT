@@ -1,4 +1,4 @@
-#include <Registration.h>
+#include <Registration/Registration.h>
 
 #include <iomanip>
 
@@ -8,7 +8,7 @@
 
 #include <dlib/global_optimization.h>
 
-#include <StringAndNumber.h>
+#include <ThirdParty/StringAndNumber.h>
 
 
 typedef std::vector<Transformation> Transformations;
