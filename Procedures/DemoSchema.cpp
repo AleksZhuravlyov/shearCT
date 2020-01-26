@@ -4,7 +4,7 @@
 #include <string>
 
 #include <NcOps/Image.h>
-#include <Vtp/ScanGridIO.h>
+#include <VtkOps/ScanGridIO.h>
 #include <Geometry/Basis.h>
 
 #include <Procedures/ScanGridUtilities.h>
@@ -27,7 +27,6 @@ void demoSchema() {
   std::string cylinderSectorFromBAndBaseSquareName =
       "cylinderSectorFromBAndBaseSquare.vtp";
 
-  double stretchZ = 0.000979212;
 
   /// =======================================================================
 
@@ -68,11 +67,6 @@ void demoSchema() {
   scanGridIo.setScanGrid(scanGridSquare);
   scanGridIo.saveScanGridToFile(baseSquareFromBName);
 
-  // Read base square from CT B from vtk file
-  /*auto scanGridSquare = std::make_shared<ScanGrid>();
-  scanGridIo.setScanGrid(scanGridSquare);
-  scanGridIo.loadScanGridFromFile(baseSquareFromBName);*/
-
   // Take origin from base square from B
   auto bottomOrigin = *(scanGridSquare->getBasis()->getOrigin());
 
@@ -89,7 +83,7 @@ void demoSchema() {
   std::cout << std::endl << "distance " << distance << std::endl;
   auto deltaL = shiftZ - distance;
   std::cout << std::endl << "deltaL " << deltaL << std::endl;
-  stretchZ = deltaL / shiftZ;
+  double stretchZ = deltaL / shiftZ;
   std::cout << std::endl << "stretchZ " << stretchZ << std::endl;
   double youngsModulus = 500. / stretchZ;
   std::cout << std::endl << "youngsModulus " << youngsModulus << std::endl;
@@ -135,13 +129,6 @@ void demoSchema() {
   // Save cylinder sector into vtk file
   scanGridIo.setScanGrid(scanGridCylinder);
   scanGridIo.saveScanGridToFile(cylinderSectorFromBAndBaseSquareName);
-
-  // Demonstration of transformation validity
-  // std::cout <<"Basis of cylinder sector from CT B:"<<std::endl;
-  // std::cout << *(scanGridCylinder->getBasis())<<std::endl;
-  // std::cout <<"Basis of base square from CT B:"<<std::endl;
-  // std::cout << *(scanGridBaseB->getBasis())<<std::endl;
-
 
   /// Find cylinder sector from CT B
 

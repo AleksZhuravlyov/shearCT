@@ -6,7 +6,7 @@
 #include <ThirdParty/StringAndNumber.h>
 #include <ThirdParty/gnuplot.h>
 
-#include <Vtp/ScanGridIO.h>
+#include <VtkOps/ScanGridIO.h>
 #include <NcOps/Image.h>
 #include <ScanGrid/ScanGrid.h>
 #include <Geometry/Translation.h>

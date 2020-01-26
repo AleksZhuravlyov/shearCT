@@ -6,7 +6,7 @@
 #include <ScanGrid/ScanGrid.h>
 #include <NcOps/Image.h>
 #include <Geometry/TransformationFunctor.h>
-#include <Vtp/ScanGridIO.h>
+#include <VtkOps/ScanGridIO.h>
 
 #include <dlib/optimization.h>
 

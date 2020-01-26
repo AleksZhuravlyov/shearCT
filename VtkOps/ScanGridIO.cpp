@@ -1,4 +1,4 @@
-#include <Vtp/ScanGridIO.h>
+#include <VtkOps/ScanGridIO.h>
 
 #include <vector>
 #include <string>

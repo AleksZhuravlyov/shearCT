@@ -18,7 +18,7 @@ set(SOURCE_CODE main.cpp
         NcOps/Image.cpp
         NcOps/Region.cpp
 
-        Vtp/ScanGridIO.cpp
+        VtkOps/ScanGridIO.cpp
 
         Geometry/Basis.cpp
         Geometry/Translation.cpp
@@ -35,9 +35,6 @@ set(SOURCE_CODE main.cpp
         Procedures/DemoSchema.cpp
         )
 
-# include_directories(Registration)
-# include_directories(Procedures)
-# include_directories(ThirdParty)
 include_directories(.)
 
 set(CMAKE_BUILD_TYPE Release)

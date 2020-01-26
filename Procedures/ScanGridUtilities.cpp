@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include <Vtp/ScanGridIO.h>
+#include <VtkOps/ScanGridIO.h>
 #include <Registration/Registration.h>
 #include <Geometry/Translation.h>
 
@@ -97,12 +97,12 @@ std::shared_ptr<ScanGrid> extractScanGridCylinder(
 
   auto origin = scanGridBase->getBasis()->getOrigin();
 
-  double R = image.getXStep() * 500;
-  double angleCenter = M_PI * 1.5;
-  double zWidth = image.getZStep() * 50;
-  double angleWidth = M_PI / 10;
-  int nZ = 500;
-  int nAngle = 5000;
+  double R = image.getXStep() * 700;
+  double angleCenter = 0.;
+  double zWidth = image.getZStep() * 30;
+  double angleWidth = M_PI * 2.;
+  int nZ = 200;
+  int nAngle = 7000;
 
   auto scanGridCylinder = std::make_shared<ScanGrid>();
   scanGridCylinder->createZCylinderSegment(origin->x(), origin->y(),
@@ -131,7 +131,7 @@ double searchScanGridCylinder(Image &image,
   std::string registrationType = "side";
   std::cout << transformationType << " " << registrationType << std::endl;
   auto answerVector = makeRegistration(image, scanGridCylinder,
-                                       transformationType, 1.e-12,
+                                       transformationType, 1.e-13,
                                        constraintsMin, constraintsMax,
                                        registrationType,
                                        false);
