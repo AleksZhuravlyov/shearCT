@@ -152,9 +152,9 @@ void Image::setRegion(const Bbox &bbox) {
   auto yStart = size_t((bbox.ymin() - yInit_) / yStep_) - 3;
   auto zStart = size_t((bbox.zmin() - zInit_) / zStep_) - 3;
 
-  auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep_) + 9;
-  auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep_) + 9;
-  auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep_) + 9;
+  auto xWidth = size_t((bbox.xmax() - bbox.xmin()) / xStep_) + 7;
+  auto yWidth = size_t((bbox.ymax() - bbox.ymin()) / yStep_) + 7;
+  auto zWidth = size_t((bbox.zmax() - bbox.zmin()) / zStep_) + 7;
 
 
   std::string errorMessage;

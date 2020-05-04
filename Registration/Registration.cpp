@@ -1,6 +1,7 @@
 #include <Registration/Registration.h>
 
 #include <iomanip>
+#include <bitset>
 
 #include <Geometry/Translation.h>
 #include <Geometry/Rotation.h>
@@ -117,55 +118,76 @@ Bbox calculateTransformationBbox(
     const std::vector<double> &constraintsMin,
     const std::vector<double> &constraintsMax) {
 
-  auto bboxIni = scanGrid->generateBbox();
-  std::vector<Bbox> rotationBboxes;
-  auto bboxIniScanGrid = ScanGrid(bboxIni);
-
+  std::vector<int> translationIndices;
   for (int i = 0; i < transformationFunctors.size(); i++)
+    if (typeid(*transformationFunctors[i]) == typeid(TranslationX) ||
+        typeid(*transformationFunctors[i]) == typeid(TranslationY) ||
+        typeid(*transformationFunctors[i]) == typeid(TranslationZ))
+      translationIndices.push_back(i);
 
+  std::vector<int> rotationIndices;
+  for (int i = 0; i < transformationFunctors.size(); i++)
     if (typeid(*transformationFunctors[i]) == typeid(RotationX) ||
         typeid(*transformationFunctors[i]) == typeid(RotationY) ||
-        typeid(*transformationFunctors[i]) == typeid(RotationZ)) {
+        typeid(*transformationFunctors[i]) == typeid(RotationZ))
+      rotationIndices.push_back(i);
 
-      auto scanGridMin = bboxIniScanGrid;
-      scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
-      rotationBboxes.push_back(scanGridMin.generateBbox());
+  std::vector<int> stretchIndices;
+  for (int i = 0; i < transformationFunctors.size(); i++)
+    if (typeid(*transformationFunctors[i]) == typeid(StretchXY))
+      stretchIndices.push_back(i);
 
-      auto scanGridMax = bboxIniScanGrid;
-      scanGridMax.transform((*transformationFunctors[i])(constraintsMax[i]));
-      rotationBboxes.push_back(scanGridMax.generateBbox());
+  auto bboxIni = scanGrid->generateBbox();
+  auto bboxIniScanGrid = ScanGrid(bboxIni);
+  for (int i = 0; i < stretchIndices.size(); i++)
+    bboxIniScanGrid.transform((*transformationFunctors[i])(constraintsMax[i]));
+  auto generalBbox = bboxIniScanGrid.generateBbox();
 
+
+  if (!rotationIndices.empty()) {
+
+    if (rotationIndices.size() != 3) {
+      std::cerr << "The number of rotation transformations is not 3."
+                << std::endl;
+      std::exit(EXIT_FAILURE);
     }
 
-  auto generalRotationBbox = bboxIni;
-  for (auto &bbox : rotationBboxes)
-    generalRotationBbox += bbox;
+    std::vector<Bbox> rotationBboxes;
+    std::vector<std::bitset<3>> combinations;
+    int combinationsN = int(std::bitset<3>(0b111).to_ulong());
+    for (int i = 0; i <= combinationsN; i++)
+      combinations.emplace_back(i);
+
+    for (int i = 0; i <= combinationsN; i++) {
+      auto scanGrid = bboxIniScanGrid;
+      for (int j = 0; j < 3; j++) {
+        int k = rotationIndices[j];
+        if (combinations[i][j] == 0)
+          scanGrid.transform((*transformationFunctors[k])(constraintsMin[k]));
+        else
+          scanGrid.transform((*transformationFunctors[k])(constraintsMax[k]));
+      }
+      rotationBboxes.emplace_back(scanGrid.generateBbox());
+    }
+
+    for (auto &bbox : rotationBboxes)
+      generalBbox += bbox;
+  }
 
 
   std::vector<Bbox> translationBboxes;
-  auto bboxRotationScanGrid = ScanGrid(generalRotationBbox);
-
-  for (int i = 0; i < transformationFunctors.size(); i++)
-
-    if (typeid(*transformationFunctors[i]) != typeid(RotationX) &&
-        typeid(*transformationFunctors[i]) != typeid(RotationY) &&
-        typeid(*transformationFunctors[i]) != typeid(RotationZ)) {
-
-      auto scanGridMin = bboxRotationScanGrid;
-      scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
-      translationBboxes.push_back(scanGridMin.generateBbox());
-
-      auto scanGridMax = bboxRotationScanGrid;
-      scanGridMax.transform((*transformationFunctors[i])(constraintsMax[i]));
-      translationBboxes.push_back(scanGridMax.generateBbox());
-
-    }
-
-  auto transformationBbox = generalRotationBbox;
+  for (int i = 0; i < translationIndices.size(); i++) {
+    auto scanGridMin = ScanGrid(generalBbox);
+    scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
+    translationBboxes.push_back(scanGridMin.generateBbox());
+    auto scanGridMax = ScanGrid(generalBbox);
+    scanGridMax.transform((*transformationFunctors[i])(constraintsMax[i]));
+    translationBboxes.push_back(scanGridMax.generateBbox());
+  }
   for (auto &bbox : translationBboxes)
-    transformationBbox += bbox;
+    generalBbox += bbox;
 
-  return transformationBbox;
+  return generalBbox;
 
 }
 
