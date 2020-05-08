@@ -1,11 +1,11 @@
 #include <string>
 
-#include <Procedures/DemoSchema.h>
+#include <Procedures/SwellingSchema.h>
 
-int main(int nArg, char** args) {
+int main(int nArg, char **args) {
 
-    demoSchema();
+  SwellingSchema();
 
-    return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 
 }

@@ -20,6 +20,8 @@ TransformationFunctors generateLinearTransformation();
 
 TransformationFunctors generateStretchingXY();
 
+TransformationFunctors generateLinearTransformationAndStretchingXY();
+
 std::vector<double> makeRegistration(
     Image &image, std::shared_ptr<ScanGrid> &scanGrid,
     const std::string &transformationType,

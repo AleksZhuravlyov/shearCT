@@ -54,19 +54,39 @@ void searchScanGridBase(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
 
   auto constraintsMin = std::vector<double>{
       -20e-5, -20e-5, -20e-5,
-      -M_PI / 180., -M_PI / 180., -M_PI / 180.};
+      -M_PI / 7., -M_PI / 11.5, -M_PI / 90.};
   auto constraintsMax = std::vector<double>{
       20e-5, 20e-5, 20e-5,
-      M_PI / 180., M_PI / 180., M_PI / 180.};
+      M_PI / 90., M_PI / 90., M_PI / 45.};
 
   std::string transformationType = "linear";
   std::string registrationType = "bottom";
   std::cout << transformationType << " " << registrationType << std::endl;
   makeRegistration(image, scanGridBase, transformationType, accuracy,
                    constraintsMin, constraintsMax,
-                   registrationType, true);
+                   registrationType, false);
 
 }
+
+void searchScanGridBaseWithStretch(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
+                                   const double &accuracy) {
+
+  auto constraintsMin = std::vector<double>{
+      -20e-5, -20e-5, -20e-5,
+      -M_PI / 7., -M_PI / 11.5, -M_PI / 90., 0.99};
+  auto constraintsMax = std::vector<double>{
+      20e-5, 20e-5, 20e-5,
+      M_PI / 90., M_PI / 90., M_PI / 45., 1.01};
+
+  std::string transformationType = "linearWithStretchingXY";
+  std::string registrationType = "bottom";
+  std::cout << transformationType << " " << registrationType << std::endl;
+  makeRegistration(image, scanGridBase, transformationType, accuracy,
+                   constraintsMin, constraintsMax,
+                   registrationType, false);
+
+}
+
 
 void searchScanGridTop(Image &image, const double &shiftZ,
                        std::shared_ptr<ScanGrid> &scanGridBase,
@@ -76,16 +96,39 @@ void searchScanGridTop(Image &image, const double &shiftZ,
   scanGridBase->transform(TranslationZ()(shiftZ));
 
   auto constraintsMin = std::vector<double>{
-      -25e-5, -25e-5, -25e-5,
-      -M_PI / 100., -M_PI / 100., -M_PI / 100.};
+      -100e-5, -100e-5, -100e-5,
+      -M_PI / 15., -M_PI / 15., -M_PI / 15.};
   auto constraintsMax = std::vector<double>{
-      25e-5, 25e-5, 25e-5,
-      M_PI / 100., M_PI / 100., M_PI / 100.};
+      100e-5, 100e-5, 100e-5,
+      M_PI / 15., M_PI / 15., M_PI / 15.};
 
   std::string transformationType = "linear";
   std::string registrationType = "top";
   std::cout << transformationType << " " << registrationType << std::endl;
-  makeRegistration(image, scanGridBase, "linear", accuracy,
+  makeRegistration(image, scanGridBase, transformationType, accuracy,
+                   constraintsMin, constraintsMax,
+                   registrationType, false);
+
+}
+
+void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
+                                  std::shared_ptr<ScanGrid> &scanGridBase,
+                                  const double &accuracy) {
+
+  scanGridBase->swapTomoAAndBuffer();
+  scanGridBase->transform(TranslationZ()(shiftZ));
+
+  auto constraintsMin = std::vector<double>{
+      -100e-5, -100e-5, -100e-5,
+      -M_PI / 15., -M_PI / 15., -M_PI / 15., 0.99};
+  auto constraintsMax = std::vector<double>{
+      100e-5, 100e-5, 100e-5,
+      M_PI / 15., M_PI / 15., M_PI / 15., 1.01};
+
+  std::string transformationType = "linearWithStretchingXY";
+  std::string registrationType = "top";
+  std::cout << transformationType << " " << registrationType << std::endl;
+  makeRegistration(image, scanGridBase, transformationType, accuracy,
                    constraintsMin, constraintsMax,
                    registrationType, false);
 
@@ -123,8 +166,8 @@ std::shared_ptr<ScanGrid> extractScanGridCylinder(
 double searchScanGridCylinder(Image &image,
                               std::shared_ptr<ScanGrid> &scanGridCylinder) {
 
-  auto constraintsMin = std::vector<double>{0.98};
-  auto constraintsMax = std::vector<double>{1.02};
+  auto constraintsMin = std::vector<double>{0.99};
+  auto constraintsMax = std::vector<double>{1.01};
 
 
   std::string transformationType = "XYStretching";

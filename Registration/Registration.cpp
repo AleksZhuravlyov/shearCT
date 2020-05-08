@@ -32,6 +32,17 @@ TransformationFunctors generateStretchingXY() {
   return transformationFunctors;
 }
 
+TransformationFunctors generateLinearTransformationAndStretchingXY() {
+  TransformationFunctors transformationFunctors;
+  transformationFunctors.push_back(std::make_shared<TranslationX>());
+  transformationFunctors.push_back(std::make_shared<TranslationY>());
+  transformationFunctors.push_back(std::make_shared<TranslationZ>());
+  transformationFunctors.push_back(std::make_shared<RotationX>());
+  transformationFunctors.push_back(std::make_shared<RotationY>());
+  transformationFunctors.push_back(std::make_shared<RotationZ>());
+  transformationFunctors.push_back(std::make_shared<StretchXY>());
+  return transformationFunctors;
+}
 
 std::vector<double> makeRegistration(
     Image &image, std::shared_ptr<ScanGrid> &scanGrid,
@@ -47,6 +58,9 @@ std::vector<double> makeRegistration(
     transformationFunctors = generateLinearTransformation();
   else if (transformationType == "XYStretching")
     transformationFunctors = generateStretchingXY();
+  else if (transformationType == "linearWithStretchingXY") {
+    transformationFunctors = generateLinearTransformationAndStretchingXY();
+  }
 
 
   auto transformationBbox = calculateTransformationBbox(scanGrid,
@@ -146,23 +160,26 @@ Bbox calculateTransformationBbox(
 
   if (!rotationIndices.empty()) {
 
-    if (rotationIndices.size() != 3) {
-      std::cerr << "The number of rotation transformations is not 3."
-                << std::endl;
-      std::exit(EXIT_FAILURE);
-    }
+    std::vector<std::vector<bool>> isMins;
+    int count = 0;
+    int i = 0;
+    do {
+      i++;
+      count = 0;
+      isMins.emplace_back(std::vector<bool>());
+      for (int j = rotationIndices.size(); j >= 1; j--) {
+        int bit = ((i & (1 << j)) >> j);
+        isMins.back().emplace_back(bit);
+        count += bit;
+      }
+    } while (count < rotationIndices.size());
 
     std::vector<Bbox> rotationBboxes;
-    std::vector<std::bitset<3>> combinations;
-    int combinationsN = int(std::bitset<3>(0b111).to_ulong());
-    for (int i = 0; i <= combinationsN; i++)
-      combinations.emplace_back(i);
-
-    for (int i = 0; i <= combinationsN; i++) {
+    for (auto &isMin :isMins) {
       auto scanGrid = bboxIniScanGrid;
-      for (int j = 0; j < 3; j++) {
-        int k = rotationIndices[j];
-        if (combinations[i][j] == 0)
+      for (int i = 0; i < isMin.size(); i++) {
+        int k = rotationIndices[i];
+        if (isMin[i])
           scanGrid.transform((*transformationFunctors[k])(constraintsMin[k]));
         else
           scanGrid.transform((*transformationFunctors[k])(constraintsMax[k]));

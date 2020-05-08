@@ -33,7 +33,7 @@ set(SOURCE_CODE main.cpp
         Procedures/ScanGridUtilities.cpp
 
         Procedures/DemoSchema.cpp
-        )
+        Procedures/SwellingSchema.cpp)
 
 include_directories(.)
 
