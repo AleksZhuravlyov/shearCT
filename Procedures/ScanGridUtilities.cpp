@@ -8,21 +8,13 @@
 
 
 std::shared_ptr<ScanGrid> extractScanGridSquare(Image &image,
-                                                const double &xCenterFactor,
-                                                const double &yCenterFactor,
-                                                const double &zCenterMeter,
-                                                const double &xWidthVoxel,
-                                                const double &yWidthVoxel,
+                                                const double &xCenter,
+                                                const double &yCenter,
+                                                const double &zCenter,
+                                                const double &xWidth,
+                                                const double &yWidth,
                                                 const int &nX, const int &nY) {
 
-  double xCenter = image.getXInit() +
-                   (image.getXStep() * image.getNX()) * xCenterFactor;
-  double yCenter = image.getYInit() +
-                   (image.getYStep() * image.getNY()) * yCenterFactor;
-  double zCenter = image.getZInit() + zCenterMeter;
-
-  double xWidth = xWidthVoxel * image.getXStep();
-  double yWidth = yWidthVoxel * image.getYStep();
 
   auto scanGridBase = std::make_shared<ScanGrid>();
   scanGridBase->createXYSquare(xCenter, yCenter, zCenter,
@@ -50,14 +42,9 @@ void writeShiftedZScanGridToBuffer(Image &image, const double &shiftZ,
 }
 
 void searchScanGridBase(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
-                        const double &accuracy) {
-
-  auto constraintsMin = std::vector<double>{
-      -20e-5, -20e-5, -20e-5,
-      -M_PI / 7., -M_PI / 11.5, -M_PI / 90.};
-  auto constraintsMax = std::vector<double>{
-      20e-5, 20e-5, 20e-5,
-      M_PI / 90., M_PI / 90., M_PI / 45.};
+                        const double &accuracy,
+                        const std::vector<double> &constraintsMin,
+                        const std::vector<double> &constraintsMax) {
 
   std::string transformationType = "linear";
   std::string registrationType = "bottom";
@@ -68,15 +55,11 @@ void searchScanGridBase(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
 
 }
 
-void searchScanGridBaseWithStretch(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
-                                   const double &accuracy) {
-
-  auto constraintsMin = std::vector<double>{
-      -20e-5, -20e-5, -20e-5,
-      -M_PI / 7., -M_PI / 11.5, -M_PI / 90., 0.99};
-  auto constraintsMax = std::vector<double>{
-      20e-5, 20e-5, 20e-5,
-      M_PI / 90., M_PI / 90., M_PI / 45., 1.01};
+void searchScanGridBaseWithStretch(Image &image,
+                                   std::shared_ptr<ScanGrid> &scanGridBase,
+                                   const double &accuracy,
+                                   const std::vector<double> &constraintsMin,
+                                   const std::vector<double> &constraintsMax) {
 
   std::string transformationType = "linearWithStretchingXY";
   std::string registrationType = "bottom";
@@ -90,17 +73,12 @@ void searchScanGridBaseWithStretch(Image &image, std::shared_ptr<ScanGrid> &scan
 
 void searchScanGridTop(Image &image, const double &shiftZ,
                        std::shared_ptr<ScanGrid> &scanGridBase,
-                       const double &accuracy) {
+                       const double &accuracy,
+                       const std::vector<double> &constraintsMin,
+                       const std::vector<double> &constraintsMax) {
 
   scanGridBase->swapTomoAAndBuffer();
   scanGridBase->transform(TranslationZ()(shiftZ));
-
-  auto constraintsMin = std::vector<double>{
-      -100e-5, -100e-5, -100e-5,
-      -M_PI / 15., -M_PI / 15., -M_PI / 15.};
-  auto constraintsMax = std::vector<double>{
-      100e-5, 100e-5, 100e-5,
-      M_PI / 15., M_PI / 15., M_PI / 15.};
 
   std::string transformationType = "linear";
   std::string registrationType = "top";
@@ -113,17 +91,12 @@ void searchScanGridTop(Image &image, const double &shiftZ,
 
 void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
                                   std::shared_ptr<ScanGrid> &scanGridBase,
-                                  const double &accuracy) {
+                                  const double &accuracy,
+                                  const std::vector<double> &constraintsMin,
+                                  const std::vector<double> &constraintsMax) {
 
   scanGridBase->swapTomoAAndBuffer();
   scanGridBase->transform(TranslationZ()(shiftZ));
-
-  auto constraintsMin = std::vector<double>{
-      -100e-5, -100e-5, -100e-5,
-      -M_PI / 15., -M_PI / 15., -M_PI / 15., 0.99};
-  auto constraintsMax = std::vector<double>{
-      100e-5, 100e-5, 100e-5,
-      M_PI / 15., M_PI / 15., M_PI / 15., 1.01};
 
   std::string transformationType = "linearWithStretchingXY";
   std::string registrationType = "top";
@@ -136,16 +109,19 @@ void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
 
 
 std::shared_ptr<ScanGrid> extractScanGridCylinder(
-    Image &image, std::shared_ptr<ScanGrid> &scanGridBase) {
+    Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
+    const double &R, const double &angleCenter,
+    const double &zWidth, const double &angleWidth,
+    const int &nZ, const int &nAngle) {
 
   auto origin = scanGridBase->getBasis()->getOrigin();
 
-  double R = image.getXStep() * 700;
+  /*double R = image.getXStep() * 700;
   double angleCenter = 0.;
   double zWidth = image.getZStep() * 30;
   double angleWidth = M_PI * 2.;
   int nZ = 200;
-  int nAngle = 7000;
+  int nAngle = 7000;*/
 
   auto scanGridCylinder = std::make_shared<ScanGrid>();
   scanGridCylinder->createZCylinderSegment(origin->x(), origin->y(),
@@ -164,10 +140,9 @@ std::shared_ptr<ScanGrid> extractScanGridCylinder(
 
 
 double searchScanGridCylinder(Image &image,
-                              std::shared_ptr<ScanGrid> &scanGridCylinder) {
-
-  auto constraintsMin = std::vector<double>{0.99};
-  auto constraintsMax = std::vector<double>{1.01};
+                              std::shared_ptr<ScanGrid> &scanGridCylinder,
+                              const std::vector<double> &constraintsMin,
+                              const std::vector<double> &constraintsMax) {
 
 
   std::string transformationType = "XYStretching";

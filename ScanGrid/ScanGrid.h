@@ -82,7 +82,7 @@ public:
 
 
     /**
-     Make transformationFunctors for this ScanGrid class.
+     Make transformations for this ScanGrid class.
      @param[in] transformations acts on this ScanGrid class.
     */
     void transform(const std::vector<Transformation> &transformations);

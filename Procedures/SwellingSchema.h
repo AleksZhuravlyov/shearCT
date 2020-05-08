@@ -1,6 +1,6 @@
 #ifndef POCEDURES_SWELLINGSCHEMA_H
 #define POCEDURES_SWELLINGSCHEMA_H
 
-void SwellingSchema();
+void swellingSchema();
 
 #endif //POCEDURES_SWELLINGSCHEMA_H

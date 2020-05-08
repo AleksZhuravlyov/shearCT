@@ -1,10 +1,12 @@
 #include <string>
 
 #include <Procedures/SwellingSchema.h>
+#include <Procedures/DemoSchema.h>
 
 int main(int nArg, char **args) {
 
-  SwellingSchema();
+  // swellingSchema();
+  demoSchema();
 
   return EXIT_SUCCESS;
 

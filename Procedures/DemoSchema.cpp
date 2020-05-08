@@ -43,11 +43,11 @@ void demoSchema() {
 
   // Generate base square and save into vtk file
   auto scanGridSquare = extractScanGridSquare(imageA,
-                                              0.5,
-                                              0.5,
+                                              0.0432,
+                                              0.0432,
                                               initZ,
-                                              20,
-                                              20,
+                                              0.0252,
+                                              0.0252,
                                               100, 100);
   scanGridIo.setScanGrid(scanGridSquare);
   scanGridIo.saveScanGridToFile(baseSquareFromAName);
@@ -63,7 +63,14 @@ void demoSchema() {
 
   /// Find base square from CT B
 
-  searchScanGridBase(imageB, scanGridSquare, 1.e-7);
+  auto constraintsMin = std::vector<double>{
+      -20e-5, -20e-5, -20e-5,
+      -M_PI / 180., -M_PI / 180., -M_PI / 180.};
+  auto constraintsMax = std::vector<double>{
+      20e-5, 20e-5, 20e-5,
+      M_PI / 180., M_PI / 180., M_PI / 180.};
+  searchScanGridBase(imageB, scanGridSquare, 1.e-7,
+                     constraintsMin, constraintsMax);
   scanGridIo.setScanGrid(scanGridSquare);
   scanGridIo.saveScanGridToFile(baseSquareFromBName);
 
@@ -72,7 +79,14 @@ void demoSchema() {
 
   /// Find top square from CT B
 
-  searchScanGridTop(imageB, shiftZ, scanGridSquare, 1.e-8);
+  constraintsMin = std::vector<double>{
+      -25e-5, -25e-5, -25e-5,
+      -M_PI / 100., -M_PI / 100., -M_PI / 100.};
+  constraintsMax = std::vector<double>{
+      25e-5, 25e-5, 25e-5,
+      M_PI / 100., M_PI / 100., M_PI / 100.};
+  searchScanGridTop(imageB, shiftZ, scanGridSquare, 1.e-8,
+                    constraintsMin, constraintsMax);
   // Take origin from top square from CT B
   auto topOrigin = *(scanGridSquare->getBasis()->getOrigin());
 
@@ -103,8 +117,10 @@ void demoSchema() {
   scanGridIo.setScanGrid(scanGridBaseA);
   scanGridIo.loadScanGridFromFile(baseSquareFromAName);
 
-  auto scanGridCylinder = extractScanGridCylinder(
-      imageA, scanGridBaseA);
+  auto scanGridCylinder = extractScanGridCylinder(imageA, scanGridBaseA,
+                                                  0.0252, 0.,
+                                                  0.00108, M_PI * 2.,
+                                                  200, 7000);
 
   // Save cylinder sector into vtk file
   scanGridIo.setScanGrid(scanGridCylinder);
@@ -132,7 +148,11 @@ void demoSchema() {
 
   /// Find cylinder sector from CT B
 
-  auto stretchWidth = searchScanGridCylinder(imageB, scanGridCylinder);
+  constraintsMin = std::vector<double>{0.99};
+  constraintsMax = std::vector<double>{1.01};
+  auto stretchWidth = searchScanGridCylinder(imageB, scanGridCylinder,
+                                             constraintsMin,
+                                             constraintsMax);
 
   /// Final Poisson's ratio calculation
 
