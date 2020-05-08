@@ -49,6 +49,9 @@ void demoSchema() {
                                               0.0252,
                                               0.0252,
                                               100, 100);
+  // Set basis to pivot
+  scanGridSquare->translateBasis(0.0432, 0.0432, initZ);
+
   scanGridIo.setScanGrid(scanGridSquare);
   scanGridIo.saveScanGridToFile(baseSquareFromAName);
 

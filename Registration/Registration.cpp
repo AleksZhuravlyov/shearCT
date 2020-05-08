@@ -152,7 +152,8 @@ Bbox calculateTransformationBbox(
       stretchIndices.push_back(i);
 
   auto bboxIni = scanGrid->generateBbox();
-  auto bboxIniScanGrid = ScanGrid(bboxIni);
+  auto bboxIniScanGrid = ScanGrid(bboxIni, scanGrid->getBasis());
+
   for (int i = 0; i < stretchIndices.size(); i++)
     bboxIniScanGrid.transform((*transformationFunctors[i])(constraintsMax[i]));
   auto generalBbox = bboxIniScanGrid.generateBbox();
@@ -194,10 +195,10 @@ Bbox calculateTransformationBbox(
 
   std::vector<Bbox> translationBboxes;
   for (int i = 0; i < translationIndices.size(); i++) {
-    auto scanGridMin = ScanGrid(generalBbox);
+    auto scanGridMin = ScanGrid(generalBbox, scanGrid->getBasis());
     scanGridMin.transform((*transformationFunctors[i])(constraintsMin[i]));
     translationBboxes.push_back(scanGridMin.generateBbox());
-    auto scanGridMax = ScanGrid(generalBbox);
+    auto scanGridMax = ScanGrid(generalBbox, scanGrid->getBasis());
     scanGridMax.transform((*transformationFunctors[i])(constraintsMax[i]));
     translationBboxes.push_back(scanGridMax.generateBbox());
   }

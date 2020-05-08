@@ -25,6 +25,11 @@ ScanGrid::ScanGrid(const Bbox &bbox) :
   translateBasisToCenter();
 }
 
+ScanGrid::ScanGrid(const Bbox &bbox, std::shared_ptr<Basis> basis) :
+    ScanGrid(bbox) {
+  setBasis(basis);
+}
+
 
 ScanGrid::ScanGrid(std::shared_ptr<Points> points,
                    std::shared_ptr<Basis> basis) :
@@ -70,23 +75,8 @@ ScanGrid &ScanGrid::operator=(ScanGrid &&scanGrid) {
 
 
 void ScanGrid::transform(const Transformation &transformation) {
-
-  auto basisTransformation = basis_->generateTransformation();
-  auto basisInverseTransformation = basisTransformation.inverse();
-
-
-  for (auto &&point : *points_)
-    point = basisInverseTransformation(point);
-  basis_->transform(basisInverseTransformation);
-
-  for (auto &&point : *points_)
-    point = transformation(point);
-  basis_->transform(transformation);
-
-  for (auto &&point : *points_)
-    point = basisTransformation(point);
-  basis_->transform(basisTransformation);
-
+  std::vector<Transformation> transformations = {transformation};
+  transform(transformations);
 }
 
 void ScanGrid::transform(
@@ -117,13 +107,20 @@ void ScanGrid::translateBasis(const Point &point) {
   basis_->setOrigin(point);
 }
 
+void ScanGrid::translateBasis(const double &x,
+                              const double &y,
+                              const double &z) {
+  auto point = Point(x, y, z);
+  basis_->setOrigin(point);
+}
+
 void ScanGrid::translateBasisToCenter() {
 
   auto bbox = CGAL::bbox_3(points_->begin(), points_->end());
 
   auto center = Point((bbox.xmax() + bbox.xmin()) / 2,
-                          (bbox.ymax() + bbox.ymin()) / 2,
-                          (bbox.zmax() + bbox.zmin()) / 2);
+                      (bbox.ymax() + bbox.ymin()) / 2,
+                      (bbox.zmax() + bbox.zmin()) / 2);
 
   translateBasis(center);
 
@@ -257,7 +254,7 @@ void ScanGrid::createXYSquare(const double &xCenter,
     for (int j = 0; j < nY; j++)
       _points->push_back(
           Point(xInit + xStep * i,
-                    yInit + yStep * j,
+                yInit + yStep * j,
                 zInit));
 
   setPoints(_points);
@@ -289,8 +286,8 @@ void ScanGrid::createZCylinderSegment(const double &xCylinderBaseCenter,
     for (int j = 0; j < nZ; j++)
       points->push_back(
           Point(xInit + R * cos(angleInit + angleStep * i),
-                    yInit + R * sin(angleInit + angleStep * i),
-                    zInit + zStep * j));
+                yInit + R * sin(angleInit + angleStep * i),
+                zInit + zStep * j));
 
   setPoints(points);
 

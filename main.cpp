@@ -5,8 +5,8 @@
 
 int main(int nArg, char **args) {
 
-  // swellingSchema();
-  demoSchema();
+  // demoSchema();
+  swellingSchema();
 
   return EXIT_SUCCESS;
 
