@@ -3,3 +3,5 @@
 *.nc
 *.avi
 *.ogv
+.idea/
+cmake-build-debug/
