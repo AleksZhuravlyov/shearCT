@@ -1,7 +1,7 @@
 #include <string>
 
-#include <Procedures/SwellingSchema.h>
-#include <Procedures/DemoSchema.h>
+#include <procedures/swellingSchema.h>
+#include <procedures/demoSchema.h>
 
 int main(int nArg, char **args) {
 
