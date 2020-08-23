@@ -15,25 +15,25 @@
 /// This class is realization of TransformationFunctor class for X translation.
 class TranslationX : public TransformationFunctor {
 public:
-  TranslationX() {}
+    TranslationX() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
 };
 
 /// This class is realization of TransformationFunctor class for Y translation.
 class TranslationY : public TransformationFunctor {
 public:
-  TranslationY() {}
+    TranslationY() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
 };
 
 /// This class is realization of TransformationFunctor class for Z translation.
 class TranslationZ : public TransformationFunctor {
 public:
-  TranslationZ() {}
+    TranslationZ() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
 };
 
 

@@ -15,25 +15,25 @@
 /// This class is realization of TransformationFunctor class for X rotation.
 class RotationX : public TransformationFunctor {
 public:
-  RotationX() {}
+    RotationX() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
 };
 
 /// This class is realization of TransformationFunctor class for Y rotation.
 class RotationY : public TransformationFunctor {
 public:
-  RotationY() {}
+    RotationY() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
 };
 
 /// This class is realization of TransformationFunctor class for Z rotation.
 class RotationZ : public TransformationFunctor {
 public:
-  RotationZ() {}
+    RotationZ() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
 };
 
 

@@ -14,7 +14,7 @@
 typedef dlib::matrix<double, 0, 1> ColumnVector;
 
 typedef std::vector<std::shared_ptr<TransformationFunctor>>
-    TransformationFunctors;
+        TransformationFunctors;
 
 TransformationFunctors generateLinearTransformation();
 
@@ -23,52 +23,52 @@ TransformationFunctors generateStretchingXY();
 TransformationFunctors generateLinearTransformationAndStretchingXY();
 
 std::vector<double> makeRegistration(
-    Image &image, std::shared_ptr<ScanGrid> &scanGrid,
-    const std::string &transformationType,
-    const double &accuracy,
-    const std::vector<double> &constraintsMin,
-    const std::vector<double> &constraintsMax,
-    const std::string &fileNamesPrefix,
-    const bool &isFilesSaved);
+        Image &image, std::shared_ptr<ScanGrid> &scanGrid,
+        const std::string &transformationType,
+        const double &accuracy,
+        const std::vector<double> &constraintsMin,
+        const std::vector<double> &constraintsMax,
+        const std::string &fileNamesPrefix,
+        const bool &isFilesSaved);
 
 Bbox calculateTransformationBbox(
-    std::shared_ptr<ScanGrid> &scanGrid,
-    const TransformationFunctors &transformationFunctors,
-    const std::vector<double> &constraintsMin,
-    const std::vector<double> &constraintsMax);
+        std::shared_ptr<ScanGrid> &scanGrid,
+        const TransformationFunctors &transformationFunctors,
+        const std::vector<double> &constraintsMin,
+        const std::vector<double> &constraintsMax);
 
 class NegativePearsonCorrelation {
 
 public:
 
-  NegativePearsonCorrelation(TransformationFunctors &transformationFunctors_,
-                             ScanGrid &scanGrid_,
-                             Region &region_,
-                             const std::string &fileNamesPrefix_,
-                             const bool &isFilesSaved_,
-                             int &iteration_,
-                             ScanGridIO &scanGridIo_);
+    NegativePearsonCorrelation(TransformationFunctors &transformationFunctors_,
+                               ScanGrid &scanGrid_,
+                               Region &region_,
+                               const std::string &fileNamesPrefix_,
+                               const bool &isFilesSaved_,
+                               int &iteration_,
+                               ScanGridIO &scanGridIo_);
 
-  virtual ~NegativePearsonCorrelation() = default;
+    virtual ~NegativePearsonCorrelation() = default;
 
-  double operator()(const ColumnVector &searchVector) const;
+    double operator()(const ColumnVector &searchVector) const;
 
-  TransformationFunctors &transformationFunctors;
+    TransformationFunctors &transformationFunctors;
 
-  ScanGrid &scanGrid;
+    ScanGrid &scanGrid;
 
-  Region &region;
+    Region &region;
 
-  std::string fileNamesPrefix;
+    std::string fileNamesPrefix;
 
-  bool isFilesSaved;
+    bool isFilesSaved;
 
-  int &iteration;
+    int &iteration;
 
-  ScanGridIO &scanGridIo;
+    ScanGridIO &scanGridIo;
 
 
-  void implementSearchVector(const ColumnVector &searchVector);
+    void implementSearchVector(const ColumnVector &searchVector);
 
 
 };

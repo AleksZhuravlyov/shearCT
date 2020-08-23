@@ -56,10 +56,10 @@ void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
 
 // creating cylinder scanGrid taking snapshot form image using base scanGrid
 std::shared_ptr<ScanGrid> extractScanGridCylinder(
-    Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
-    const double &R, const double &angleCenter,
-    const double &zWidth, const double &angleWidth,
-    const int &nZ, const int &nAngle);
+        Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
+        const double &R, const double &angleCenter,
+        const double &zWidth, const double &angleWidth,
+        const int &nZ, const int &nAngle);
 
 // search of cylinder scanGrid in image
 double searchScanGridCylinder(Image &image,

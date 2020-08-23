@@ -1,7 +1,5 @@
 #include "scanGridUtilities.h"
 
-#include <cmath>
-
 #include <vtkOps/ScanGridIO.h>
 #include <registration/Registration.h>
 #include <geometry/Translation.h>
@@ -16,16 +14,16 @@ std::shared_ptr<ScanGrid> extractScanGridSquare(Image &image,
                                                 const int &nX, const int &nY) {
 
 
-  auto scanGridBase = std::make_shared<ScanGrid>();
-  scanGridBase->createXYSquare(xCenter, yCenter, zCenter,
-                               xWidth, yWidth,
-                               nX, nY);
+    auto scanGridBase = std::make_shared<ScanGrid>();
+    scanGridBase->createXYSquare(xCenter, yCenter, zCenter,
+                                 xWidth, yWidth,
+                                 nX, nY);
 
-  image.setRegion(scanGridBase->generateBbox());
-  image.region.setPoints(scanGridBase->getPoints(), scanGridBase->getTomoA());
-  image.region.computePointsValue();
+    image.setRegion(scanGridBase->generateBbox());
+    image.region.setPoints(scanGridBase->getPoints(), scanGridBase->getTomoA());
+    image.region.computePointsValue();
 
-  return scanGridBase;
+    return scanGridBase;
 
 }
 
@@ -33,11 +31,11 @@ std::shared_ptr<ScanGrid> extractScanGridSquare(Image &image,
 void writeShiftedZScanGridToBuffer(Image &image, const double &shiftZ,
                                    std::shared_ptr<ScanGrid> &scanGridBase) {
 
-  scanGridBase->transform(TranslationZ()(shiftZ));
-  image.setRegion(scanGridBase->generateBbox());
-  image.region.setPoints(scanGridBase->getPoints(), scanGridBase->getBuffer());
-  image.region.computePointsValue();
-  scanGridBase->transform(TranslationZ()(-shiftZ));
+    scanGridBase->transform(TranslationZ()(shiftZ));
+    image.setRegion(scanGridBase->generateBbox());
+    image.region.setPoints(scanGridBase->getPoints(), scanGridBase->getBuffer());
+    image.region.computePointsValue();
+    scanGridBase->transform(TranslationZ()(-shiftZ));
 
 }
 
@@ -46,12 +44,12 @@ void searchScanGridBase(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
                         const std::vector<double> &constraintsMin,
                         const std::vector<double> &constraintsMax) {
 
-  std::string transformationType = "linear";
-  std::string registrationType = "bottom";
-  std::cout << transformationType << " " << registrationType << std::endl;
-  makeRegistration(image, scanGridBase, transformationType, accuracy,
-                   constraintsMin, constraintsMax,
-                   registrationType, false);
+    std::string transformationType = "linear";
+    std::string registrationType = "bottom";
+    std::cout << transformationType << " " << registrationType << std::endl;
+    makeRegistration(image, scanGridBase, transformationType, accuracy,
+                     constraintsMin, constraintsMax,
+                     registrationType, false);
 
 }
 
@@ -61,12 +59,12 @@ void searchScanGridBaseWithStretch(Image &image,
                                    const std::vector<double> &constraintsMin,
                                    const std::vector<double> &constraintsMax) {
 
-  std::string transformationType = "linearWithStretchingXY";
-  std::string registrationType = "bottom";
-  std::cout << transformationType << " " << registrationType << std::endl;
-  makeRegistration(image, scanGridBase, transformationType, accuracy,
-                   constraintsMin, constraintsMax,
-                   registrationType, false);
+    std::string transformationType = "linearWithStretchingXY";
+    std::string registrationType = "bottom";
+    std::cout << transformationType << " " << registrationType << std::endl;
+    makeRegistration(image, scanGridBase, transformationType, accuracy,
+                     constraintsMin, constraintsMax,
+                     registrationType, false);
 
 }
 
@@ -77,15 +75,15 @@ void searchScanGridTop(Image &image, const double &shiftZ,
                        const std::vector<double> &constraintsMin,
                        const std::vector<double> &constraintsMax) {
 
-  scanGridBase->swapTomoAAndBuffer();
-  scanGridBase->transform(TranslationZ()(shiftZ));
+    scanGridBase->swapTomoAAndBuffer();
+    scanGridBase->transform(TranslationZ()(shiftZ));
 
-  std::string transformationType = "linear";
-  std::string registrationType = "top";
-  std::cout << transformationType << " " << registrationType << std::endl;
-  makeRegistration(image, scanGridBase, transformationType, accuracy,
-                   constraintsMin, constraintsMax,
-                   registrationType, false);
+    std::string transformationType = "linear";
+    std::string registrationType = "top";
+    std::cout << transformationType << " " << registrationType << std::endl;
+    makeRegistration(image, scanGridBase, transformationType, accuracy,
+                     constraintsMin, constraintsMax,
+                     registrationType, false);
 
 }
 
@@ -95,39 +93,39 @@ void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
                                   const std::vector<double> &constraintsMin,
                                   const std::vector<double> &constraintsMax) {
 
-  scanGridBase->swapTomoAAndBuffer();
-  scanGridBase->transform(TranslationZ()(shiftZ));
+    scanGridBase->swapTomoAAndBuffer();
+    scanGridBase->transform(TranslationZ()(shiftZ));
 
-  std::string transformationType = "linearWithStretchingXY";
-  std::string registrationType = "top";
-  std::cout << transformationType << " " << registrationType << std::endl;
-  makeRegistration(image, scanGridBase, transformationType, accuracy,
-                   constraintsMin, constraintsMax,
-                   registrationType, false);
+    std::string transformationType = "linearWithStretchingXY";
+    std::string registrationType = "top";
+    std::cout << transformationType << " " << registrationType << std::endl;
+    makeRegistration(image, scanGridBase, transformationType, accuracy,
+                     constraintsMin, constraintsMax,
+                     registrationType, false);
 
 }
 
 
 std::shared_ptr<ScanGrid> extractScanGridCylinder(
-    Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
-    const double &R, const double &angleCenter,
-    const double &zWidth, const double &angleWidth,
-    const int &nZ, const int &nAngle) {
+        Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
+        const double &R, const double &angleCenter,
+        const double &zWidth, const double &angleWidth,
+        const int &nZ, const int &nAngle) {
 
-  auto origin = scanGridBase->getBasis()->getOrigin();
+    auto origin = scanGridBase->getBasis()->getOrigin();
 
-  auto scanGridCylinder = std::make_shared<ScanGrid>();
-  scanGridCylinder->createZCylinderSegment(origin->x(), origin->y(),
-                                           origin->z(),
-                                           R, angleCenter, zWidth, angleWidth,
-                                           nZ, nAngle);
+    auto scanGridCylinder = std::make_shared<ScanGrid>();
+    scanGridCylinder->createZCylinderSegment(origin->x(), origin->y(),
+                                             origin->z(),
+                                             R, angleCenter, zWidth, angleWidth,
+                                             nZ, nAngle);
 
-  image.setRegion(scanGridCylinder->generateBbox());
-  image.region.setPoints(scanGridCylinder->getPoints(),
-                         scanGridCylinder->getTomoA());
-  image.region.computePointsValue();
+    image.setRegion(scanGridCylinder->generateBbox());
+    image.region.setPoints(scanGridCylinder->getPoints(),
+                           scanGridCylinder->getTomoA());
+    image.region.computePointsValue();
 
-  return scanGridCylinder;
+    return scanGridCylinder;
 
 }
 
@@ -138,15 +136,15 @@ double searchScanGridCylinder(Image &image,
                               const std::vector<double> &constraintsMax) {
 
 
-  std::string transformationType = "XYStretching";
-  std::string registrationType = "side";
-  std::cout << transformationType << " " << registrationType << std::endl;
-  auto answerVector = makeRegistration(image, scanGridCylinder,
-                                       transformationType, 1.e-13,
-                                       constraintsMin, constraintsMax,
-                                       registrationType,
-                                       false);
+    std::string transformationType = "XYStretching";
+    std::string registrationType = "side";
+    std::cout << transformationType << " " << registrationType << std::endl;
+    auto answerVector = makeRegistration(image, scanGridCylinder,
+                                         transformationType, 1.e-13,
+                                         constraintsMin, constraintsMax,
+                                         registrationType,
+                                         false);
 
-  return answerVector[0] - 1;
+    return answerVector[0] - 1;
 
 }

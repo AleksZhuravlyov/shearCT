@@ -1,5 +1,5 @@
-#ifndef THIRDPARTY_STRINGANDNUMBER_H
-#define THIRDPARTY_STRINGANDNUMBER_H
+#ifndef STRINGANDNUMBER_H
+#define STRINGANDNUMBER_H
 
 
 #include <string>
@@ -46,20 +46,14 @@ T fromString(const std::string &s) {
 
 /*
 std::string str;
-
 int iVal;
-
 float fVal;
 
-
 str = toString(iVal);
-
 str = toString(fVal);
 
-
 iVal = fromString<int>(str);
-
 fVal = fromString<float>(str);
 */
 
-#endif // THIRDPARTY_STRINGANDNUMBER_H
+#endif // STRINGANDNUMBER_H

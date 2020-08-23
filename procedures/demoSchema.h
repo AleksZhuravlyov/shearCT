@@ -1,6 +1,6 @@
-#ifndef POCEDURES_DEMOSCHEMA_H
-#define POCEDURES_DEMOSCHEMA_H
+#ifndef DEMOSCHEMA_H
+#define DEMOSCHEMA_H
 
 void demoSchema();
 
-#endif // POCEDURES_DEMOSCHEMA_H
+#endif // DEMOSCHEMA_H

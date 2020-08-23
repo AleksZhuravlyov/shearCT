@@ -15,9 +15,17 @@
 /// This class is realization of TransformationFunctor class for XY stretch.
 class StretchXY : public TransformationFunctor {
 public:
-  StretchXY() {}
+    StretchXY() {}
 
-  virtual Transformation operator()(const double &value) override final;
+    virtual Transformation operator()(const double &value) override final;
+};
+
+/// This class is realization of TransformationFunctor class for XYZ stretch.
+class StretchXYZ : public TransformationFunctor {
+public:
+    StretchXYZ() {}
+
+    virtual Transformation operator()(const double &value) override final;
 };
 
 

@@ -20,23 +20,23 @@ class TransformationFunctor {
 
 public:
 
-  /**
-   Constructor is set by default.
-  */
-  TransformationFunctor() = default;
+    /**
+     Constructor is set by default.
+    */
+    TransformationFunctor() = default;
 
-  /**
-   Destructor is set by default.
-  */
-  virtual ~TransformationFunctor() {}
+    /**
+     Destructor is set by default.
+    */
+    virtual ~TransformationFunctor() {}
 
-  /**
-   Pure virtual overload function call operator.
-   This method constructs simple transformation.
-   @param[in] value is parameter for transformation.
-   @return transformation is constructed by this method.
-  */
-  virtual Transformation operator()(const double &value) = 0;
+    /**
+     Pure virtual overload function call operator.
+     This method constructs simple transformation.
+     @param[in] value is parameter for transformation.
+     @return transformation is constructed by this method.
+    */
+    virtual Transformation operator()(const double &value) = 0;
 
 };
 
