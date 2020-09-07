@@ -26,9 +26,9 @@ std::map<std::string, double> swellingSchema(std::map<std::string,
     // std::string baseSquareFromBName = "baseSquareFromB.vtp";
 
     // std::string cylinderSectorFromAAndBaseSquareName =
-    "cylinderSectorFromAAndBaseSquare.vtp";
+    //         "cylinderSectorFromAAndBaseSquare.vtp";
     // std::string cylinderSectorFromBAndBaseSquareName =
-    "cylinderSectorFromBAndBaseSquare.vtp";
+    //         "cylinderSectorFromBAndBaseSquare.vtp";
 
     /// =======================================================================
 
@@ -65,7 +65,7 @@ std::map<std::string, double> swellingSchema(std::map<std::string,
 
 
     auto answerBase = searchScanGridBaseWithStretch(
-            imageB, scanGridSquare, 1.e-10,
+            imageB, scanGridSquare, std::get<double>(params["baseAccuracy"]),
             std::get<std::vector<double>>(params["baseConstraintsMin"]),
             std::get<std::vector<double>>(params["baseConstraintsMax"]));
     // scanGridIo.setScanGrid(scanGridSquare);
@@ -77,7 +77,7 @@ std::map<std::string, double> swellingSchema(std::map<std::string,
     /// Find top square from CT B
 
     auto answerTop = searchScanGridTopWithStretch(
-            imageB, shiftZ, scanGridSquare, 1.e-9,
+            imageB, shiftZ, scanGridSquare, std::get<double>(params["topAccuracy"]),
             std::get<std::vector<double>>(params["topConstraintsMin"]),
             std::get<std::vector<double>>(params["topConstraintsMax"]));
     // Take origin from top square from CT B
