@@ -117,7 +117,6 @@ std::vector<double> makeRegistration(
     }
 
 
-    std::cout << std::endl;
     auto stop_strategy = dlib::objective_delta_stop_strategy(accuracy);
     if (isVerbose)
         stop_strategy.be_verbose();
@@ -131,9 +130,11 @@ std::vector<double> makeRegistration(
 
     functionForValue.implementSearchVector(searchVector);
 
-    std::cout << std::endl;
-    std::cout << "pearsonCorrelation " << pearsonCorrelation << std::endl;
-    std::cout << "searchVector:\n" << searchVector << std::endl;
+    if (isVerbose) {
+        std::cout << std::endl;
+        std::cout << "pearsonCorrelation " << pearsonCorrelation << std::endl;
+        std::cout << "searchVector:\n" << searchVector << std::endl;
+    }
 
     std::vector<double> answer;
     for (int i = 0; i < searchVector.size(); i++)

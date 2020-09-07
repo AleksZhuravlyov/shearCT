@@ -63,7 +63,8 @@ std::vector<double> searchScanGridBaseWithStretch(
 
     std::string transformationType = "linearWithStretchingXY";
     std::string registrationType = "bottom";
-    std::cout << transformationType << " " << registrationType << std::endl;
+    if (isVerbose)
+        std::cout << transformationType << " " << registrationType << std::endl;
     return makeRegistration(image, scanGridBase, transformationType, accuracy,
                             constraintsMin, constraintsMax, isVerbose,
                             registrationType, false);
@@ -100,9 +101,12 @@ std::vector<double> searchScanGridTopWithStretch(
     scanGridBase->swapTomoAAndBuffer();
     scanGridBase->transform(TranslationZ()(shiftZ));
 
+
     std::string transformationType = "linearWithStretchingXY";
     std::string registrationType = "top";
-    std::cout << transformationType << " " << registrationType << std::endl;
+    if (isVerbose)
+        std::cout << transformationType << " " << registrationType << std::endl;
+
     return makeRegistration(image, scanGridBase, transformationType, accuracy,
                             constraintsMin, constraintsMax, isVerbose,
                             registrationType, false);
