@@ -12,29 +12,31 @@ params['imageAFileName'] = argv[1]
 params['valueName'] = 'array'
 
 params['shiftZ'] = float(0.004)
-params['initZ'] = float(0.0005)
-params['xCenter'] = float(0.004)
-params['yCenter'] = float(0.004)
-params['xWidth'] = float(0.0025)
-params['yWidth'] = float(0.0025)
-params['nX'] = int(300)
-params['nY'] = int(300)
+params['initZ'] = float(0.00033)
+params['xCenter'] = float(0.0037)
+params['yCenter'] = float(0.0037)
+params['xWidth'] = float(0.0035)
+params['yWidth'] = float(0.0035)
+params['nX'] = int(100)
+params['nY'] = int(100)
 
-params['baseAccuracy'] = float(1.e-10)
-params['topAccuracy'] = float(1.e-9)
+params['baseAccuracy'] = float(1.e-12)
+params['topAccuracy'] = float(1.e-12)
 
-params['baseConstraintsMin'] = [-30e-6, -30e-6, -30e-6, -0.0785, -0.0785, -0.0785, 0.99]
-params['baseConstraintsMax'] = [30e-6, 30e-6, 30e-6, 0.0785, 0.0785, 0.0785, 1.01]
+params['baseConstraintsMin'] = [-10e-6, -10e-6, -10e-6, -0.001, -0.001, -0.001, 0.99]
+params['baseConstraintsMax'] = [10e-6, 10e-6, 10e-6, 0.001, 0.001, 0.001, 1.01]
 
-params['topConstraintsMin'] = [-30e-6, -30e-6, -30e-6, -0.2094, -0.2094, -0.2094, 0.99]
-params['topConstraintsMax'] = [30e-6, 30e-6, 30e-6, 0.2094, 0.2094, 0.2094, 1.01]
+params['topConstraintsMin'] = [-10e-6, -10e-6, -10e-6, -0.001, -0.001, -0.001, 0.99]
+params['topConstraintsMax'] = [10e-6, 10e-6, 17e-6, 0.003, 0.002, 0.001, 1.01]
 
 answers = dict()
-files = argv[2:]
-print(files)
-for file in files:
+
+for file in argv[2:12]:
     params['imageBFileName'] = file
     answers[file[0:-3]] = swelling_schema(params)
+    print()
+    print(answers[file[0:-3]])
+    print()
 
 
 with open('answers.json', 'w') as f:
