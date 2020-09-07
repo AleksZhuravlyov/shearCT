@@ -1,9 +1,14 @@
+import sys
+import os
+import json
+
 from scripts import swelling_schema
+
+argv = sys.argv
 
 params = dict()
 
-params['imageAFileName'] = '/Users/bigelk/tmp/microct/zak/CO2Z0al_01.nc'
-params['imageBFileName'] = '/Users/bigelk/tmp/microct/zak/CO2Z0al_10.nc'
+params['imageAFileName'] = argv[1]
 params['valueName'] = 'array'
 
 params['shiftZ'] = float(0.001186)
@@ -24,6 +29,13 @@ params['baseConstraintsMax'] = [30e-6, 30e-6, 30e-6, 0.0785, 0.0785, 0.0785, 1.0
 params['topConstraintsMin'] = [-30e-6, -30e-6, -30e-6, -0.2094, -0.2094, -0.2094, 0.99]
 params['topConstraintsMax'] = [30e-6, 30e-6, 30e-6, 0.2094, 0.2094, 0.2094, 1.01]
 
-answer = swelling_schema(params)
+answers = dict()
+for file in argv[1:3]:
+    params['imageBFileName'] = file
+    answers[file[0:-3]] = swelling_schema(params)
 
-print(answer)
+
+with open('answers.json', 'w') as f:
+    json.dump(answers, f, sort_keys=True, indent=4 * ' ')
+
+print(answers)
