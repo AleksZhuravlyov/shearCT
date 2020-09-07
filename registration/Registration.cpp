@@ -61,6 +61,7 @@ std::vector<double> makeRegistration(
         const double &accuracy,
         const std::vector<double> &constraintsMin,
         const std::vector<double> &constraintsMax,
+        const bool &isVerbose,
         const std::string &fileNamesPrefix,
         const bool &isFilesSaved) {
 
@@ -117,9 +118,13 @@ std::vector<double> makeRegistration(
 
 
     std::cout << std::endl;
+    auto stop_strategy = dlib::objective_delta_stop_strategy(accuracy);
+    if (isVerbose)
+        stop_strategy.be_verbose();
+
     auto pearsonCorrelation = -find_min_box_constrained(
             dlib::lbfgs_search_strategy(10),
-            dlib::objective_delta_stop_strategy(accuracy).be_verbose(),
+            stop_strategy,
             functionForValue, dlib::derivative(functionForDerivative),
             searchVector, lowerConstraint, upperConstraint);
 

@@ -28,6 +28,7 @@ std::vector<double> makeRegistration(
         const double &accuracy,
         const std::vector<double> &constraintsMin,
         const std::vector<double> &constraintsMax,
+        const bool &isVerbose,
         const std::string &fileNamesPrefix,
         const bool &isFilesSaved);
 

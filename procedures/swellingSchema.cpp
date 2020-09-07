@@ -9,7 +9,7 @@
 #include "scanGridUtilities.h"
 
 std::map<std::string, double> swellingSchema(std::map<std::string,
-        std::variant<int, double, std::string, std::vector<double>>> params) {
+        std::variant<bool, int, double, std::string, std::vector<double>>> params) {
 
     /// General stuff
     /// =======================================================================
@@ -67,7 +67,8 @@ std::map<std::string, double> swellingSchema(std::map<std::string,
     auto answerBase = searchScanGridBaseWithStretch(
             imageB, scanGridSquare, std::get<double>(params["baseAccuracy"]),
             std::get<std::vector<double>>(params["baseConstraintsMin"]),
-            std::get<std::vector<double>>(params["baseConstraintsMax"]));
+            std::get<std::vector<double>>(params["baseConstraintsMax"]),
+            std::get<bool>(params["isVerbose"]));
     // scanGridIo.setScanGrid(scanGridSquare);
     // scanGridIo.saveScanGridToFile(baseSquareFromBName);
 
@@ -79,7 +80,8 @@ std::map<std::string, double> swellingSchema(std::map<std::string,
     auto answerTop = searchScanGridTopWithStretch(
             imageB, shiftZ, scanGridSquare, std::get<double>(params["topAccuracy"]),
             std::get<std::vector<double>>(params["topConstraintsMin"]),
-            std::get<std::vector<double>>(params["topConstraintsMax"]));
+            std::get<std::vector<double>>(params["topConstraintsMax"]),
+            std::get<bool>(params["isVerbose"]));
     // Take origin from top square from CT B
     auto topOrigin = *(scanGridSquare->getBasis()->getXYZOrigin());
 

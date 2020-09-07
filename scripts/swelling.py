@@ -2,6 +2,8 @@ import sys
 import os
 import json
 
+from multiprocessing import Pool
+
 from scripts import swelling_schema
 
 argv = sys.argv
@@ -29,17 +31,42 @@ params['baseConstraintsMax'] = [10e-6, 10e-6, 10e-6, 0.001, 0.001, 0.001, 1.01]
 params['topConstraintsMin'] = [-10e-6, -10e-6, -10e-6, -0.001, -0.001, -0.001, 0.99]
 params['topConstraintsMax'] = [10e-6, 10e-6, 17e-6, 0.003, 0.002, 0.001, 1.01]
 
-answers = dict()
 
-for file in argv[2:12]:
-    params['imageBFileName'] = file
-    answers[file[0:-3]] = swelling_schema(params)
-    print()
-    print(answers[file[0:-3]])
-    print()
+def process_parallel(file_name):
+    params['imageBFileName'] = file_name
+    params['isVerbose'] = False
+    answer = {file_name[0:-3]: swelling_schema(params)}
+    print(answer, '\n\n')
+    return answer
 
 
-with open('answers.json', 'w') as f:
-    json.dump(answers, f, sort_keys=True, indent=4 * ' ')
+def process_sequential(file_name):
+    params['imageBFileName'] = file_name
+    params['isVerbose'] = True
+    answer = {file_name[0:-3]: swelling_schema(params)}
+    print(answer, '\n\n')
+    return answer
 
-print(answers)
+
+if __name__ == '__main__':
+    files = argv[2:]
+    results = list()
+    answers = dict()
+
+    # parallel
+    pool = Pool()
+    results = pool.map(process_parallel, files)
+
+    # sequential
+    # for file in files:
+    #     answer = process_sequential(file)
+    #     results.append(answer)
+
+    for result in results:
+        for key in result:
+            answers[key] = result[key]
+
+    with open('answers.json', 'w') as f:
+        json.dump(answers, f, sort_keys=True, indent=4 * ' ')
+
+    print(answers)
