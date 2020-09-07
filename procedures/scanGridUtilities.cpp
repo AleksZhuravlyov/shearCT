@@ -53,18 +53,19 @@ void searchScanGridBase(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
 
 }
 
-void searchScanGridBaseWithStretch(Image &image,
-                                   std::shared_ptr<ScanGrid> &scanGridBase,
-                                   const double &accuracy,
-                                   const std::vector<double> &constraintsMin,
-                                   const std::vector<double> &constraintsMax) {
+std::vector<double> searchScanGridBaseWithStretch(
+        Image &image,
+        std::shared_ptr<ScanGrid> &scanGridBase,
+        const double &accuracy,
+        const std::vector<double> &constraintsMin,
+        const std::vector<double> &constraintsMax) {
 
     std::string transformationType = "linearWithStretchingXY";
     std::string registrationType = "bottom";
     std::cout << transformationType << " " << registrationType << std::endl;
-    makeRegistration(image, scanGridBase, transformationType, accuracy,
-                     constraintsMin, constraintsMax,
-                     registrationType, false);
+    return makeRegistration(image, scanGridBase, transformationType, accuracy,
+                            constraintsMin, constraintsMax,
+                            registrationType, false);
 
 }
 
@@ -87,11 +88,12 @@ void searchScanGridTop(Image &image, const double &shiftZ,
 
 }
 
-void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
-                                  std::shared_ptr<ScanGrid> &scanGridBase,
-                                  const double &accuracy,
-                                  const std::vector<double> &constraintsMin,
-                                  const std::vector<double> &constraintsMax) {
+std::vector<double> searchScanGridTopWithStretch(
+        Image &image, const double &shiftZ,
+        std::shared_ptr<ScanGrid> &scanGridBase,
+        const double &accuracy,
+        const std::vector<double> &constraintsMin,
+        const std::vector<double> &constraintsMax) {
 
     scanGridBase->swapTomoAAndBuffer();
     scanGridBase->transform(TranslationZ()(shiftZ));
@@ -99,9 +101,9 @@ void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
     std::string transformationType = "linearWithStretchingXY";
     std::string registrationType = "top";
     std::cout << transformationType << " " << registrationType << std::endl;
-    makeRegistration(image, scanGridBase, transformationType, accuracy,
-                     constraintsMin, constraintsMax,
-                     registrationType, false);
+    return makeRegistration(image, scanGridBase, transformationType, accuracy,
+                            constraintsMin, constraintsMax,
+                            registrationType, false);
 
 }
 

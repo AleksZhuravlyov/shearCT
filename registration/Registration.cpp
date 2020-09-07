@@ -130,11 +130,12 @@ std::vector<double> makeRegistration(
     std::cout << "pearsonCorrelation " << pearsonCorrelation << std::endl;
     std::cout << "searchVector:\n" << searchVector << std::endl;
 
-    std::vector<double> answerVector;
+    std::vector<double> answer;
     for (int i = 0; i < searchVector.size(); i++)
-        answerVector.push_back(searchVector(i));
+        answer.push_back(searchVector(i));
+    answer.push_back(pearsonCorrelation);
 
-    return answerVector;
+    return answer;
 
 }
 

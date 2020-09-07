@@ -1,6 +1,12 @@
 #ifndef SWELLINGSCHEMA_H
 #define SWELLINGSCHEMA_H
 
-void swellingSchema();
+#include <string>
+#include <map>
+#include <variant>
+#include <vector>
+
+std::map<std::string, double> swellingSchema(std::map<std::string,
+        std::variant<int, double, std::string, std::vector<double>>> params);
 
 #endif // SWELLINGSCHEMA_H

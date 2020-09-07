@@ -33,11 +33,12 @@ void searchScanGridBase(Image &image, std::shared_ptr<ScanGrid> &scanGridBase,
                         const std::vector<double> &constraintsMin,
                         const std::vector<double> &constraintsMax);
 
-void searchScanGridBaseWithStretch(Image &image,
-                                   std::shared_ptr<ScanGrid> &scanGridBase,
-                                   const double &accuracy,
-                                   const std::vector<double> &constraintsMin,
-                                   const std::vector<double> &constraintsMax);
+std::vector<double> searchScanGridBaseWithStretch(
+        Image &image,
+        std::shared_ptr<ScanGrid> &scanGridBase,
+        const double &accuracy,
+        const std::vector<double> &constraintsMin,
+        const std::vector<double> &constraintsMax);
 
 
 // search of top scanGridBase in image employing registration
@@ -47,11 +48,12 @@ void searchScanGridTop(Image &image, const double &shiftZ,
                        const std::vector<double> &constraintsMin,
                        const std::vector<double> &constraintsMax);
 
-void searchScanGridTopWithStretch(Image &image, const double &shiftZ,
-                                  std::shared_ptr<ScanGrid> &scanGridBase,
-                                  const double &accuracy,
-                                  const std::vector<double> &constraintsMin,
-                                  const std::vector<double> &constraintsMax);
+std::vector<double> searchScanGridTopWithStretch(
+        Image &image, const double &shiftZ,
+        std::shared_ptr<ScanGrid> &scanGridBase,
+        const double &accuracy,
+        const std::vector<double> &constraintsMin,
+        const std::vector<double> &constraintsMax);
 
 
 // creating cylinder scanGrid taking snapshot form image using base scanGrid
