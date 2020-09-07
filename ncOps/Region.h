@@ -45,7 +45,8 @@ public:
     std::vector<size_t> start; ///< Start point of region in terms of voxels.
     std::vector<size_t> width; ///< Width of region in terms of voxels.
     std::vector<std::vector<float>> dimArrays; ///< Axes X, Y and Z of region.
-    std::vector<short> value; ///< Value array of region.
+    // ToDo: type of vector depends on type of microCT data
+    std::vector<uint8_t> value; ///< Value array of region.
 
 
     /**

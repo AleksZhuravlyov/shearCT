@@ -15,8 +15,10 @@ void demoSchema() {
     /// =======================================================================
 
 
-    Image imageA("/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc");
-    Image imageB("/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc");
+    Image imageA("/Users/bigelk/data/samples/tomography/shearCT/Processed/5.nc",
+                 "tomo");
+    Image imageB("/Users/bigelk/data/samples/tomography/shearCT/Processed/10.nc",
+                 "tomo");
     ScanGridIO scanGridIo;
 
     std::string baseSquareFromAName = "baseSquareFromA.vtp";

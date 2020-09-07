@@ -47,7 +47,7 @@ public:
      Constructor sets name of nc file.
      @param[in] fileName is the name of nc file.
     */
-    Image(const std::string &fileName);
+    Image(const std::string &fileName, const std::string &valueName);
 
     /**
      Destructor sets by default.
@@ -136,7 +136,8 @@ public:
      Accessor for value attribute.
      @return shared pointer of value attribute.
     */
-    std::shared_ptr<std::vector<short>> getValue();
+    // ToDo: type of vector depends on type of microCT data
+    std::shared_ptr<std::vector<uint8_t>> getValue();
 
 
     /**

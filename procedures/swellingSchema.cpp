@@ -15,8 +15,10 @@ void swellingSchema() {
     /// =======================================================================
 
 
-    Image imageA("/Users/bigelk/data/workspace/swelling/registered/C2K12B.nc");
-    Image imageB("/Users/bigelk/data/workspace/swelling/registered/C2K13B.nc");
+    Image imageA("/Users/bigelk/tmp/microct/zak/CO2Z0al_01.nc", "array");
+    std::cout << "test" << std::endl;
+
+    Image imageB("/Users/bigelk/tmp/microct/zak/CO2Z0al_10.nc", "array");
     ScanGridIO scanGridIo;
 
     std::string baseSquareFromAName = "baseSquareFromA.vtp";
@@ -30,21 +32,22 @@ void swellingSchema() {
     /// =======================================================================
 
 
-    double shiftZ = 0.02376;
-    double initZ = 0.01728;
+    double shiftZ = 0.002965;
+    shiftZ = 0.001186;
+    double initZ = 0.0008895;
 
     /// Base square from CT A
 
     // Generate base square and save into vtk file
     auto scanGridSquare = extractScanGridSquare(imageA,
-                                                0.035838,
-                                                0.04005,
+                                                0.00360544,
+                                                0.00364102,
                                                 initZ,
-                                                0.032364,
-                                                0.032364,
-                                                700, 700);
+                                                0.0047,
+                                                0.0047,
+                                                300, 300);
     // Set basis to pivot
-    scanGridSquare->translateBasis(0.037494, 0.037872, initZ);
+    // scanGridSquare->translateBasis(0.037494, 0.037872, initZ);
 
     scanGridIo.setScanGrid(scanGridSquare);
     scanGridIo.saveScanGridToFile(baseSquareFromAName);
@@ -61,12 +64,12 @@ void swellingSchema() {
     /// Find base square from CT B
 
     auto constraintsMin = std::vector<double>{
-            -40e-5, -40e-5, -20e-5,
-            -M_PI / 90., -M_PI / 90., -M_PI / 90., 0.99};
+            -30e-6, -30e-6, -30e-6,
+            -M_PI / 40., -M_PI / 40., -M_PI / 40., 0.99};
     auto constraintsMax = std::vector<double>{
-            20e-5, 20e-5, 20e-5,
-            M_PI / 90., M_PI / 90., M_PI / 90., 1.01};
-    searchScanGridBaseWithStretch(imageB, scanGridSquare, 1.e-8,
+            30e-6, 30e-6, 30e-6,
+            M_PI / 40., M_PI / 40., M_PI / 40., 1.01};
+    searchScanGridBaseWithStretch(imageB, scanGridSquare, 1.e-10,
                                   constraintsMin,
                                   constraintsMax);
     scanGridIo.setScanGrid(scanGridSquare);
@@ -78,12 +81,12 @@ void swellingSchema() {
     /// Find top square from CT B
 
     constraintsMin = std::vector<double>{
-            -100e-5, -100e-5, -100e-5,
+            -30e-6, -30e-6, -30e-6,
             -M_PI / 15., -M_PI / 15., -M_PI / 15., 0.99};
     constraintsMax = std::vector<double>{
-            100e-5, 100e-5, 100e-5,
+            30e-6, 30e-6, 30e-6,
             M_PI / 15., M_PI / 15., M_PI / 15., 1.01};
-    searchScanGridTopWithStretch(imageB, shiftZ, scanGridSquare, 1.e-8,
+    searchScanGridTopWithStretch(imageB, shiftZ, scanGridSquare, 1.e-9,
                                  constraintsMin,
                                  constraintsMax);
     // Take origin from top square from CT B
@@ -98,63 +101,10 @@ void swellingSchema() {
     distance = sqrt(distance);
     std::cout << std::endl << "distance " << distance << std::endl;
 
-    auto deltaL = shiftZ - distance;
+    auto deltaL = distance - shiftZ;
     std::cout << std::endl << "deltaL " << deltaL << std::endl;
-    double stretchZ = deltaL / shiftZ;
+    double stretchZ = 1 + deltaL / shiftZ;
     std::cout << std::endl << "stretchZ " << stretchZ << std::endl;
-
-
-    /// =======================================================================
-
-    /// Take cylinder sector from CT A and base square
-
-    // Take CT A base square from vtk file
-
-    auto scanGridBaseA = std::make_shared<ScanGrid>();
-    scanGridIo.setScanGrid(scanGridBaseA);
-    scanGridIo.loadScanGridFromFile(baseSquareFromAName);
-
-    auto scanGridCylinder = extractScanGridCylinder(imageA, scanGridBaseA,
-                                                    0.0252, 0.,
-                                                    0.00108, M_PI * 2.,
-                                                    200, 7000);
-
-    // Save cylinder sector into vtk file
-    scanGridIo.setScanGrid(scanGridCylinder);
-    scanGridIo.saveScanGridToFile(cylinderSectorFromAAndBaseSquareName);
-    // Save nc region of cylinder sector into netCDF file
-    // imageA.saveRegion("cylinder.nc");
-
-    /// Translation of cylinder sector to B and basis of base square B
-
-    // Take CT B base square from vtk file
-    auto scanGridBaseB = std::make_shared<ScanGrid>();
-    scanGridIo.setScanGrid(scanGridBaseB);
-    scanGridIo.loadScanGridFromFile(baseSquareFromBName);
-
-
-    auto transformationA = scanGridBaseA->getBasis()->generateTransformation();
-    auto transformationB = scanGridBaseB->getBasis()->generateTransformation();
-
-    scanGridCylinder->transform(transformationA.inverse());
-    scanGridCylinder->transform(transformationB);
-
-    // Save cylinder sector into vtk file
-    scanGridIo.setScanGrid(scanGridCylinder);
-    scanGridIo.saveScanGridToFile(cylinderSectorFromBAndBaseSquareName);
-
-    /// Find cylinder sector from CT B
-
-    constraintsMin = std::vector<double>{0.99};
-    constraintsMax = std::vector<double>{1.01};
-    auto stretchWidth = searchScanGridCylinder(imageB, scanGridCylinder,
-                                               constraintsMin,
-                                               constraintsMax);
-
-    std::cout << "stretchWidth " << stretchWidth << std::endl;
-    std::cout << "stretchZ " << stretchZ << std::endl;
-
-    /// =======================================================================
 
 }
 

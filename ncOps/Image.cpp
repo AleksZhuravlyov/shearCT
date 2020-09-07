@@ -3,12 +3,13 @@
 #include <algorithm>
 
 
-Image::Image(const std::string &fileName) : ncFile_(fileName,
-                                                    netCDF::NcFile::read),
-                                            path_(fileName),
-                                            valueName_("tomo"),
-                                            units_("units"),
-                                            region(Region()) {
+Image::Image(const std::string &fileName,
+             const std::string &valueName) : ncFile_(fileName, netCDF::NcFile::read),
+                                             path_(fileName),
+                                             valueName_(valueName),
+                                             // ToDo: units_ can be different
+                                             units_("units"),
+                                             region(Region()) {
 
     for (auto &&varData : ncFile_.getVars()) {
         vars_.push_back(Var());
@@ -123,8 +124,9 @@ std::shared_ptr<std::vector<Var>> Image::getVars() {
     return std::make_shared<std::vector<Var>>(vars_);
 }
 
-std::shared_ptr<std::vector<short>> Image::getValue() {
-    return std::make_shared<std::vector<short>>(region.value);
+// ToDo: type of vector depends on type of microCT data
+std::shared_ptr<std::vector<uint8_t>> Image::getValue() {
+    return std::make_shared<std::vector<uint8_t>>(region.value);
 }
 
 
@@ -195,8 +197,9 @@ void Image::saveRegion(const std::string &fileName) {
     for (int i = 0; i < dims_.size(); i++)
         ncVars[i] = regionCtFile.addVar(vars_[i].name,
                                         netCDF::ncFloat, ncDims[i]);
+    // ToDo: type of variable in method args depends on type of microCT data
     netCDF::NcVar valVar = regionCtFile.addVar(valueName_,
-                                               netCDF::ncShort, ncDims);
+                                               netCDF::ncUbyte, ncDims);
 
     for (int i = 0; i < dims_.size(); i++)
         ncVars[i].putAtt(units_, vars_[i].unitName);

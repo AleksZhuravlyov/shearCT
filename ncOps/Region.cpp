@@ -4,7 +4,8 @@
 Region::Region() : start({0, 0, 0}),
                    width({1, 1, 1}),
                    dimArrays(std::vector<std::vector<float>>(3)),
-                   value(std::vector<short>(1)) {
+        // ToDo: type of vector depends on type of microCT data
+                   value(std::vector<uint8_t>(1)) {
 
     for (int i = 0; i < width.size(); i++)
         dimArrays[i].resize(width[i]);
