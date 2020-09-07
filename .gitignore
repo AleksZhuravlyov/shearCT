@@ -5,3 +5,4 @@
 *.ogv
 .idea/
 cmake-build-debug/
+*.so

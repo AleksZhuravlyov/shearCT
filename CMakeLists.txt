@@ -12,6 +12,7 @@ add_subdirectory(scanGrid)
 add_subdirectory(vtkOps)
 add_subdirectory(registration)
 add_subdirectory(procedures)
+add_subdirectory(scripts)
 
 set(SOURCE_CODE main.cpp)
 
