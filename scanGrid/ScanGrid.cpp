@@ -27,7 +27,7 @@ ScanGrid::ScanGrid(const Bbox &bbox) :
 
 ScanGrid::ScanGrid(const Bbox &bbox, std::shared_ptr<Basis> basis) :
         ScanGrid(bbox) {
-    setBasis(basis);
+    setBasis(std::make_shared<Basis>(Basis(*basis)));
 }
 
 

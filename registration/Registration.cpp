@@ -197,15 +197,15 @@ Bbox calculateTransformationBbox(
 
         std::vector<Bbox> rotationBboxes;
         for (auto &isMin :isMins) {
-            auto scanGrid = bboxIniScanGrid;
+            auto bboxScanGrid = bboxIniScanGrid;
             for (int i = 0; i < isMin.size(); i++) {
                 int k = rotationIndices[i];
                 if (isMin[i])
-                    scanGrid.transform((*transformationFunctors[k])(constraintsMin[k]));
+                    bboxScanGrid.transform((*transformationFunctors[k])(constraintsMin[k]));
                 else
-                    scanGrid.transform((*transformationFunctors[k])(constraintsMax[k]));
+                    bboxScanGrid.transform((*transformationFunctors[k])(constraintsMax[k]));
             }
-            rotationBboxes.emplace_back(scanGrid.generateBbox());
+            rotationBboxes.emplace_back(bboxScanGrid.generateBbox());
         }
 
         for (auto &bbox : rotationBboxes)
