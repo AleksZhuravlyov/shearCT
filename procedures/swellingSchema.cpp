@@ -1,15 +1,20 @@
 #include "swellingSchema.h"
 
 #include <iostream>
+#include <variant>
+#include <vector>
 
 #include <ncOps/Image.h>
 #include <vtkOps/ScanGridIO.h>
 #include <geometry/Basis.h>
 
+
 #include "scanGridUtilities.h"
 
-std::map<std::string, double> swellingSchema(std::map<std::string,
-        std::variant<bool, int, double, std::string, std::vector<double>>> params) {
+std::map<std::string,
+        std::variant<double, std::vector<double>>> swellingSchema(
+        std::map<std::string,
+                std::variant<bool, int, double, std::string, std::vector<double>>> params) {
 
     /// General stuff
     /// =======================================================================
@@ -99,10 +104,10 @@ std::map<std::string, double> swellingSchema(std::map<std::string,
     double stretchZ = 1 + deltaL / shiftZ;
     // std::cout << std::endl << "stretchZ " << stretchZ << std::endl;
 
-    std::map<std::string, double> answer;
-    answer["stretchZ"] = stretchZ;
-    answer["pearsonCorrelationBase"] = answerBase.back();
-    answer["pearsonCorrelationTop"] = answerTop.back();
+    std::map<std::string, std::variant<double, std::vector<double>>> answer;
+    answer["stretch"] = stretchZ;
+    answer["answerBase"] = answerBase;
+    answer["answerTop"] = answerTop;
 
     return answer;
 
