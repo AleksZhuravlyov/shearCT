@@ -16,5 +16,5 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/..)
 add_library(${PROJECT_NAME} ${SOURCE_CODE})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
-        /usr/local/lib/libnetcdf-cxx4.dylib
+        /opt/homebrew/lib/libnetcdf-cxx4.dylib
         CGAL::CGAL)
